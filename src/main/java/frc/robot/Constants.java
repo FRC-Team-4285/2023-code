@@ -24,7 +24,7 @@ public final class Constants {
 
     /* Drivetrain Constants */
     public static final double trackWidth = Units.inchesToMeters(19.5);
-    public static final double wheelBase = Units.inchesToMeters(16.5);
+    public static final double wheelBase = Units.inchesToMeters(19.5);
 
     // nominal (real) divided by fudge factor
     public static final double wheelDiameter = Units.inchesToMeters(4.0 / 1.04085);
@@ -47,8 +47,8 @@ public final class Constants {
     public static final int frontLeftRotationMotorId = 8;
     public static final int frontLeftDriveMotorId = 7;
 
-    public static final int frontRightRotationMotorId = 6;
-    public static final int frontRightDriveMotorId = 5;
+    public static final int frontRightRotationMotorId = 5;
+    public static final int frontRightDriveMotorId = 6;
 
     public static final int rearLeftRotationMotorId = 2;
     public static final int rearLeftDriveMotorId = 1;
