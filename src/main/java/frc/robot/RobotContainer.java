@@ -4,18 +4,11 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.SwerveBase;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
-// import frc.robot.subsystems.ExampleSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -30,7 +23,7 @@ public class RobotContainer {
   /* Drive Controls */
   private final int translationAxis = 1;
   private final int strafeAxis = 0;
-  private final int rotationAxis = 4;
+  private final int rotationAxis = 2; //was 4 on Xbox
 
   /* Drive Buttons */
   private final JoystickButton zeroGyro;
@@ -49,25 +42,25 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     driver = new Joystick(0);
-    zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+    zeroGyro = new JoystickButton(driver, 7); //resets field-centric heading
     swerveBase = new SwerveBase();
     swerveBase.setDefaultCommand(
       new TeleopSwerve(
         swerveBase,
+        // currently code has no deadband, add deadband here if needed in future
         () -> driver.getRawAxis(translationAxis),
         () -> driver.getRawAxis(strafeAxis),
-        () -> driver.getRawAxis(rotationAxis),
-        () -> !driver.getRawButton(XboxController.Button.kLeftBumper.value)
+        () -> -driver.getRawAxis(rotationAxis),
+        () -> !driver.getRawButton(1) //inverted=fieldCentric, non-inverted=RobotCentric
       )
     );
-
 
     // Configure the trigger bindings
     configureBindings();
   }
 
   private void configureBindings() {
-    zeroGyro.onTrue(new InstantCommand(() -> swerveBase.getNavX().reset()));
+    zeroGyro.onTrue(new InstantCommand(() -> swerveBase.getPigeonSensor().reset()));
   }
 
   /**

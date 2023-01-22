@@ -23,26 +23,26 @@ public final class Constants {
     public static final SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(0.1, 0.15, 0.01);
 
     /* Drivetrain Constants */
-    public static final double trackWidth = Units.inchesToMeters(19.5);
-    public static final double wheelBase = Units.inchesToMeters(19.5);
+    public static final double trackWidth = Units.inchesToMeters(21.5); //measured from center of each module
+    public static final double wheelBase = Units.inchesToMeters(21.5);
 
     // nominal (real) divided by fudge factor
-    public static final double wheelDiameter = Units.inchesToMeters(4.0 / 1.04085);
+    public static final double wheelDiameter = Units.inchesToMeters(4.0 / 1.0); //was 1.04085
     public static final double wheelCircumference = wheelDiameter * Math.PI;
 
-    public static final double driveGearRatio = (6.75 / 1.0); // 6.75:1
-    public static final double angleGearRatio = ((150.0 / 7.0) / 1.0); // 150/7:1
+    public static final double driveGearRatio = 8.16; // Mk3 Standard drive ratio 
+    public static final double angleGearRatio = 12.8; // Mk3 Standard steer ratio (does this need encoder stuff??)
 
     public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-                    new Translation2d(trackWidth / 2.0, wheelBase / 2.0), // front left
-                    new Translation2d(trackWidth / 2.0, -wheelBase / 2.0), // front right
-                    new Translation2d(-trackWidth / 2.0, wheelBase / 2.0), // rear left
-                    new Translation2d(-trackWidth / 2.0, -wheelBase / 2.0) // rear right
+                    new Translation2d(trackWidth / 2.0, wheelBase / 2.0), // front left, was ++
+                    new Translation2d(trackWidth / 2.0, -wheelBase / 2.0), // front right, was +-
+                    new Translation2d(-trackWidth / 2.0, wheelBase / 2.0), // rear left, was -+
+                    new Translation2d(-trackWidth / 2.0, -wheelBase / 2.0) // rear right, was --
     );
 
     /* Swerve Profiling Values */
-    public static final double maxSpeed = 4.5; // meters per second
-    public static final double maxAngularVelocity = 11.5;
+    public static final double maxSpeed = 4.5; // NOT a speed unit; robot gets faster if this is lower
+    public static final double maxAngularVelocity = 11.0;
 
     public static final int frontLeftRotationMotorId = 8;
     public static final int frontLeftDriveMotorId = 7;

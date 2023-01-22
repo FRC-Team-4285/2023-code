@@ -49,7 +49,6 @@ public class TeleopSwerve extends CommandBase {
     this.turningLimiter = new SlewRateLimiter(Swerve.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
 
     addRequirements(subsystem);
-
   }
 
   @Override
@@ -61,13 +60,12 @@ public class TeleopSwerve extends CommandBase {
      * speed
      * Otherwise, our max speed would be 1 meter per second and 1 radian per second
      */
-
     double fwdX = forwardX.getAsDouble();
     double fwdY = forwardY.getAsDouble();
     double rot = rotation.getAsDouble();
 
-    // 2. Apply deadband
-    fwdX = Math.abs(fwdX) > 0.1 ? fwdX : 0.0;
+    // 2. Apply deadband ///Can edit this later to have smoother behavior
+    fwdX = Math.abs(fwdX) > 0.1 ? fwdX : 0.0; 
     fwdY = Math.abs(fwdY) > 0.1 ? fwdY : 0.0;
     rot = Math.abs(rot) > 0.1 ? rot : 0.0;
 
@@ -80,9 +78,8 @@ public class TeleopSwerve extends CommandBase {
     drive.drive(
         -fwdX,
         -fwdY,
-        -rot,
-        fieldOrientedFunction.get());
-
+        rot,
+        fieldOrientedFunction.get()
+      );
   }
-
 }
