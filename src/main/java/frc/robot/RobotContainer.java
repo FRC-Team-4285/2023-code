@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.util.HashMap;
 
 import com.pathplanner.lib.PathConstraints;
@@ -16,6 +18,9 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.SwerveBase;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -95,8 +100,16 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public CommandBase getAutonomousCommand() {
-    // An example command will be run in autonomous
-    PathPlannerTrajectory path = PathPlanner.loadPath("Example Path", new PathConstraints(4, 3));
+    String directory = Filesystem.getDeployDirectory().toPath().resolve("ExamplePath.json").toString();
+
+    PathPlannerTrajectory path = PathPlanner.loadPath(
+      directory,
+      new PathConstraints(
+        4,
+        3
+      )
+    );
+
     return new SequentialCommandGroup(
       swerveBase.followTrajectoryCommand(path, true)
     );
