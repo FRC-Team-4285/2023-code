@@ -1,10 +1,14 @@
 package frc.robot.commands;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-// import java.io.IOException;
-
 public class AutonomousCommand extends CommandBase {
+
+    private PathPlannerTrajectory path;
 
     public AutonomousCommand() {
     }

@@ -1,8 +1,11 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Swerve;
-
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -15,6 +18,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 public class SwerveBase extends SubsystemBase {
 
@@ -187,6 +192,10 @@ public class SwerveBase extends SubsystemBase {
     return new Pose2d(translation.getX(), translation.getY(), rotation);
   }
 
+  public Rotation2d getGyroscopeRotation() {
+    return Rotation2d.fromDegrees(pigeonSensor.getCompassHeading());
+  }
+
   public void drive(double forward, double strafe, double rotation, boolean isFieldRelative, boolean isAutoBalancing) {
 
     /**
@@ -309,4 +318,25 @@ public class SwerveBase extends SubsystemBase {
   public SwerveDriveKinematics getKinematics() {
     return Swerve.kinematics;
   }
+
+  public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+    return new SequentialCommandGroup(
+         new InstantCommand(() -> {
+           // Reset odometry for the first path you run during auto
+           if(isFirstPath){
+               this.resetOdometry(traj.getInitialHolonomicPose());
+           }
+         }),
+         new PPSwerveControllerCommand(
+             traj, 
+             this::getPose, // Pose supplier
+             Swerve.kinematics, // SwerveDriveKinematics
+             new PIDController(0, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+             new PIDController(0, 0, 0), // Y controller (usually the same values as X controller)
+             new PIDController(0, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+             this::setModuleStates, // Module states consumer
+             this // Requires this drive subsystem
+         )
+     );
+ }
 }
