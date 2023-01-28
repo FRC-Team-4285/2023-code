@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.SwerveBase;
 import edu.wpi.first.wpilibj.Joystick;

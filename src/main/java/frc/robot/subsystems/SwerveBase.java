@@ -5,6 +5,7 @@ import frc.robot.Constants.Swerve;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -31,6 +32,10 @@ public class SwerveBase extends SubsystemBase {
   private static final double frontRightAngleOffset = Units.degreesToRadians(146);
   private static final double rearLeftAngleOffset = Units.degreesToRadians(-124 + 180);
   private static final double rearRightAngleOffset = Units.degreesToRadians(-121.5);
+
+  private Pose2d m_pose = new Pose2d(0, 0, new Rotation2d());
+  private final double SCALE_X = -1/0.9;
+  private final double SCALE_Y = -1/0.9;
 
   /**
    * SwerveModule objects
@@ -175,6 +180,13 @@ public class SwerveBase extends SubsystemBase {
 
   }
 
+  public Pose2d getScaledPose() {
+    m_pose = getPose();
+    final var translation = new Translation2d(m_pose.getX() * SCALE_X, m_pose.getY() * SCALE_Y);
+    final var rotation = m_pose.getRotation().rotateBy(new Rotation2d(0));
+    return new Pose2d(translation.getX(), translation.getY(), rotation);
+  }
+
   public void drive(double forward, double strafe, double rotation, boolean isFieldRelative, boolean isAutoBalancing) {
 
     /**
@@ -292,5 +304,9 @@ public class SwerveBase extends SubsystemBase {
 
   public WPI_Pigeon2 getPigeonSensor() {
     return pigeonSensor;
+  }
+
+  public SwerveDriveKinematics getKinematics() {
+    return Swerve.kinematics;
   }
 }
