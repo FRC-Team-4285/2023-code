@@ -90,4 +90,41 @@ public final class Constants {
         new TrapezoidProfile.Constraints(
             kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
   }
+
+  public static final class ArmConstants {
+    // Encoder IDs
+    public static final int ARM_MOTOR_ID = 9;
+
+    // Motor Speed
+    public static final double ARM_MOTOR_POWER = 0.1;    
+
+    // Direction
+    public static final boolean ARM_DIRECTION_UP = true;
+    public static final boolean ARM_DIRECTION_DOWN = false;
+  }
+
+  public static final class ClimberConstants {
+    // Encoder IDs
+    public static final int CLIMBER_MOTOR_LEFT_ID = 10;
+    public static final int CLIMBER_MOTOR_RIGHT_ID = 11;
+
+    // Motor Speed
+    public static final double CLIMBER_MOTOR_POWER = 0.1;
+
+    // Direction
+    public static final boolean CLIMBER_DIRECTION_UP = true;
+    public static final boolean CLIMBER_DIRECTION_DOWN = false;
+  }
+
+  public static final class IntakeConstants {
+    // Encoder IDs
+    public static final int INTAKE_MOTOR_ID = 12;
+
+    // Motor Speed
+    public static final double INTAKE_MOTOR_POWER = 0.1;
+
+    // Direction
+    public static final boolean INTAKE_DIRECTION_UP = true;
+    public static final boolean INTAKE_DIRECTION_DOWN = false;
+  }
 }
