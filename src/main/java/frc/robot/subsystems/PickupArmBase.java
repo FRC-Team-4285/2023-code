@@ -3,10 +3,9 @@ package frc.robot.subsystems;
 import frc.robot.Constants.ArmConstants;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -14,78 +13,23 @@ public class PickupArmBase extends SubsystemBase {
 
   /** Creates a new ArmBase. */
 
-  private CANSparkMax arm_motor;
-  private DutyCycleEncoder arm_motor_encoder;
+  private CANSparkMax armMotor;
+  private RelativeEncoder armMotorEncoder;
+
 
   public PickupArmBase() {
-
-    arm_motor = new CANSparkMax(ArmConstants.ARM_MOTOR_ID, MotorType.kBrushless);
-    arm_motor_encoder = new DutyCycleEncoder(0);
-
+    armMotor = new CANSparkMax(ArmConstants.ARM_MOTOR_ID, MotorType.kBrushless);
+    armMotorEncoder = armMotor.getEncoder();
   }
-
-
-  /**
-
-   * Example command factory method.
-
-   *
-
-   * @return a command
-
-   */
-
-  public CommandBase exampleMethodCommand() {
-
-    // Inline construction of command goes here.
-
-    // Subsystem::RunOnce implicitly requires `this` subsystem.
-
-    return runOnce(
-
-        () -> {
-
-          /* one-time action goes here */
-
-        });
-
-  }
-
-
-  /**
-
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-
-   *
-
-   * @return value of some boolean subsystem state, such as a digital sensor.
-
-   */
-
-  public boolean exampleCondition() {
-
-    // Query some boolean state, such as a digital sensor.
-
-    return false;
-
-  }
-
 
   @Override
-
   public void periodic() {
-
     // This method will be called once per scheduler run
-
   }
 
-
   @Override
-
   public void simulationPeriodic() {
-
     // This method will be called once per scheduler run during simulation
-
   }
 
   public void engage_arm(boolean direction) {
@@ -94,15 +38,15 @@ public class PickupArmBase extends SubsystemBase {
      */
 
     double power = ArmConstants.ARM_MOTOR_POWER;
-    double pos = arm_motor_encoder.getAbsolutePosition();
+    double pos = armMotorEncoder.getPosition();
 
     System.out.println("arm motor pos: " + pos);
 
     if (direction) {
-        arm_motor.set(power);
+        armMotor.set(power);
     }
     else {
-        arm_motor.set(-power);
+        armMotor.set(-power);
     }
   }
 
@@ -111,6 +55,6 @@ public class PickupArmBase extends SubsystemBase {
      * Turn off all motors.
      */
 
-    arm_motor.set(0.0);
+    armMotor.set(0.0);
   }
 }

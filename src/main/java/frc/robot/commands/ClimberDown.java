@@ -6,8 +6,13 @@ import frc.robot.subsystems.ClimberArmBase;
 
 
 public class ClimberDown extends CommandBase {
+  /*
+   * Climber Down Command
+   * --------------------
+   * 
+   * This command will raise the climber system.
+   */
 
-  // Climber Subsystem
   private final ClimberArmBase m_climberSubsystem;
 
 
@@ -21,12 +26,10 @@ public class ClimberDown extends CommandBase {
     m_climberSubsystem.stop();
   }
 
-
   @Override
   public void initialize() {
     m_climberSubsystem.engage_climber(ClimberConstants.CLIMBER_DIRECTION_DOWN);
   }
-
 
   @Override
   public boolean isFinished() {

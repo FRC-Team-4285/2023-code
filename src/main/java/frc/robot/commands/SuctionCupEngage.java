@@ -6,8 +6,13 @@ import frc.robot.subsystems.SuctionCupBase;
 
 
 public class SuctionCupEngage extends CommandBase {
+  /*
+   * Suction Cup Engage Command
+   * --------------------------
+   * 
+   * This command enable the suction system.
+   */
 
-  // Suction Cup Subsystem
   private final SuctionCupBase m_suctionSubsystem;
 
 
@@ -21,12 +26,10 @@ public class SuctionCupEngage extends CommandBase {
     m_suctionSubsystem.stop();
   }
 
-
   @Override
   public void initialize() {
     m_suctionSubsystem.engageSuctionCup(SuctionConstants.SUCTION_CUP_ENGAGE);
   }
-
 
   @Override
   public boolean isFinished() {

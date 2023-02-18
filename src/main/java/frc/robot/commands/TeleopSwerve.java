@@ -9,16 +9,17 @@ import frc.robot.Constants.Swerve;
 import frc.robot.subsystems.SwerveBase;
 
 public class TeleopSwerve extends CommandBase {
-
-  /**
-   * Command to allow for driver input in teleop
-   * Can't be inlined efficiently if we want to edit the inputs in any way
-   * (deadband, square, etc.)
+  /*
+   * Teleoperated Swerve Drive Command
+   * ---------------------------------
+   * 
+   * This command hooks up to the Swerve Drive subsystem
+   * and passes in our joystick inputs into it.
    */
 
   private final SwerveBase drive;
 
-  /**
+  /*
    * Joysticks return DoubleSuppliers when the get methods are called
    * This is so that joystick getter methods can be passed in as a parameter but
    * will continuously update,
@@ -53,18 +54,17 @@ public class TeleopSwerve extends CommandBase {
 
   @Override
   public void execute() {
-
-    /**
-     * Units are given in meters per second radians per second
-     * Since joysticks give output from -1 to 1, we multiply the outputs by the max
-     * speed
-     * Otherwise, our max speed would be 1 meter per second and 1 radian per second
+    /*
+     * Units are given in meters per second radians per second. Since joysticks give output
+     * from -1 to 1, we multiply the outputs by the max speed. Otherwise, our max speed
+     * would be only 1 meter per second and 1 radian per second.
      */
+
     double fwdX = forwardX.getAsDouble();
     double fwdY = forwardY.getAsDouble();
     double rot = rotation.getAsDouble();
 
-    // 2. Apply deadband ///Can edit this later to have smoother behavior
+    // 2. Apply deadband, can edit this later to have smoother behavior
     fwdX = Math.abs(fwdX) > 0.1 ? fwdX : 0.0; 
     fwdY = Math.abs(fwdY) > 0.1 ? fwdY : 0.0;
     rot = Math.abs(rot) > 0.1 ? rot : 0.0;
@@ -72,8 +72,7 @@ public class TeleopSwerve extends CommandBase {
     // 3. Make the driving smoother
     fwdX = xLimiter.calculate(fwdX) * Swerve.kTeleDriveMaxSpeedMetersPerSecond;
     fwdY = yLimiter.calculate(fwdY) * Swerve.kTeleDriveMaxSpeedMetersPerSecond;
-    rot = turningLimiter.calculate(rot)
-        * Swerve.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+    rot = turningLimiter.calculate(rot) * Swerve.kTeleDriveMaxAngularSpeedRadiansPerSecond;
 
     drive.drive(
         -fwdX,

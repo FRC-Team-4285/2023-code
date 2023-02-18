@@ -5,18 +5,20 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.PickupArmBase;
 
 
-public class ArmDown extends CommandBase {
+public class PickupArmUp extends CommandBase {
+  /*
+   * Pickup Arm Up Command
+   * ---------------------
+   * 
+   * This command will raise the pickup arm.
+   */
 
-  // Arm Subsystem
   private final PickupArmBase m_armSubsystem;
 
 
-  public ArmDown(PickupArmBase subsystem) {
-
+  public PickupArmUp(PickupArmBase subsystem) {
     m_armSubsystem = subsystem;
-
     addRequirements(m_armSubsystem);
-
   }
 
   @Override
@@ -24,20 +26,14 @@ public class ArmDown extends CommandBase {
     m_armSubsystem.stop();
   }
 
-
   @Override
-
   public void initialize() {
-    m_armSubsystem.engage_arm(ArmConstants.ARM_DIRECTION_DOWN);
+    m_armSubsystem.engage_arm(ArmConstants.ARM_DIRECTION_UP);
   }
 
-
   @Override
-
   public boolean isFinished() {
-
     return true;
-
   }
 
 }

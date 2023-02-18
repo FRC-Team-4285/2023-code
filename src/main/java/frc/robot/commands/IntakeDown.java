@@ -6,17 +6,19 @@ import frc.robot.subsystems.IntakeBase;
 
 
 public class IntakeDown extends CommandBase {
+  /*
+   * Intake Down Command
+   * -------------------
+   * 
+   * This command will lower the intake system.
+   */
 
-  // Intake Subsystem
   private final IntakeBase m_intakeSubsystem;
 
 
   public IntakeDown(IntakeBase subsystem) {
-
     m_intakeSubsystem = subsystem;
-
     addRequirements(m_intakeSubsystem);
-
   }
 
   @Override
@@ -24,20 +26,14 @@ public class IntakeDown extends CommandBase {
     m_intakeSubsystem.stop();
   }
 
-
   @Override
-
   public void initialize() {
     m_intakeSubsystem.engage_intake(IntakeConstants.INTAKE_DIRECTION_DOWN);
   }
 
-
   @Override
-
   public boolean isFinished() {
-
     return true;
-
   }
 
 }
