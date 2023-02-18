@@ -1,0 +1,80 @@
+package frc.robot.subsystems;
+
+import frc.robot.Constants.ClimberConstants;
+
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+
+public class ClimberArmBase extends SubsystemBase {
+
+  /** Creates a new ClimberBase. */
+
+  private CANSparkMax climberMotorLeft;
+  private CANSparkMax climberMotorRight;
+  private DutyCycleEncoder climberMotorEncoder;
+
+  public ClimberArmBase() {
+    climberMotorLeft = new CANSparkMax(ClimberConstants.CLIMBER_MOTOR_LEFT_ID, MotorType.kBrushless);
+    climberMotorRight = new CANSparkMax(ClimberConstants.CLIMBER_MOTOR_RIGHT_ID, MotorType.kBrushless);
+    climberMotorEncoder = new DutyCycleEncoder(0);
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    // This method will be called once per scheduler run during simulation
+  }
+
+  public void engage_climber(boolean direction) {
+    /*
+     * Engage climber motors.
+     */
+
+    double power = ClimberConstants.CLIMBER_MOTOR_POWER;
+    double pos = climberMotorEncoder.getAbsolutePosition();
+
+    System.out.println("climb motor pos: " + pos);
+
+    // ----------------------
+    // !!! VERY IMPORTANT !!!
+    // ----------------------
+    // Each motor's power MUST be the opposite of each other.
+    // If you don't, you will cause a large mechanical error
+    // requiring an untimely and difficult manual fix.
+    // 
+    // More literally:
+    //   - If left is power, right must be -power;
+    //   - If left is -power, right must be power.
+    //
+    // You have been warned. If you break it, YOU fix it!
+    // Yes, that means YOU.
+
+    if (direction) {
+        climberMotorLeft.set(power);
+        climberMotorRight.set(-power);
+    }
+    else {
+        climberMotorLeft.set(-power);
+        climberMotorRight.set(power);
+    }
+  }
+
+  public void stop() {
+    /*
+     * Turn off all motors.
+     */
+
+    climberMotorLeft.set(0.0);
+    climberMotorRight.set(0.0);
+  }
+}
