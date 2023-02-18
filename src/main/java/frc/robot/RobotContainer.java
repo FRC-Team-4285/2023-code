@@ -4,25 +4,13 @@
 
 package frc.robot;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.util.HashMap;
-
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.auto.PIDConstants;
-import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
-import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.SwerveBase;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -61,6 +49,7 @@ public class RobotContainer {
   public RobotContainer() {
     driver = new Joystick(0);
     zeroGyro = new JoystickButton(driver, 7); //resets field-centric heading
+
     swerveBase = new SwerveBase();
     swerveBase.setDefaultCommand(
       new TeleopSwerve(
@@ -71,19 +60,6 @@ public class RobotContainer {
         () -> -driver.getRawAxis(rotationAxis),
         () -> !driver.getRawButton(1) //inverted=fieldCentric, non-inverted=RobotCentric
       )
-    );
-
-    HashMap<String, Command> eventMap = new HashMap<>();
-
-    SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
-      swerveBase::getPose, // Pose2d supplier
-      swerveBase::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
-      swerveBase.getKinematics(), // SwerveDriveKinematics
-      new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
-      new PIDConstants(0.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
-      swerveBase::setModuleStates, // Module states consumer used to output to the drive subsystem
-      eventMap,
-      swerveBase // The drive subsystem. Used to properly set the requirements of path following commands
     );
 
     // Configure the trigger bindings
