@@ -100,13 +100,11 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public CommandBase getAutonomousCommand() {
-    String directory = Filesystem.getDeployDirectory().toPath().resolve("ExamplePath.path").toString();
-
     PathPlannerTrajectory path = PathPlanner.loadPath(
-      directory,
+      "ExamplePath",
       new PathConstraints(
-        4,
-        3
+        3,
+        2
       )
     );
 
