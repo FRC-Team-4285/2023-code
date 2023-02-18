@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Joystick driverJoystick;
+  private final Joystick passengerJoystick;
 
   /* Drive Controls */
   private final int translationAxis = 1;
@@ -54,8 +55,9 @@ public class RobotContainer {
   private final PickupArmBase pickupArmBase;
   private final SuctionCupBase suctionCupBase;
 
-  public Joystick getJoystick() {
-    return driverJoystick;
+  public Joystick getJoystick(int stickID) {
+    if (stickID == 1) return passengerJoystick;
+    return driverJoystick; //default stick
   }
 
   public SwerveBase getSwerveSubsytem() {
@@ -65,6 +67,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     driverJoystick = new Joystick(0);
+    passengerJoystick = new Joystick(1);
 
     swerveBase = new SwerveBase();
     swerveBase.setDefaultCommand(
