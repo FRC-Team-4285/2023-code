@@ -134,6 +134,16 @@ public final class Constants {
 
     // Motor Speed
     public static final double SUCTION_MOTOR_POWER = 0.1;
+
+    // Action
+    public static final boolean SUCTION_CUP_ENGAGE = true;
+    public static final boolean SUCTION_CUP_RELEASE = false;
+
+    public static final int PUMP_READY = 0;
+    public static final int PUMP_NEED_RESET = 1;
+    public static final int PUMP_WAIT = 2;
+
+    public static final double PUMP_DELAY_MS = 300.0;
   }
 
   public static class HardwareCAN {
@@ -146,5 +156,4 @@ public final class Constants {
     public static final int FORWARD = 6;
     public static final int REVERSE = 7;
   }
-
 }

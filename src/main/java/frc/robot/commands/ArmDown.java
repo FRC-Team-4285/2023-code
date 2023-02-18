@@ -2,16 +2,16 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.subsystems.ArmBase;
+import frc.robot.subsystems.PickupArmBase;
 
 
 public class ArmDown extends CommandBase {
 
   // Arm Subsystem
-  private final ArmBase m_armSubsystem;
+  private final PickupArmBase m_armSubsystem;
 
 
-  public ArmDown(ArmBase subsystem) {
+  public ArmDown(PickupArmBase subsystem) {
 
     m_armSubsystem = subsystem;
 

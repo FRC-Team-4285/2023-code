@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
-public class ClimberBase extends SubsystemBase {
+public class ClimberArmBase extends SubsystemBase {
 
   /** Creates a new ClimberBase. */
 
@@ -19,7 +19,7 @@ public class ClimberBase extends SubsystemBase {
   private RelativeEncoder climber_motor_left_encoder;
   private RelativeEncoder climber_motor_right_encoder;
 
-  public ClimberBase() {
+  public ClimberArmBase() {
 
     climber_motor_left = new CANSparkMax(ClimberConstants.CLIMBER_MOTOR_LEFT_ID, MotorType.kBrushless);
     climber_motor_left_encoder = climber_motor_left.getEncoder();

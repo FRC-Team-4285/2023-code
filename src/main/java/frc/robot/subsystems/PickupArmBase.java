@@ -1,56 +1,29 @@
 package frc.robot.subsystems;
 
-import frc.robot.Constants.SuctionConstants;
-import frc.robot.Robot;
-import frc.robot.Constants.HardwareCAN;
-import frc.robot.Constants.PneumaticChannels;
+import frc.robot.Constants.ArmConstants;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
-public class SuctionBase extends SubsystemBase {
+public class PickupArmBase extends SubsystemBase {
 
-  /** Creates a new SuctionBase. */
+  /** Creates a new ArmBase. */
 
-  public DoubleSolenoid solenoid;
+  private CANSparkMax arm_motor;
+  private DutyCycleEncoder arm_motor_encoder;
 
-  public SuctionBase() {
-    solenoid = new DoubleSolenoid(
-      HardwareCAN.PneumaticHUB, 
-      PneumaticsModuleType.REVPH, 
-      PneumaticChannels.FORWARD, 
-      PneumaticChannels.REVERSE
-    );
+  public PickupArmBase() {
+
+    arm_motor = new CANSparkMax(ArmConstants.ARM_MOTOR_ID, MotorType.kBrushless);
+    arm_motor_encoder = new DutyCycleEncoder(0);
+
   }
 
-  public void enableCompressor() {
-    Robot.compressor.enableDigital();
-  }
-
-  public void openConeGrabber() {
-    solenoid.set(Value.kForward);
-  }
-  public void closeConeGrabber() {
-    solenoid.set(Value.kReverse);
-  }
-
-  public void stop() {
-    /*
-     * Keep the solenoid closed in our default state.
-     */
-
-
-     solenoid.set(Value.kReverse);
-  }
 
   /**
 
@@ -113,5 +86,31 @@ public class SuctionBase extends SubsystemBase {
 
     // This method will be called once per scheduler run during simulation
 
+  }
+
+  public void engage_arm(boolean direction) {
+    /*
+     * Engage arm motor.
+     */
+
+    double power = ArmConstants.ARM_MOTOR_POWER;
+    double pos = arm_motor_encoder.getAbsolutePosition();
+
+    System.out.println("arm motor pos: " + pos);
+
+    if (direction) {
+        arm_motor.set(power);
+    }
+    else {
+        arm_motor.set(-power);
+    }
+  }
+
+  public void stop() {
+    /*
+     * Turn off all motors.
+     */
+
+    arm_motor.set(0.0);
   }
 }
