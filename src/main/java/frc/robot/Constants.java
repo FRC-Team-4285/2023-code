@@ -127,4 +127,24 @@ public final class Constants {
     public static final boolean INTAKE_DIRECTION_UP = true;
     public static final boolean INTAKE_DIRECTION_DOWN = false;
   }
+
+  public static final class SuctionConstants {
+    // Encoder IDs
+    public static final int SUCTION_MOTOR_ID = 13;
+
+    // Motor Speed
+    public static final double SUCTION_MOTOR_POWER = 0.1;
+  }
+
+  public static class HardwareCAN {
+    // Hardware CAN IDs
+    public static final int PDU = 10;
+    public static final int PneumaticHUB = 11;
+  }
+
+  public static class PneumaticChannels {
+    public static final int FORWARD = 6;
+    public static final int REVERSE = 7;
+  }
+
 }
