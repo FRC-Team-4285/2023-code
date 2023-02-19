@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
       HardwareCAN.PneumaticHUB, 
       PneumaticsModuleType.REVPH
     );
-    compressor.enableDigital();
+    compressor.enableAnalog(90.0, 120.0);
 
   }
 
@@ -55,6 +55,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    //System.out.println(compressor.getPressure());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

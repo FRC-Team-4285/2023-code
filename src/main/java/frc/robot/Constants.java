@@ -150,8 +150,8 @@ public final class Constants {
 
   public static class HardwareCAN {
     // Hardware CAN IDs
-    public static final int PDU = 1;
-    public static final int PneumaticHUB = 1;
+    public static final int PDU = 20;
+    public static final int PneumaticHUB = 21;
   }
 
   public static class PneumaticChannels {
