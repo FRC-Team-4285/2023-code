@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -35,7 +37,9 @@ public class RobotContainer {
   /* Drive Controls */
   private final int translationAxis = 1;
   private final int strafeAxis = 0;
-  private final int rotationAxis = 2; //was 4 on Xbox
+  private final int rotationAxis = 3; //flipper axis ranges from 1 to -1
+
+  private final DoubleSupplier rotationSupplier;
 
   /* Drive Buttons */
   private JoystickButton zeroGyro;
@@ -55,9 +59,11 @@ public class RobotContainer {
   private final PickupArmBase pickupArmBase;
   private final SuctionCupBase suctionCupBase;
 
-  public Joystick getJoystick(int stickID) {
-    if (stickID == 1) return passengerJoystick;
-    return driverJoystick; //default stick
+  public Joystick getDriverJoystick(int stickID) {
+    return driverJoystick;
+  }
+  public Joystick getPassengerJoystick(){
+    return passengerJoystick;
   }
 
   public SwerveBase getSwerveSubsytem() {
@@ -69,16 +75,22 @@ public class RobotContainer {
     driverJoystick = new Joystick(0);
     passengerJoystick = new Joystick(1);
 
+    rotationSupplier = () -> (
+      driverJoystick.getRawAxis(rotationAxis)*( //flipper axis controls power of rotation
+        (driverJoystick.getRawButton(11) ? -1.0:0.0) //button 11 turns left/  - direction
+      + (driverJoystick.getRawButton(12) ? 1.0:0.0)  //button 12 turns right/ + direction
+    ));
+
     swerveBase = new SwerveBase();
     swerveBase.setDefaultCommand(
       new TeleopSwerve(
         swerveBase,
-        // currently code has no deadband, add deadband here if needed in future
+        //swerve takes in doubleSuppliers for translation, strafing, and rotation
         () -> driverJoystick.getRawAxis(translationAxis),
         () -> driverJoystick.getRawAxis(strafeAxis),
-        () -> -driverJoystick.getRawAxis(rotationAxis),
-        () -> !driverJoystick.getRawButton(1) //inverted=fieldCentric, non-inverted=RobotCentric
-      )
+        rotationSupplier, //see above
+        () -> !driverJoystick.getRawButton(1) //field-centric by default
+        )
     );
 
     climberArmBase = new ClimberArmBase();
