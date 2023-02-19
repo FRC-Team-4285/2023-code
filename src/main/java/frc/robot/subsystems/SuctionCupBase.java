@@ -4,9 +4,11 @@ import frc.robot.Constants.SuctionConstants;
 import frc.robot.Constants.HardwareCAN;
 import frc.robot.Constants.PneumaticChannels;
 
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -24,7 +26,7 @@ public class SuctionCupBase extends SubsystemBase {
    *    a piston via a solenoid. 
    */
 
-  private DoubleSolenoid pump_solenoid;
+  private Solenoid pump_solenoid;
   private DoubleSolenoid release_solenoid;
 
   private boolean isEngaged = false;
@@ -35,11 +37,10 @@ public class SuctionCupBase extends SubsystemBase {
   public SuctionCupBase() {
     // This solenoid pumps the suction cup,
     // holding us to the balance station.
-    pump_solenoid = new DoubleSolenoid(
-      HardwareCAN.PneumaticHUB, 
-      PneumaticsModuleType.REVPH, 
-      PneumaticChannels.FORWARD, 
-      PneumaticChannels.REVERSE
+    pump_solenoid = new Solenoid(
+      HardwareCAN.PneumaticHUB,
+      PneumaticsModuleType.REVPH,
+      PneumaticChannels.CUP_PUMPER
     );
 
     // This solenoid releases the suction cup
@@ -47,8 +48,8 @@ public class SuctionCupBase extends SubsystemBase {
     release_solenoid = new DoubleSolenoid(
       HardwareCAN.PneumaticHUB, 
       PneumaticsModuleType.REVPH, 
-      PneumaticChannels.FORWARD, 
-      PneumaticChannels.REVERSE
+      PneumaticChannels.CUP_RELEASE_OFF,
+      PneumaticChannels.CUP_RELEASE_ON
     );
   }
 
@@ -78,7 +79,7 @@ public class SuctionCupBase extends SubsystemBase {
      */
 
     lastPumpEventTime = getCurrentTime();
-    pump_solenoid.set(Value.kForward);
+    pump_solenoid.set(true);
     isPumped = true;
   }
 
@@ -89,7 +90,7 @@ public class SuctionCupBase extends SubsystemBase {
      */
 
     lastPumpEventTime = getCurrentTime();
-    pump_solenoid.set(Value.kReverse);
+    pump_solenoid.set(false);
     isPumped = false;
   }
 

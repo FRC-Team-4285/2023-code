@@ -35,10 +35,10 @@ public final class Constants {
     public static final double angleGearRatio = 12.8; // Mk3 Standard steer ratio (does this need encoder stuff??)
 
     public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-                    new Translation2d(trackWidth / 2.0, wheelBase / 2.0), // front left, was ++
-                    new Translation2d(trackWidth / 2.0, -wheelBase / 2.0), // front right, was +-
-                    new Translation2d(-trackWidth / 2.0, wheelBase / 2.0), // rear left, was -+
-                    new Translation2d(-trackWidth / 2.0, -wheelBase / 2.0) // rear right, was --
+                    new Translation2d(trackWidth / 2.0, wheelBase / 2.0), // front left, ++ quadrant
+                    new Translation2d(trackWidth / 2.0, -wheelBase / 2.0), // front right, +- quadrant
+                    new Translation2d(-trackWidth / 2.0, wheelBase / 2.0), // rear left, -+ quadrant
+                    new Translation2d(-trackWidth / 2.0, -wheelBase / 2.0) // rear right, -- quadrant
     );
 
     /* Swerve Profiling Values */
@@ -148,12 +148,22 @@ public final class Constants {
 
   public static class HardwareCAN {
     // Hardware CAN IDs
-    public static final int PDU = 10;
-    public static final int PneumaticHUB = 11;
+    public static final int PDU = 0;
+    public static final int PneumaticHUB = 0;
   }
 
   public static class PneumaticChannels {
-    public static final int FORWARD = 6;
-    public static final int REVERSE = 7;
+    public static final int ROBOT_LIFTER = 0; //lifts robot when suction cup is engaged
+    public static final int CONE_ARM_RELEASE = 1; //cone arm is held up @ start of match, must be disengaged on match start
+    public static final int CUP_PUMPER = 2; //pumps up suction cup, needs at least 6-7 pumps before robot can support itself
+    public static final int CUP_RELEASE_OFF = 3; //releases suction cup
+    public static final int CUP_RELEASE_ON = 4;
+    public static final int CUBE_GRAB = 5; //cone arm main grabber, used on its own for cubes
+    public static final int CONE_GRAB_OFF = 6; //cone arm auxilliary grabber, used alongside CUBE_GRAB to grab cones better
+    public static final int CONE_GRAB_ON = 7;
+    public static final int FLOOR_EXTEND_OFF = 8; //extends grabber for grabbing cones off floor
+    public static final int FLOOR_EXTEND_ON = 9;
+    public static final int FLOOR_GRAB_OFF = 10; //actuates grabber for grabbing cones off floor
+    public static final int FLOOR_GRAB_ON = 11;
   }
 }

@@ -75,8 +75,8 @@ public class RobotContainer {
     driverJoystick = new Joystick(0);
     passengerJoystick = new Joystick(1);
 
-    rotationSupplier = () -> (
-      (1-driverJoystick.getRawAxis(rotationAxis))/2.0 *( //flipper axis controls power of rotation
+    rotationSupplier = () -> -(
+      (1.0-driverJoystick.getRawAxis(rotationAxis))/2.0 *( //flipper axis controls power of rotation
         (driverJoystick.getRawButton(11) ? -1.0:0.0) //button 11 turns left/  - direction
       + (driverJoystick.getRawButton(12) ? 1.0:0.0)  //button 12 turns right/ + direction
     ));
@@ -85,7 +85,7 @@ public class RobotContainer {
     swerveBase.setDefaultCommand(
       new TeleopSwerve(
         swerveBase,
-        //swerve takes in doubleSuppliers for translation, strafing, and rotation
+        //swerve command takes in doubleSuppliers for translation, strafing, and rotation
         () -> driverJoystick.getRawAxis(translationAxis),
         () -> driverJoystick.getRawAxis(strafeAxis),
         rotationSupplier, //see above
