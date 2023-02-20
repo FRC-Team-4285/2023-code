@@ -33,7 +33,7 @@ public class ClimberDown extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 
 }

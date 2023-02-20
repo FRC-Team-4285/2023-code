@@ -93,37 +93,37 @@ public class RobotContainer {
   private void configureBindings() {
     // Zero Gyro
     zeroGyro = new JoystickButton(driverJoystick, 7); //resets field-centric heading
-    zeroGyro.onTrue(new InstantCommand(() -> swerveBase.getPigeonSensor().reset()));
+    zeroGyro.whileHeld(new InstantCommand(() -> swerveBase.getPigeonSensor().reset()));
 
     // Arm Manual Raise
     btnArmRaise = new JoystickButton(driverJoystick, 6);
-    btnArmRaise.onTrue(new PickupArmUp(pickupArmBase));
+    btnArmRaise.whileHeld(new PickupArmUp(pickupArmBase));
 
     // Arm Manual Lower
     btnArmLower = new JoystickButton(driverJoystick, 5);
-    btnArmLower.onTrue(new PickupArmDown(pickupArmBase));
+    btnArmLower.whileHeld(new PickupArmDown(pickupArmBase));
 
     // Climber Manual Raise
     btnClimberUp = new JoystickButton(driverJoystick, 3);
-    btnClimberUp.onTrue(new ClimberUp(climberArmBase));
+    btnClimberUp.whileHeld(new ClimberUp(climberArmBase));
 
     // Climber Manual Lower
     btnClimberDown = new JoystickButton(driverJoystick, 4);
-    btnClimberDown.onTrue(new ClimberDown(climberArmBase));
+    btnClimberDown.whileHeld(new ClimberDown(climberArmBase));
 
     // Intake Manual Raise
     btnIntakeUp = new JoystickButton(driverJoystick, 5);
-    btnIntakeUp.onTrue(new IntakeUp(intakeBase));
+    btnIntakeUp.whileHeld(new IntakeUp(intakeBase));
 
     // Intake Manual Lower
     btnIntakeDown = new JoystickButton(driverJoystick, 6);
-    btnIntakeDown.onTrue(new IntakeDown(intakeBase));
+    btnIntakeDown.whileHeld(new IntakeDown(intakeBase));
 
     btnSuctionEngage = new JoystickButton(driverJoystick, 7);
-    btnSuctionEngage.onTrue(new SuctionCupEngage(suctionCupBase));
+    btnSuctionEngage.whileHeld(new SuctionCupEngage(suctionCupBase));
 
     btnSuctionRelease = new JoystickButton(driverJoystick, 8);
-    btnSuctionRelease.onTrue(new SuctionCupRelease(suctionCupBase));
+    btnSuctionRelease.whileHeld(new SuctionCupRelease(suctionCupBase));
   }
 
   /**
@@ -144,4 +144,37 @@ public class RobotContainer {
       swerveBase.followTrajectoryCommand(path, true)
     );
   }
+
+  // public int getArmRaiseBtnStatus() {
+  //   return btnArmRaise.isPressed()
+  // }
+
+  // public int getArmLowerBtnStatus() {
+  //   return btnArmLower.isPressed()
+  // }
+
+  // public int getClimberUpBtnStatus() {
+  //   return btnClimberUp.isPressed()
+  // }
+
+  // public int getClimberDownBtnStatus() {
+  //   return btnClimberDown.isPressed()
+  // }
+
+  // public int getIntakeUpBtnStatus() {
+  //   return btnIntakeUp.isPressed()
+  // }
+
+  // public int getIntakeDownBtnStatus() {
+  //   return btnIntakeDown.()
+  // }
+
+  // public int getSuctionEngageBtnStatus() {
+  //   return btnSuctionEngage.isPressed()
+  // }
+
+  // public int getSuctionReleaseBtnStatus() {
+  //   return btnSuctionRelease.isPressed()
+  // }
+
 }
