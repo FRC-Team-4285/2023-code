@@ -1,16 +1,12 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.Constants.PneumaticChannels;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
-// import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -20,25 +16,11 @@ public class IntakeBase extends SubsystemBase {
 
   private CANSparkMax intakeMotor;
   private RelativeEncoder intakeMotorEncoder;
-  private DoubleSolenoid intakeExtender;
-  private DoubleSolenoid intakeGrabber;
 
 
   public IntakeBase() {
     intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_ID, MotorType.kBrushless);
     intakeMotorEncoder = intakeMotor.getEncoder();
-
-    intakeExtender = new DoubleSolenoid(
-      PneumaticsModuleType.REVPH,
-      PneumaticChannels.FLOOR_EXTEND_OFF,
-      PneumaticChannels.FLOOR_EXTEND_ON
-    );
-
-    intakeGrabber = new DoubleSolenoid(
-      PneumaticsModuleType.REVPH,
-      PneumaticChannels.FLOOR_GRAB_OFF,
-      PneumaticChannels.FLOOR_GRAB_ON
-    );
   }
 
   @Override
@@ -67,22 +49,6 @@ public class IntakeBase extends SubsystemBase {
     else {
         intakeMotor.set(-power);
     }
-  }
-
-  public void extend_intake(){
-    intakeExtender.set(Value.kForward);
-  }
-
-  public void retract_intake(){
-    intakeExtender.set(Value.kReverse);
-  }
-  
-  public void grab_cone(){
-    intakeGrabber.set(Value.kForward);
-  }
-
-  public void release_cone(){
-    intakeGrabber.set(Value.kReverse);
   }
 
   public void stop() {
