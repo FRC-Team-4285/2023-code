@@ -3,11 +3,12 @@ package frc.robot.subsystems;
 import frc.robot.Constants.ClimberConstants;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
+// import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.Solenoid;
+
+// import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -18,6 +19,7 @@ public class ClimberArmBase extends SubsystemBase {
   private CANSparkMax climberMotorLeft;
   private CANSparkMax climberMotorRight;
   private DutyCycleEncoder climberMotorEncoder;
+  private Solenoid climberLiftSolenoid;
 
   public ClimberArmBase() {
     climberMotorLeft = new CANSparkMax(ClimberConstants.CLIMBER_MOTOR_LEFT_ID, MotorType.kBrushless);
@@ -67,6 +69,19 @@ public class ClimberArmBase extends SubsystemBase {
         climberMotorLeft.set(-power);
         climberMotorRight.set(power);
     }
+  }
+
+  public void engage_lift(){
+    // engages cylinders and disables operator control of the climbing motors
+    // climbing motors MUST BE IN COAST while cylinder is extending
+    // Use PID to set climber motors to assist cylinder???
+    climberLiftSolenoid.set(false);
+
+  }
+
+  public void disengage_lift(){
+    // default state of lift
+    climberLiftSolenoid.set(true); //solenoid is inverted so true == retracted
   }
 
   public void stop() {

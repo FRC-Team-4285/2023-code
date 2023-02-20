@@ -108,6 +108,8 @@ public final class Constants {
     public static final int CLIMBER_MOTOR_LEFT_ID = 10;
     public static final int CLIMBER_MOTOR_RIGHT_ID = 11;
 
+    public static final int BATTERY_MOTOR_ID = 12;
+
     // Motor Speed
     public static final double CLIMBER_MOTOR_POWER = 0.1;
 
@@ -118,7 +120,7 @@ public final class Constants {
 
   public static final class IntakeConstants {
     // Encoder IDs
-    public static final int INTAKE_MOTOR_ID = 12;
+    public static final int INTAKE_MOTOR_ID = 13;
 
     // Motor Speed
     public static final double INTAKE_MOTOR_POWER = 0.1;
@@ -130,10 +132,10 @@ public final class Constants {
 
   public static final class SuctionConstants {
     // Encoder IDs
-    public static final int SUCTION_MOTOR_ID = 13;
+    //public static final int SUCTION_MOTOR_ID = 13;
 
     // Motor Speed
-    public static final double SUCTION_MOTOR_POWER = 0.1;
+    //public static final double SUCTION_MOTOR_POWER = 0.1;
 
     // Action
     public static final boolean SUCTION_CUP_ENGAGE = true;
@@ -154,13 +156,13 @@ public final class Constants {
 
   public static class PneumaticChannels {
     public static final int ROBOT_LIFTER = 0; //lifts robot when suction cup is engaged
-    public static final int CONE_ARM_RELEASE = 1; //cone arm is held up @ start of match, must be disengaged on match start
+    public static final int ARM_LOCKER_OFF = 1; //cone arm is held up @ start of match, must be disengaged after match start
+    public static final int ARM_LOCKER_ON = 7;
     public static final int CUP_PUMPER = 2; //pumps up suction cup, needs at least 6-7 pumps before robot can support itself
     public static final int CUP_RELEASE_OFF = 3; //releases suction cup
     public static final int CUP_RELEASE_ON = 4;
     public static final int CUBE_GRAB = 5; //cone arm main grabber, used on its own for cubes
-    public static final int CONE_GRAB_OFF = 6; //cone arm auxilliary grabber, used alongside CUBE_GRAB to grab cones better
-    public static final int CONE_GRAB_ON = 7;
+    public static final int CONE_GRAB = 6; //cone arm auxilliary grabber, used alongside CUBE_GRAB to grab cones better
     public static final int FLOOR_EXTEND_OFF = 8; //extends grabber for grabbing cones off floor
     public static final int FLOOR_EXTEND_ON = 9;
     public static final int FLOOR_GRAB_OFF = 10; //actuates grabber for grabbing cones off floor
