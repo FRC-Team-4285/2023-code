@@ -11,14 +11,11 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import frc.robot.commands.*;
-
 import frc.robot.subsystems.ClimberArmBase;
 import frc.robot.subsystems.IntakeBase;
 import frc.robot.subsystems.PickupArmBase;
-// import frc.robot.subsystems.PressureBase;
 import frc.robot.subsystems.SuctionCupBase;
 import frc.robot.subsystems.SwerveBase;
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -60,7 +57,6 @@ public class RobotContainer {
   private final ClimberArmBase climberArmBase;
   private final IntakeBase intakeBase;
   private final PickupArmBase pickupArmBase;
-  //private final PressureBase pressureBase;
   private final SuctionCupBase suctionCupBase;
 
   public Joystick getDriverJoystick(int stickID) {
@@ -100,7 +96,6 @@ public class RobotContainer {
     climberArmBase = new ClimberArmBase();
     intakeBase = new IntakeBase();
     pickupArmBase = new PickupArmBase();
-   // pressureBase = new PressureBase();
     suctionCupBase = new SuctionCupBase();  
 
     // Configure the trigger bindings
@@ -114,32 +109,32 @@ public class RobotContainer {
 
     // Arm Manual Raise
     btnArmRaise = new JoystickButton(driverJoystick, 6);
-    btnArmRaise.onTrue(new PickupArmUp(pickupArmBase));
+    btnArmRaise.onTrue(new ArmUp(pickupArmBase));
 
     // Arm Manual Lower
-    btnArmLower = new JoystickButton(driverJoystick, 4);
-    btnArmLower.onTrue(new PickupArmDown(pickupArmBase));
+    btnArmLower = new JoystickButton(driverJoystick, 5);
+    btnArmLower.onTrue(new ArmDown(pickupArmBase));
 
     // Climber Manual Raise
-    btnClimberUp = new JoystickButton(driverJoystick, 5);
+    btnClimberUp = new JoystickButton(driverJoystick, 3);
     btnClimberUp.onTrue(new ClimberUp(climberArmBase));
 
     // Climber Manual Lower
-    btnClimberDown = new JoystickButton(driverJoystick, 3);
+    btnClimberDown = new JoystickButton(driverJoystick, 4);
     btnClimberDown.onTrue(new ClimberDown(climberArmBase));
 
     // Intake Manual Raise
-    btnIntakeUp = new JoystickButton(driverJoystick, 2);
+    btnIntakeUp = new JoystickButton(driverJoystick, 5);
     btnIntakeUp.onTrue(new IntakeUp(intakeBase));
 
     // Intake Manual Lower
-    btnIntakeDown = new JoystickButton(driverJoystick, 8);
+    btnIntakeDown = new JoystickButton(driverJoystick, 6);
     btnIntakeDown.onTrue(new IntakeDown(intakeBase));
 
-    btnSuctionEngage = new JoystickButton(driverJoystick, 10);
+    btnSuctionEngage = new JoystickButton(driverJoystick, 7);
     btnSuctionEngage.onTrue(new SuctionCupEngage(suctionCupBase));
 
-    btnSuctionRelease = new JoystickButton(driverJoystick, 9);
+    btnSuctionRelease = new JoystickButton(driverJoystick, 8);
     btnSuctionRelease.onTrue(new SuctionCupRelease(suctionCupBase));
   }
 
