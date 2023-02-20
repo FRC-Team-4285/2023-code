@@ -38,7 +38,7 @@ public class SuctionCupBase extends SubsystemBase {
     // This solenoid pumps the suction cup,
     // holding us to the balance station.
     pump_solenoid = new Solenoid(
-      HardwareCAN.PneumaticHUB,
+      HardwareCAN.PNEUMATIC_HUB,
       PneumaticsModuleType.REVPH,
       PneumaticChannels.CUP_PUMPER
     );
@@ -46,7 +46,7 @@ public class SuctionCupBase extends SubsystemBase {
     // This solenoid releases the suction cup
     // disconnecting us from the balance station.
     release_solenoid = new DoubleSolenoid(
-      HardwareCAN.PneumaticHUB, 
+      HardwareCAN.PNEUMATIC_HUB, 
       PneumaticsModuleType.REVPH, 
       PneumaticChannels.CUP_RELEASE_OFF,
       PneumaticChannels.CUP_RELEASE_ON
@@ -62,13 +62,12 @@ public class SuctionCupBase extends SubsystemBase {
     // If we are telling it to turn on.
     if (suctionCupEngage) {
       // Engage the system.
+      release_solenoid.set(DoubleSolenoid.Value.kForward);
       isEngaged = true;
     }
-    // Otherwise assume we are in a state where we should
-    // shut down.
     else {
-      // So call stop to shut everything down.
       stop();
+      release_solenoid.set(DoubleSolenoid.Value.kReverse);
     }
   }
 
@@ -81,6 +80,7 @@ public class SuctionCupBase extends SubsystemBase {
     lastPumpEventTime = getCurrentTime();
     pump_solenoid.set(true);
     isPumped = true;
+    suctionCount++;
   }
 
   public void resetPump() {
@@ -101,6 +101,7 @@ public class SuctionCupBase extends SubsystemBase {
 
     resetPump();
     lastPumpEventTime = 0.0;
+    suctionCount = 0;
     isEngaged = false;
   }
 
@@ -114,15 +115,20 @@ public class SuctionCupBase extends SubsystemBase {
       // Get pump status.
       int pumpStatus = checkIsPumpReady();
 
+      System.out.println(pumpStatus);
       // Pump is ready!
       if (pumpStatus == SuctionConstants.PUMP_READY) {
         // So PUMP!
+        System.out.println("PUMP");
         pumpSuctionCup();
       }
       // Pump is ready for a reset!
       else if (pumpStatus == SuctionConstants.PUMP_NEED_RESET) {
         // So RESET IT!
         resetPump();
+      }
+      else if (pumpStatus == SuctionConstants.PUMP_COMPLETE) {
+        stop();
       }
       else {
         // Everything that requires us to do something has been handled
@@ -160,6 +166,8 @@ public class SuctionCupBase extends SubsystemBase {
      *                          - We have just performed a pump action (pump/reset)
      *                            and need to wait a few moments to allow the mechanical
      *                            system to catch up with us.
+     *    PUMP_COMPLETE ..... Pump has finished pumping and the command is able to
+     *                        successfully exit and cleanup.
      */
 
     boolean deltaPumpTime = (getCurrentTime() - lastPumpEventTime) > SuctionConstants.PUMP_DELAY_MS;
@@ -172,9 +180,14 @@ public class SuctionCupBase extends SubsystemBase {
         return SuctionConstants.PUMP_NEED_RESET;
       }
       // ... we are not pumped and we haven't pumped enough yet.
-      else if (suctionCount <= 10) {
+      else if (suctionCount < 10) {
         // Pump!
         return SuctionConstants.PUMP_READY;
+      }
+      // OK we are ready to exit!
+      else if (suctionCount >= 10) {
+        // Tell it we're done.
+        return SuctionConstants.PUMP_COMPLETE;
       }
       // ... we are not pumped and we have did all the pumping
       // we need to do.
@@ -188,6 +201,10 @@ public class SuctionCupBase extends SubsystemBase {
       // ... so do nothing!
       return SuctionConstants.PUMP_WAIT;
     }
+  }
+
+  public boolean getIsEngaged() {
+    return isEngaged;
   }
 
   @Override

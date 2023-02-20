@@ -1,11 +1,14 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants.ClimberConstants;
+import frc.robot.Constants.HardwareCAN;
+import frc.robot.Constants.PneumaticChannels;
 
 import com.revrobotics.CANSparkMax;
 // import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 
 // import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -25,6 +28,14 @@ public class ClimberArmBase extends SubsystemBase {
     climberMotorLeft = new CANSparkMax(ClimberConstants.CLIMBER_MOTOR_LEFT_ID, MotorType.kBrushless);
     climberMotorRight = new CANSparkMax(ClimberConstants.CLIMBER_MOTOR_RIGHT_ID, MotorType.kBrushless);
     climberMotorEncoder = new DutyCycleEncoder(0);
+
+    // This solenoid pumps the suction cup,
+    // holding us to the balance station.
+    climberLiftSolenoid = new Solenoid(
+      HardwareCAN.PNEUMATIC_HUB,
+      PneumaticsModuleType.REVPH,
+      PneumaticChannels.CLIMBER_ARM_LIFTER
+    );
   }
 
   @Override
@@ -62,10 +73,12 @@ public class ClimberArmBase extends SubsystemBase {
     // Yes, that means YOU.
 
     if (direction) {
+        climberLiftSolenoid.set(true);
         climberMotorLeft.set(power);
         climberMotorRight.set(-power);
     }
     else {
+        climberLiftSolenoid.set(false);
         climberMotorLeft.set(-power);
         climberMotorRight.set(power);
     }

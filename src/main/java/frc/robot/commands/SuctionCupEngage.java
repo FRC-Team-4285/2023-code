@@ -24,6 +24,7 @@ public class SuctionCupEngage extends CommandBase {
   @Override
   public void end(boolean isInterrupted) {
     m_suctionSubsystem.stop();
+    System.out.println("stop");
   }
 
   @Override

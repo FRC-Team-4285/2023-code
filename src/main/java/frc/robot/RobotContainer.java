@@ -112,18 +112,18 @@ public class RobotContainer {
     btnClimberDown.whileHeld(new ClimberDown(climberArmBase));
 
     // Intake Manual Raise
-    btnIntakeUp = new JoystickButton(driverJoystick, 5);
+    btnIntakeUp = new JoystickButton(driverJoystick, 9);
     btnIntakeUp.whileHeld(new IntakeUp(intakeBase));
 
     // Intake Manual Lower
-    btnIntakeDown = new JoystickButton(driverJoystick, 6);
+    btnIntakeDown = new JoystickButton(driverJoystick, 10);
     btnIntakeDown.whileHeld(new IntakeDown(intakeBase));
 
     btnSuctionEngage = new JoystickButton(driverJoystick, 7);
-    btnSuctionEngage.whileHeld(new SuctionCupEngage(suctionCupBase));
+    btnSuctionEngage.onTrue(new SuctionCupEngage(suctionCupBase));
 
     btnSuctionRelease = new JoystickButton(driverJoystick, 8);
-    btnSuctionRelease.whileHeld(new SuctionCupRelease(suctionCupBase));
+    btnSuctionRelease.onTrue(new SuctionCupRelease(suctionCupBase));
   }
 
   /**

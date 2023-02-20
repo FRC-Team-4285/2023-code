@@ -34,10 +34,10 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
 
     compressor = new Compressor(
-      HardwareCAN.PneumaticHUB, 
+      HardwareCAN.PNEUMATIC_HUB, 
       PneumaticsModuleType.REVPH
     );
-    compressor.enableDigital();
+    compressor.enableAnalog(110.0, 120.0);
 
   }
 

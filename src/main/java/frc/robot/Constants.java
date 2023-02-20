@@ -111,7 +111,7 @@ public final class Constants {
     public static final int BATTERY_MOTOR_ID = 12;
 
     // Motor Speed
-    public static final double CLIMBER_MOTOR_POWER = 0.1;
+    public static final double CLIMBER_MOTOR_POWER = 0.4;
 
     // Direction
     public static final boolean CLIMBER_DIRECTION_UP = true;
@@ -144,18 +144,19 @@ public final class Constants {
     public static final int PUMP_READY = 0;
     public static final int PUMP_NEED_RESET = 1;
     public static final int PUMP_WAIT = 2;
+    public static final int PUMP_COMPLETE = 3;
 
-    public static final double PUMP_DELAY_MS = 300.0;
+    public static final double PUMP_DELAY_MS = 200.0;
   }
 
   public static class HardwareCAN {
     // Hardware CAN IDs
-    public static final int PDU = 20;
-    public static final int PneumaticHUB = 21;
+    public static final int PDU_PUMP = 20;
+    public static final int PNEUMATIC_HUB = 21;
   }
 
   public static class PneumaticChannels {
-    public static final int ROBOT_LIFTER = 0; //lifts robot when suction cup is engaged
+    public static final int CLIMBER_ARM_LIFTER = 0; //lifts robot when suction cup is engaged
     public static final int ARM_LOCKER_OFF = 1; //cone arm is held up @ start of match, must be disengaged after match start
     public static final int ARM_LOCKER_ON = 7;
     public static final int CUP_PUMPER = 2; //pumps up suction cup, needs at least 6-7 pumps before robot can support itself
