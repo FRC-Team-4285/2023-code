@@ -46,10 +46,10 @@ public final class Constants {
     public static final double maxAngularVelocity = 11.0;
 
     public static final int frontLeftRotationMotorId = 8;
-    public static final int frontLeftDriveMotorId = 7;
+    public static final int frontLeftDriveMotorId = 23;
 
     public static final int frontRightRotationMotorId = 5;
-    public static final int frontRightDriveMotorId = 6;
+    public static final int frontRightDriveMotorId = 22;
 
     public static final int rearLeftRotationMotorId = 2;
     public static final int rearLeftDriveMotorId = 1;

@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.HardwareCAN;
 import frc.robot.Constants.PneumaticChannels;
 
 import com.revrobotics.CANSparkMax;
@@ -34,17 +35,20 @@ public class PickupArmBase extends SubsystemBase {
     armMotorEncoder = armMotor.getEncoder();
 
     armLocker = new DoubleSolenoid(
+      HardwareCAN.PNEUMATIC_HUB,
       PneumaticsModuleType.REVPH,
       PneumaticChannels.ARM_LOCKER_OFF,
       PneumaticChannels.ARM_LOCKER_ON
     );
 
     cubeGrabber = new Solenoid(
+      HardwareCAN.PNEUMATIC_HUB,
       PneumaticsModuleType.REVPH,
       PneumaticChannels.CUBE_GRAB
     );
-    
+
     coneGrabber = new Solenoid(
+      HardwareCAN.PNEUMATIC_HUB,
       PneumaticsModuleType.REVPH,
       PneumaticChannels.CONE_GRAB
     );
@@ -86,7 +90,7 @@ public class PickupArmBase extends SubsystemBase {
     cubeGrabber.set(false);
   }
 
-  public void grab_cone(){
+  public void grab_cone() {
     grab_cube();
     coneGrabber.set(true); //cone grabber is engaged AFTER cube grabber
   }

@@ -47,6 +47,7 @@ public class RobotContainer {
   private JoystickButton btnIntakeDown;
   private JoystickButton btnSuctionEngage;
   private JoystickButton btnSuctionRelease;
+  private JoystickButton btnConeGrab;
 
   /* Subsystems */
   private final SwerveBase swerveBase;
@@ -77,7 +78,7 @@ public class RobotContainer {
         () -> driverJoystick.getRawAxis(translationAxis),
         () -> driverJoystick.getRawAxis(strafeAxis),
         () -> -driverJoystick.getRawAxis(rotationAxis),
-        () -> !driverJoystick.getRawButton(1) //inverted=fieldCentric, non-inverted=RobotCentric
+        () -> false //inverted=fieldCentric, non-inverted=RobotCentric
       )
     );
 
@@ -119,11 +120,15 @@ public class RobotContainer {
     btnIntakeDown = new JoystickButton(driverJoystick, 10);
     btnIntakeDown.whileHeld(new IntakeDown(intakeBase));
 
-    btnSuctionEngage = new JoystickButton(driverJoystick, 7);
+    btnSuctionEngage = new JoystickButton(driverJoystick, 11);
     btnSuctionEngage.onTrue(new SuctionCupEngage(suctionCupBase));
 
-    btnSuctionRelease = new JoystickButton(driverJoystick, 8);
+    btnSuctionRelease = new JoystickButton(driverJoystick, 12);
     btnSuctionRelease.onTrue(new SuctionCupRelease(suctionCupBase));
+
+    btnConeGrab = new JoystickButton(driverJoystick, 8);
+    btnConeGrab.whileHeld(new CubeGrab(pickupArmBase));
+
   }
 
   /**
