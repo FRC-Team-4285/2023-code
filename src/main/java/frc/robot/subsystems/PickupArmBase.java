@@ -7,7 +7,8 @@ import frc.robot.Constants.PneumaticChannels;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import com.revrobotics.SparkMaxAlternateEncoder;
+
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -32,7 +33,7 @@ public class PickupArmBase extends SubsystemBase {
 
   public PickupArmBase() {
     armMotor = new CANSparkMax(ArmConstants.ARM_MOTOR_ID, MotorType.kBrushless);
-    armMotorEncoder = armMotor.getEncoder();
+    armMotorEncoder = armMotor.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 8196);
 
     armLocker = new DoubleSolenoid(
       HardwareCAN.PNEUMATIC_HUB,
@@ -70,9 +71,14 @@ public class PickupArmBase extends SubsystemBase {
      */
 
     double power = ArmConstants.ARM_MOTOR_POWER;
-    double pos = armMotorEncoder.getPosition();
+    double pos = armMotorEncoder.getAbsolutePosition();
 
     System.out.println("arm motor pos: " + pos);
+    boolean isSafe = (pos > 0 && pos < 100);
+    if (!isSafe) {
+      armMotor.set(0);
+      return;
+    }
 
     if (direction) {
         armMotor.set(power);
@@ -92,11 +98,11 @@ public class PickupArmBase extends SubsystemBase {
 
   public void grab_cone() {
     grab_cube();
-    coneGrabber.set(true); //cone grabber is engaged AFTER cube grabber
+    coneGrabber.set(false); //cone grabber is engaged AFTER cube grabber
   }
 
   public void release_cone(){
-    coneGrabber.set(false);//cone grabber is released BEFORE cube grabber
+    coneGrabber.set(true);//cone grabber is released BEFORE cube grabber
     release_cube();
   }
 

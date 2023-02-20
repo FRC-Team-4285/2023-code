@@ -127,7 +127,7 @@ public class RobotContainer {
     btnSuctionRelease.onTrue(new SuctionCupRelease(suctionCupBase));
 
     btnConeGrab = new JoystickButton(driverJoystick, 8);
-    btnConeGrab.whileHeld(new CubeGrab(pickupArmBase));
+    btnConeGrab.whileHeld(new ConeGrab(pickupArmBase));
 
   }
 
