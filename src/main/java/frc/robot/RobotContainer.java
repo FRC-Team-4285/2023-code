@@ -109,11 +109,11 @@ public class RobotContainer {
 
     // Arm Manual Raise
     btnArmRaise = new JoystickButton(driverJoystick, 6);
-    btnArmRaise.onTrue(new ArmUp(pickupArmBase));
+    btnArmRaise.onTrue(new PickupArmUp(pickupArmBase));
 
     // Arm Manual Lower
     btnArmLower = new JoystickButton(driverJoystick, 5);
-    btnArmLower.onTrue(new ArmDown(pickupArmBase));
+    btnArmLower.onTrue(new PickupArmDown(pickupArmBase));
 
     // Climber Manual Raise
     btnClimberUp = new JoystickButton(driverJoystick, 3);
