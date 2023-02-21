@@ -35,9 +35,9 @@ public class PickupArmBase extends SubsystemBase {
 
   public PickupArmBase() {
     armMotor = new CANSparkMax(ArmConstants.ARM_MOTOR_ID, MotorType.kBrushless);
-    //armMotorEncoder = armMotor.getAlternateEncoder(null, 8192);
     armMotorEncoder = new DutyCycleEncoder(1);
     armMotorEncoder.setDistancePerRotation(360.0);
+
     armLocker = new DoubleSolenoid(
       HardwareCAN.PNEUMATIC_HUB,
       PneumaticsModuleType.REVPH,
@@ -80,20 +80,34 @@ public class PickupArmBase extends SubsystemBase {
     System.out.println("arm motor pos: " + pos);
     boolean isSafe = (pos > 0 && pos < 100);
     if (!isSafe) {
-      //DOES NOT WORK
-      //COMMAND CONTINUES EVEN IF ARM EXCEEDS SAFE ANGLES
-      //DOES WORK WHEN THE COMMAND IS STOPPED AND ANOTHER COMMAND IS ATTEMPTED
-      if(pos < 0) armMotor.set(0.05);
-      else if(pos>100) armMotor.set(-0.05);
-      else;
-      return;
+      // We know that when within this block we are already out of bounds.
+      // So we only need to know about one side to know whether or not we exceeded
+      // the other side. If we are not below 0, we must be above 100; if we are not above 100,
+      // we must be below 0.
+      boolean bound_dir_exceeded = (pos < 0) ? true : false;
+  
+      // bound_dir_exceeded = TRUE when we are BELOW 0
+      // bound_dir_exceeded = FALSE when we are ABOVE 100
+      // direction = TRUE when we are INCREASING/RAISING ARM
+      // direction = FALSE when we are DECREASING/LOWERING ARM
+  
+      if (direction && !bound_dir_exceeded) {
+        // if we are INCEASING and we are ABOVE 100, this is NOT OK.
+        stop();
+        return;
+      }
+      else if (!direction && bound_dir_exceeded) {
+        // if we are DECREASING and we are BELOW 0, this is NOT OK.
+        stop();
+        return;
+      }
     }
 
     if (direction) {
-        armMotor.set(power);
+      armMotor.set(power);
     }
     else {
-        armMotor.set(-power);
+      armMotor.set(-power);
     }
   }
 
