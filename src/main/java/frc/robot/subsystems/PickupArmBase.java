@@ -5,14 +5,16 @@ import frc.robot.Constants.HardwareCAN;
 import frc.robot.Constants.PneumaticChannels;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
+//import com.revrobotics.RelativeEncoder;
+//import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxAlternateEncoder;
+//import com.revrobotics.SparkMaxAlternateEncoder;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -22,7 +24,7 @@ public class PickupArmBase extends SubsystemBase {
   /** Creates a new ArmBase. */
 
   private CANSparkMax armMotor;
-  private RelativeEncoder armMotorEncoder;
+  private DutyCycleEncoder armMotorEncoder;
   private DoubleSolenoid armLocker;
   private Solenoid cubeGrabber;
   private Solenoid coneGrabber;
@@ -33,8 +35,9 @@ public class PickupArmBase extends SubsystemBase {
 
   public PickupArmBase() {
     armMotor = new CANSparkMax(ArmConstants.ARM_MOTOR_ID, MotorType.kBrushless);
-    armMotorEncoder = armMotor.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 8196);
-
+    //armMotorEncoder = armMotor.getAlternateEncoder(null, 8192);
+    armMotorEncoder = new DutyCycleEncoder(1);
+    armMotorEncoder.setDistancePerRotation(360.0);
     armLocker = new DoubleSolenoid(
       HardwareCAN.PNEUMATIC_HUB,
       PneumaticsModuleType.REVPH,
@@ -71,12 +74,14 @@ public class PickupArmBase extends SubsystemBase {
      */
 
     double power = ArmConstants.ARM_MOTOR_POWER;
-    double pos = armMotorEncoder.getAbsolutePosition();
+    double pos = 50.0 - armMotorEncoder.getDistance();
 
     System.out.println("arm motor pos: " + pos);
     boolean isSafe = (pos > 0 && pos < 100);
     if (!isSafe) {
-      armMotor.set(0);
+      if(pos < 0) armMotor.set(0.05);
+      else if(pos>100) armMotor.set(-0.05);
+      else;
       return;
     }
 
