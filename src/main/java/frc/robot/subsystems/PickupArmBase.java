@@ -74,11 +74,15 @@ public class PickupArmBase extends SubsystemBase {
      */
 
     double power = ArmConstants.ARM_MOTOR_POWER;
-    double pos = 50.0 - armMotorEncoder.getDistance();
+    // need to set 50.0 as offset for this encoder
+    double pos = 50.0 - armMotorEncoder.getDistance(); //encoder is backwards, fixed by - sign
 
     System.out.println("arm motor pos: " + pos);
     boolean isSafe = (pos > 0 && pos < 100);
     if (!isSafe) {
+      //DOES NOT WORK
+      //COMMAND CONTINUES EVEN IF ARM EXCEEDS SAFE ANGLES
+      //DOES WORK WHEN THE COMMAND IS STOPPED AND ANOTHER COMMAND IS ATTEMPTED
       if(pos < 0) armMotor.set(0.05);
       else if(pos>100) armMotor.set(-0.05);
       else;
