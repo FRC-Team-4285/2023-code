@@ -28,6 +28,7 @@ public class PickupArmBase extends SubsystemBase {
   private DoubleSolenoid armLocker;
   private Solenoid cubeGrabber;
   private Solenoid coneGrabber;
+  private boolean arm_direction;
 
   //pickup arm has an encoder connected to SPARK MAX
   //said encoder is capable of operating in duty-cycle mode
@@ -61,6 +62,13 @@ public class PickupArmBase extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    double pos = getEncoderValue();
+    boolean isSafe = getIsSafe(arm_direction, pos);
+    if (!isSafe) {
+      stop();
+      return;
+    }
+
   }
 
   @Override
@@ -68,17 +76,38 @@ public class PickupArmBase extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 
+  public double getEncoderValue() {
+    //encoder is backwards, fixed by - sign
+    return 50.0 - armMotorEncoder.getDistance();
+  }
+
   public void engage_arm(boolean direction) {
     /*
      * Engage arm motor.
      */
 
+    arm_direction = direction;
+
     double power = ArmConstants.ARM_MOTOR_POWER;
     // need to set 50.0 as offset for this encoder
-    double pos = 50.0 - armMotorEncoder.getDistance(); //encoder is backwards, fixed by - sign
+    double pos = getEncoderValue();
 
-    System.out.println("arm motor pos: " + pos);
-    boolean isSafe = (pos > 0 && pos < 100);
+    boolean isSafe = getIsSafe(direction, pos);
+    if (!isSafe) {
+      armMotor.set(0);
+      return;
+    }
+
+    if (direction) {
+      armMotor.set(power);
+    }
+    else {
+      armMotor.set(-power);
+    }
+  }
+
+  private boolean getIsSafe(boolean direction, double pos) {
+    boolean isSafe = (pos > 0 && pos < 230);
     if (!isSafe) {
       // We know that when within this block we are already out of bounds.
       // So we only need to know about one side to know whether or not we exceeded
@@ -93,22 +122,15 @@ public class PickupArmBase extends SubsystemBase {
   
       if (direction && !bound_dir_exceeded) {
         // if we are INCEASING and we are ABOVE 100, this is NOT OK.
-        stop();
-        return;
+        return false;
       }
       else if (!direction && bound_dir_exceeded) {
         // if we are DECREASING and we are BELOW 0, this is NOT OK.
-        stop();
-        return;
+        return false;
       }
     }
 
-    if (direction) {
-      armMotor.set(power);
-    }
-    else {
-      armMotor.set(-power);
-    }
+    return true;
   }
 
   public void grab_cube(){

@@ -23,11 +23,13 @@ public class ClimberArmBase extends SubsystemBase {
   private CANSparkMax climberMotorRight;
   private DutyCycleEncoder climberMotorEncoder;
   private Solenoid climberLiftSolenoid;
+  private boolean climber_direction;
 
   public ClimberArmBase() {
     climberMotorLeft = new CANSparkMax(ClimberConstants.CLIMBER_MOTOR_LEFT_ID, MotorType.kBrushless);
     climberMotorRight = new CANSparkMax(ClimberConstants.CLIMBER_MOTOR_RIGHT_ID, MotorType.kBrushless);
     climberMotorEncoder = new DutyCycleEncoder(0);
+    climberMotorEncoder.setDistancePerRotation(360.0);
 
     // This solenoid pumps the suction cup,
     // holding us to the balance station.
@@ -41,6 +43,48 @@ public class ClimberArmBase extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    double pos = getEncoderValue();
+
+    System.out.println("climb motor pos: " + pos);
+
+    boolean isSafe = getIsSafe(climber_direction, pos);
+    if (!isSafe) {
+      stop();
+      return;
+    }
+
+  }
+
+  private boolean getIsSafe(boolean direction, double pos) {
+    System.out.println(direction + " " + pos);
+    boolean isSafe = (pos > 0 && pos < 101);
+    if (!isSafe) {
+      // We know that when within this block we are already out of bounds.
+      // So we only need to know about one side to know whether or not we exceeded
+      // the other side. If we are not below 0, we must be above 100; if we are not above 100,
+      // we must be below 0.
+      boolean bound_dir_exceeded = (pos < 0) ? true : false;
+  
+      // bound_dir_exceeded = TRUE when we are BELOW 0
+      // bound_dir_exceeded = FALSE when we are ABOVE 100
+      // direction = TRUE when we are INCREASING/RAISING ARM
+      // direction = FALSE when we are DECREASING/LOWERING ARM
+  
+      if (direction && bound_dir_exceeded) {
+        // if we are INCEASING and we are ABOVE 100, this is NOT OK.
+        return false;
+      }
+      else if (!direction && !bound_dir_exceeded) {
+        // if we are DECREASING and we are BELOW 0, this is NOT OK.
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  public double getEncoderValue() {
+    return climberMotorEncoder.getDistance() - 354;
   }
 
   @Override
@@ -54,7 +98,8 @@ public class ClimberArmBase extends SubsystemBase {
      */
 
     double power = ClimberConstants.CLIMBER_MOTOR_POWER;
-    double pos = climberMotorEncoder.getAbsolutePosition();
+    double pos = getEncoderValue();
+    climber_direction = direction;
 
     System.out.println("climb motor pos: " + pos);
 

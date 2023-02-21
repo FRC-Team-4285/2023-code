@@ -96,7 +96,7 @@ public final class Constants {
     public static final int ARM_MOTOR_ID = 9;
 
     // Motor Speed
-    public static final double ARM_MOTOR_POWER = 0.1;    
+    public static final double ARM_MOTOR_POWER = 0.35;    
 
     // Direction
     public static final boolean ARM_DIRECTION_UP = true;
@@ -146,7 +146,7 @@ public final class Constants {
     public static final int PUMP_WAIT = 2;
     public static final int PUMP_COMPLETE = 3;
 
-    public static final double PUMP_DELAY_MS = 200.0;
+    public static final double PUMP_DELAY_MS = 125.0;
   }
 
   public static class HardwareCAN {

@@ -115,11 +115,9 @@ public class SuctionCupBase extends SubsystemBase {
       // Get pump status.
       int pumpStatus = checkIsPumpReady();
 
-      System.out.println(pumpStatus);
       // Pump is ready!
       if (pumpStatus == SuctionConstants.PUMP_READY) {
         // So PUMP!
-        System.out.println("PUMP");
         pumpSuctionCup();
       }
       // Pump is ready for a reset!
