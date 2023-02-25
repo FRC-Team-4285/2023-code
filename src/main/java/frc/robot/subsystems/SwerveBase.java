@@ -96,6 +96,7 @@ public class SwerveBase extends SubsystemBase {
 
   private final WPI_Pigeon2 pigeonSensor;
   private final AHRS navX;
+  private boolean isFieldRelativeLocal = true;
 
   public SwerveBase() {
     navX = new AHRS(SPI.Port.kMXP);
@@ -103,7 +104,7 @@ public class SwerveBase extends SubsystemBase {
     new Thread(() -> {
       try {
         //Thread.sleep(1000);
-        //pigeonSensor.reset();
+        navX.reset();
         //odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
       } catch (Exception e) {
       }
@@ -158,37 +159,6 @@ public class SwerveBase extends SubsystemBase {
     SmartDashboard.putString("RR Wheel Angle", rearRight.getCanCoderAngle().toString());
   }
 
-  /**
-   * method for driving the robot
-   * Parameters:
-   * forward linear value
-   * sideways linear value
-   * rotation value
-   * if the control is field relative or robot relative
-   */
-  public void drive(double forward, double strafe, double rotation, boolean isFieldRelative) {
-
-    /**
-     * ChassisSpeeds object to represent the overall state of the robot
-     * ChassisSpeeds takes a forward and sideways linear value and a rotational
-     * value
-     * 
-     * speeds is set to field relative or default (robot relative) based on
-     * parameter
-     */
-    ChassisSpeeds speeds = isFieldRelative
-        ? ChassisSpeeds.fromFieldRelativeSpeeds(
-            forward, strafe, rotation, getHeading())
-        : new ChassisSpeeds(forward, strafe, rotation);
-
-    // use kinematics (wheel placements) to convert overall robot state to array of
-    // individual module states
-    SwerveModuleState[] states = Swerve.kinematics.toSwerveModuleStates(speeds);
-
-    setModuleStates(states);
-
-  }
-
   public Pose2d getScaledPose() {
     m_pose = getPose();
     final var translation = new Translation2d(m_pose.getX() * SCALE_X, m_pose.getY() * SCALE_Y);
@@ -200,7 +170,7 @@ public class SwerveBase extends SubsystemBase {
     return Rotation2d.fromDegrees(pigeonSensor.getCompassHeading());
   }
 
-  public void drive(double forward, double strafe, double rotation, boolean isFieldRelative, boolean isAutoBalancing) {
+  public void drive(double forward, double strafe, double rotation, boolean isFieldRelative) {
 
     /**
      * ChassisSpeeds object to represent the overall state of the robot
@@ -210,16 +180,20 @@ public class SwerveBase extends SubsystemBase {
      * speeds is set to field relative or default (robot relative) based on
      * parameter
      */
-    ChassisSpeeds speeds = isFieldRelative
-        ? ChassisSpeeds.fromFieldRelativeSpeeds(
-            forward, strafe, rotation, getHeading())
-        : new ChassisSpeeds(forward, strafe, rotation);
+
+     isFieldRelativeLocal = isFieldRelative;
+
+     ChassisSpeeds speeds = isFieldRelativeLocal
+     ? ChassisSpeeds.fromFieldRelativeSpeeds(
+         forward, strafe, rotation, getHeading())
+     : ChassisSpeeds.fromFieldRelativeSpeeds(
+      forward, strafe, rotation, Rotation2d.fromDegrees(180));
 
     // use kinematics (wheel placements) to convert overall robot state to array of
     // individual module states
     SwerveModuleState[] states = Swerve.kinematics.toSwerveModuleStates(speeds);
 
-    setModuleStates(states, isAutoBalancing);
+    setModuleStates(states);
 
   }
 
@@ -305,7 +279,7 @@ public class SwerveBase extends SubsystemBase {
 
   // get the current heading of the robot based on the gyro
   public Rotation2d getHeading() {
-    return Rotation2d.fromDegrees(-navX.getYaw() + 90); // was -
+    return Rotation2d.fromDegrees(-navX.getYaw() + 90);
   }
 
   public void stopModules() {
