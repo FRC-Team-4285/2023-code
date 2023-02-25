@@ -78,7 +78,7 @@ public class RobotContainer {
         () -> driverJoystick.getRawAxis(translationAxis),
         () -> driverJoystick.getRawAxis(strafeAxis),
         () -> -driverJoystick.getRawAxis(rotationAxis),
-        () -> false //inverted=fieldCentric, non-inverted=RobotCentric
+        () -> !driverJoystick.getRawButton(1) //inverted=fieldCentric, non-inverted=RobotCentric
       )
     );
 

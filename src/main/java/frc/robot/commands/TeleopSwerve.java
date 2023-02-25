@@ -78,7 +78,7 @@ public class TeleopSwerve extends CommandBase {
         -fwdX,
         -fwdY,
         rot,
-        true
+        fieldOrientedFunction.get()
       );
   }
 }

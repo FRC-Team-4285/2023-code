@@ -45,7 +45,7 @@ public class ClimberArmBase extends SubsystemBase {
     // This method will be called once per scheduler run
     double pos = getEncoderValue();
 
-    System.out.println("climb motor pos: " + pos);
+    // System.out.println("climb motor pos: " + pos);
 
     boolean isSafe = getIsSafe(climber_direction, pos);
     if (!isSafe) {
@@ -56,7 +56,7 @@ public class ClimberArmBase extends SubsystemBase {
   }
 
   private boolean getIsSafe(boolean direction, double pos) {
-    System.out.println(direction + " " + pos);
+    // System.out.println(direction + " " + pos);
     boolean isSafe = (pos > 0 && pos < 101);
     if (!isSafe) {
       // We know that when within this block we are already out of bounds.
@@ -101,7 +101,7 @@ public class ClimberArmBase extends SubsystemBase {
     double pos = getEncoderValue();
     climber_direction = direction;
 
-    System.out.println("climb motor pos: " + pos);
+    // System.out.println("climb motor pos: " + pos);
 
     // ----------------------
     // !!! VERY IMPORTANT !!!
