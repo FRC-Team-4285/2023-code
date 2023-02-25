@@ -94,7 +94,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Zero Gyro
     zeroGyro = new JoystickButton(driverJoystick, 7); //resets field-centric heading
-    zeroGyro.whileHeld(new InstantCommand(() -> swerveBase.getPigeonSensor().reset()));
+    zeroGyro.whileHeld(new InstantCommand(() -> swerveBase.getNavX().reset()));
 
     // Arm Manual Raise
     btnArmRaise = new JoystickButton(driverJoystick, 6);
@@ -138,10 +138,10 @@ public class RobotContainer {
    */
   public CommandBase getAutonomousCommand() {
     PathPlannerTrajectory path = PathPlanner.loadPath(
-      "ExamplePath",
+      "A_AutoClimbCubeCone",
       new PathConstraints(
         3,
-        2
+      2
       )
     );
 

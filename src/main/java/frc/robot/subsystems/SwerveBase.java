@@ -16,10 +16,12 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
- 
+import com.kauailabs.navx.frc.AHRS;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+import edu.wpi.first.wpilibj.SPI;
+
 
 public class SwerveBase extends SubsystemBase {
 
@@ -93,8 +95,10 @@ public class SwerveBase extends SubsystemBase {
   }
 
   private final WPI_Pigeon2 pigeonSensor;
+  private final AHRS navX;
 
   public SwerveBase() {
+    navX = new AHRS(SPI.Port.kMXP);
     pigeonSensor = new WPI_Pigeon2(0);
     new Thread(() -> {
       try {
@@ -301,7 +305,7 @@ public class SwerveBase extends SubsystemBase {
 
   // get the current heading of the robot based on the gyro
   public Rotation2d getHeading() {
-    return Rotation2d.fromDegrees(pigeonSensor.getYaw()); // was -
+    return Rotation2d.fromDegrees(-navX.getYaw() + 90); // was -
   }
 
   public void stopModules() {
@@ -313,6 +317,10 @@ public class SwerveBase extends SubsystemBase {
 
   public WPI_Pigeon2 getPigeonSensor() {
     return pigeonSensor;
+  }
+
+  public AHRS getNavX() {
+    return navX;
   }
 
   public SwerveDriveKinematics getKinematics() {
