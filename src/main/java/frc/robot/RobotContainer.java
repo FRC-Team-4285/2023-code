@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 
-/**
+/*
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
@@ -57,9 +57,11 @@ public class RobotContainer {
   public final PickupArmBase pickupArmBase;
   public final SuctionCupBase suctionCupBase;
 
-  public Joystick getJoystick(int stickID) {
-    if (stickID == 1) return passengerJoystick;
-    return driverJoystick; //default stick
+  public Joystick getJoystick() {
+    return driverJoystick;
+  }
+  public Joystick getPassengerJoystick() {
+    return passengerJoystick;
   }
 
   public SwerveBase getSwerveSubsytem() {
