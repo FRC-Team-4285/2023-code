@@ -151,36 +151,44 @@ public class RobotContainer {
     );
   }
 
-  // public int getArmRaiseBtnStatus() {
-  //   return btnArmRaise.isPressed()
-  // }
+  public boolean getZeroGyroBtnStatus() {
+    return zeroGyro.getAsBoolean();
+  }
 
-  // public int getArmLowerBtnStatus() {
-  //   return btnArmLower.isPressed()
-  // }
+  public boolean getArmRaiseBtnStatus() {
+    return btnArmRaise.getAsBoolean();
+  }
 
-  // public int getClimberUpBtnStatus() {
-  //   return btnClimberUp.isPressed()
-  // }
+  public boolean getArmLowerBtnStatus() {
+    return btnArmLower.getAsBoolean();
+  }
 
-  // public int getClimberDownBtnStatus() {
-  //   return btnClimberDown.isPressed()
-  // }
+  public boolean getClimberUpBtnStatus() {
+    return btnClimberUp.getAsBoolean();
+  }
 
-  // public int getIntakeUpBtnStatus() {
-  //   return btnIntakeUp.isPressed()
-  // }
+  public boolean getClimberDownBtnStatus() {
+    return btnClimberDown.getAsBoolean();
+  }
 
-  // public int getIntakeDownBtnStatus() {
-  //   return btnIntakeDown.()
-  // }
+  public boolean getIntakeUpBtnStatus() {
+    return btnIntakeUp.getAsBoolean();
+  }
 
-  // public int getSuctionEngageBtnStatus() {
-  //   return btnSuctionEngage.isPressed()
-  // }
+  public boolean getIntakeDownBtnStatus() {
+    return btnIntakeDown.getAsBoolean();
+  }
 
-  // public int getSuctionReleaseBtnStatus() {
-  //   return btnSuctionRelease.isPressed()
-  // }
+  public boolean getSuctionEngageBtnStatus() {
+    return btnSuctionEngage.getAsBoolean();
+  }
+
+  public boolean getSuctionReleaseBtnStatus() {
+    return btnSuctionRelease.getAsBoolean();
+  }
+
+  public boolean getConeGrabBtnStatus() {
+    return btnConeGrab.getAsBoolean();
+  }
 
 }
