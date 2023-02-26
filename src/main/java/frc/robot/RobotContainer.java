@@ -146,6 +146,13 @@ public class RobotContainer {
       )
     );
 
+    // How to chain link commands SEQUENTIALLY.
+    // return new SequentialCommandGroup(
+    //   swerveBase.followTrajectoryCommand(path_a, true),
+    //   swerveBase.followTrajectoryCommand(path_b, false),
+    //   swerveBase.followTrajectoryCommand(path_c, false)
+    // );
+
     return new SequentialCommandGroup(
       swerveBase.followTrajectoryCommand(path, true)
     );
