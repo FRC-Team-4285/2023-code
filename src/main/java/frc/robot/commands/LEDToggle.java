@@ -27,7 +27,7 @@ public class LEDToggle extends CommandBase {
 
   @Override
   public void initialize() {
-    m_ledSubsystem.toggle_led();
+    m_ledSubsystem.toggle_led_strip();
   }
 
   @Override

@@ -31,7 +31,7 @@ public class LEDBase extends SubsystemBase {
      */
   }
 
-  public void toggle_led() {
+  public void toggle_led_strip() {
     led_strip.set(
       !led_strip.get()
     );
