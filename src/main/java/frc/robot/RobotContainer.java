@@ -8,6 +8,7 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
+import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.ClimberArmBase;
 import frc.robot.subsystems.IntakeBase;
@@ -50,11 +51,11 @@ public class RobotContainer {
   private JoystickButton btnConeGrab;
 
   /* Subsystems */
-  private final SwerveBase swerveBase;
-  private final ClimberArmBase climberArmBase;
-  private final IntakeBase intakeBase;
-  private final PickupArmBase pickupArmBase;
-  private final SuctionCupBase suctionCupBase;
+  public final SwerveBase swerveBase;
+  public final ClimberArmBase climberArmBase;
+  public final IntakeBase intakeBase;
+  public final PickupArmBase pickupArmBase;
+  public final SuctionCupBase suctionCupBase;
 
   public Joystick getJoystick(int stickID) {
     if (stickID == 1) return passengerJoystick;
@@ -138,10 +139,10 @@ public class RobotContainer {
    */
   public CommandBase getAutonomousCommand() {
     PathPlannerTrajectory path = PathPlanner.loadPath(
-      "A_AutoClimbCubeCone",
+      AutoConstants.SELECTED_AUTO,
       new PathConstraints(
-        3,
-      2
+        AutoConstants.MAX_SPEED,
+        AutoConstants.MAX_ACCELLERATION
       )
     );
 

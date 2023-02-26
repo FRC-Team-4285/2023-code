@@ -7,7 +7,7 @@ import frc.robot.Constants.LEDConstants;
 
 public class LEDBase extends SubsystemBase {
 
-  /** Creates a new ClimberBase. */
+  /** Creates a new LEDBase. */
 
   private DigitalOutput led_strip;
 

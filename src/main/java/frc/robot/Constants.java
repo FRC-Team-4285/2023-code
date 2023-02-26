@@ -76,19 +76,14 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 3;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-    public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-    public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+    public static final double MAX_SPEED = 0.3;
+    public static final double MAX_ACCELLERATION = 0.3;
 
-    public static final double kPXController = 0;
-    public static final double kPYController = 0;
-    public static final double kPThetaController = 0;
+    // AUTO CONFIGURATIONS
+    public static final String A_AUTO_CLIMB_CUBE_CONE = "A_AutoClimbCubeCone";
 
-    // Constraint for the motion profilied robot angle controller
-    public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
-        new TrapezoidProfile.Constraints(
-            kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+    // CURRENTLY SELECTED AUTO.
+    public static final String SELECTED_AUTO = AutoConstants.A_AUTO_CLIMB_CUBE_CONE;
   }
 
   public static final class ArmConstants {
@@ -174,4 +169,5 @@ public final class Constants {
     public static final int FLOOR_GRAB_OFF = 10; //actuates grabber for grabbing cones off floor
     public static final int FLOOR_GRAB_ON = 11;
   }
+
 }
