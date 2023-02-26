@@ -155,6 +155,11 @@ public final class Constants {
     public static final int PNEUMATIC_HUB = 21;
   }
 
+  public static class LEDConstants {
+    // DIO Port IDs for LEDs.
+    public static final int DIO_LED_STRIP = 2;
+  }
+
   public static class PneumaticChannels {
     public static final int CLIMBER_ARM_LIFTER = 0; //lifts robot when suction cup is engaged
     public static final int ARM_LOCKER_OFF = 1; //cone arm is held up @ start of match, must be disengaged after match start
