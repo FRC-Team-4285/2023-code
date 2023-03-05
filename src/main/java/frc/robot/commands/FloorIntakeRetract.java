@@ -13,12 +13,12 @@ public class FloorIntakeRetract extends CommandBase {
    * This command will lower the intake system.
    */
 
-  private final IntakeBase m_intakeBase;
+  private final IntakeBase m_intakeSubsystem;
 
 
   public FloorIntakeRetract(IntakeBase subsystem) {
-    m_intakeBase = subsystem;
-    addRequirements(m_intakeBase);
+    m_intakeSubsystem = subsystem;
+    addRequirements(m_intakeSubsystem);
   }
 
   @Override
@@ -28,7 +28,8 @@ public class FloorIntakeRetract extends CommandBase {
 
   @Override
   public void initialize() {
-    m_intakeBase.retract_intake();
+    m_intakeSubsystem.retract_intake();
+    m_intakeSubsystem.go_to_position(-60.453);
   }
 
   @Override
