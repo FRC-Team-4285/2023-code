@@ -13,6 +13,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.ClimberArmBase;
 import frc.robot.subsystems.IntakeBase;
 import frc.robot.subsystems.PickupArmBase;
+import frc.robot.subsystems.SuctionArmBase;
 import frc.robot.subsystems.SuctionCupBase;
 import frc.robot.subsystems.SwerveBase;
 import edu.wpi.first.wpilibj.Joystick;
@@ -31,7 +32,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Joystick driverJoystick;
-  private final Joystick passengerJoystick;
+  private final Joystick streamDeck;
 
   /* Drive Controls */
   private final int translationAxis = 1;
@@ -49,6 +50,14 @@ public class RobotContainer {
   private JoystickButton btnSuctionEngage;
   private JoystickButton btnSuctionRelease;
   private JoystickButton btnConeGrab;
+  private JoystickButton btnCubeGrab;
+  private JoystickButton btnFloorIntakeExtend;
+  private JoystickButton btnFloorIntakeRetract;
+  private JoystickButton btnIntakeGrabCone;
+  private JoystickButton btnIntakeStartPos;
+  private JoystickButton btnArmStartPos;
+  private JoystickButton btnArmDropPos;
+  private JoystickButton btnArmFeederPos;
 
   /* Subsystems */
   public final SwerveBase swerveBase;
@@ -56,12 +65,14 @@ public class RobotContainer {
   public final IntakeBase intakeBase;
   public final PickupArmBase pickupArmBase;
   public final SuctionCupBase suctionCupBase;
+  public final SuctionArmBase suctionArmBase;
 
   public Joystick getJoystick() {
     return driverJoystick;
   }
-  public Joystick getPassengerJoystick() {
-    return passengerJoystick;
+
+  public Joystick getStreamDeck() {
+    return streamDeck;
   }
 
   public SwerveBase getSwerveSubsytem() {
@@ -71,7 +82,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     driverJoystick = new Joystick(0);
-    passengerJoystick = new Joystick(1);
+    streamDeck = new Joystick(1);
 
     swerveBase = new SwerveBase();
     swerveBase.setDefaultCommand(
@@ -89,6 +100,7 @@ public class RobotContainer {
     intakeBase = new IntakeBase();
     pickupArmBase = new PickupArmBase();
     suctionCupBase = new SuctionCupBase();  
+    suctionArmBase = new SuctionArmBase();
 
     // Configure the trigger bindings
     configureBindings();
@@ -99,38 +111,76 @@ public class RobotContainer {
     zeroGyro = new JoystickButton(driverJoystick, 7); //resets field-centric heading
     zeroGyro.whileHeld(new InstantCommand(() -> swerveBase.getNavX().reset()));
 
-    // Arm Manual Raise
-    btnArmRaise = new JoystickButton(driverJoystick, 6);
-    btnArmRaise.whileHeld(new PickupArmUp(pickupArmBase));
+    // // Arm Manual Raise
+    // btnArmRaise = new JoystickButton(streamDeck, 1);
+    // btnArmRaise.whileHeld(new PickupArmUp(pickupArmBase));
 
-    // Arm Manual Lower
-    btnArmLower = new JoystickButton(driverJoystick, 5);
-    btnArmLower.whileHeld(new PickupArmDown(pickupArmBase));
+    // // Arm Manual Lower
+    // btnArmLower = new JoystickButton(streamDeck, 6);
+    // btnArmLower.whileHeld(new PickupArmDown(pickupArmBase));
 
-    // Climber Manual Raise
-    btnClimberUp = new JoystickButton(driverJoystick, 3);
+    // // Arm Manual Piston
+    // btnArmPiston = new JoystickButton(streamDeck, 10);
+    // btnArmPiston.whileHeld(new ArmPiston(suctionArmBase));
+
+    // Arm Drop Config
+    btnArmDropPos = new JoystickButton(streamDeck, 2);
+    btnArmDropPos.whileHeld(new PickupArmDropPos(pickupArmBase));
+
+    // Arm Start Config
+    btnArmStartPos = new JoystickButton(streamDeck, 7);
+    btnArmStartPos.whileHeld(new PickupArmStartPos(pickupArmBase));
+
+    // Arm Feeder Pos
+    btnArmFeederPos = new JoystickButton(streamDeck, 12);
+    btnArmFeederPos.whileHeld(new PickupArmFeederPos(pickupArmBase));
+
+
+    //Climber Manual Raise
+    btnClimberUp = new JoystickButton(streamDeck, 128);
     btnClimberUp.whileHeld(new ClimberUp(climberArmBase));
 
     // Climber Manual Lower
-    btnClimberDown = new JoystickButton(driverJoystick, 4);
+    btnClimberDown = new JoystickButton(streamDeck, 127);
     btnClimberDown.whileHeld(new ClimberDown(climberArmBase));
 
     // Intake Manual Raise
-    btnIntakeUp = new JoystickButton(driverJoystick, 9);
-    btnIntakeUp.whileHeld(new IntakeUp(intakeBase));
+    // btnIntakeUp = new JoystickButton(streamDeck, 9);
+    // btnIntakeUp.whileHeld(new ConeGrabberIngestUp(intakeBase));
 
     // Intake Manual Lower
-    btnIntakeDown = new JoystickButton(driverJoystick, 10);
-    btnIntakeDown.whileHeld(new IntakeDown(intakeBase));
+    // btnIntakeDown = new JoystickButton(streamDeck, 10);
+    // btnIntakeDown.whileHeld(new ConeGrabberIngestDown(intakeBase));
 
-    btnSuctionEngage = new JoystickButton(driverJoystick, 11);
-    btnSuctionEngage.onTrue(new SuctionCupEngage(suctionCupBase));
+    // Intake Grab Cone
+    btnIntakeGrabCone = new JoystickButton(streamDeck, 4);
+    btnIntakeGrabCone.whileHeld(new ConeGrabberIngestCone(intakeBase));
 
-    btnSuctionRelease = new JoystickButton(driverJoystick, 12);
-    btnSuctionRelease.onTrue(new SuctionCupRelease(suctionCupBase));
+    // Intake Start Position
+    btnIntakeStartPos = new JoystickButton(streamDeck, 2);
+    btnIntakeStartPos.whileHeld(new ConeGrabberIngestStartPos(intakeBase));
 
-    btnConeGrab = new JoystickButton(driverJoystick, 8);
-    btnConeGrab.whileHeld(new ConeGrab(pickupArmBase));
+    // Extend Floor Intake
+    btnFloorIntakeExtend = new JoystickButton(streamDeck, 8);
+    btnFloorIntakeExtend.whileHeld(new FloorIntakeExtend(intakeBase));
+
+    // Retract Floor Intake
+    btnFloorIntakeRetract = new JoystickButton(streamDeck, 3);
+    btnFloorIntakeRetract.whileHeld(new FloorIntakeRetract(intakeBase));
+
+    // btnSuctionEngage = new JoystickButton(streamDeck, 11);
+    // btnSuctionEngage.onTrue(new SuctionCupEngage(suctionCupBase));
+
+    // btnSuctionRelease = new JoystickButton(streamDeck, 12);
+    // btnSuctionRelease.onTrue(new SuctionCupRelease(suctionCupBase));
+
+    // Cone Grab
+    btnConeGrab = new JoystickButton(streamDeck, 32);
+    btnConeGrab.whileHeld(new ConeGrab(suctionArmBase, intakeBase));
+
+    // Cube Grab
+    btnCubeGrab = new JoystickButton(streamDeck, 31);
+    btnCubeGrab.whileHeld(new CubeGrab(suctionArmBase));
 
   }
 
@@ -140,24 +190,29 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public CommandBase getAutonomousCommand() {
-    PathPlannerTrajectory path = PathPlanner.loadPath(
-      AutoConstants.SELECTED_AUTO,
+    PathPlannerTrajectory path_a = PathPlanner.loadPath(
+      "A_AutoClimbCubeCone_1",
       new PathConstraints(
         AutoConstants.MAX_SPEED,
         AutoConstants.MAX_ACCELLERATION
       )
     );
 
-    // How to chain link commands SEQUENTIALLY.
-    // return new SequentialCommandGroup(
-    //   swerveBase.followTrajectoryCommand(path_a, true),
-    //   swerveBase.followTrajectoryCommand(path_b, false),
-    //   swerveBase.followTrajectoryCommand(path_c, false)
-    // );
-
-    return new SequentialCommandGroup(
-      swerveBase.followTrajectoryCommand(path, true)
+    PathPlannerTrajectory path_b = PathPlanner.loadPath(
+      "A_AutoClimbCubeCone_2",
+      new PathConstraints(
+        AutoConstants.MAX_SPEED,
+        AutoConstants.MAX_ACCELLERATION
+      )
     );
+
+
+    // How to chain link commands SEQUENTIALLY.
+    return new SequentialCommandGroup(
+      swerveBase.followTrajectoryCommand(path_a, true),
+      swerveBase.followTrajectoryCommand(path_b, false)
+    );
+
   }
 
   public boolean getZeroGyroBtnStatus() {

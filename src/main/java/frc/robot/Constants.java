@@ -95,6 +95,12 @@ public final class Constants {
     // Direction
     public static final boolean ARM_DIRECTION_UP = true;
     public static final boolean ARM_DIRECTION_DOWN = false;
+
+    // PID Positions
+    public static final double START_POS = 16.43;
+    public static final double FEEDER_POS = 0.85;
+    public static final double DROP_POS = 56.35;
+
   }
 
   public static final class ClimberConstants {
@@ -110,6 +116,13 @@ public final class Constants {
     // Direction
     public static final boolean CLIMBER_DIRECTION_UP = true;
     public static final boolean CLIMBER_DIRECTION_DOWN = false;
+
+    // PID Positions
+    public static final double CLIMBER_POS_DOWN_LEFT = 0.0;
+    public static final double CLIMBER_POS_DOWN_RIGHT = 0.0;
+    public static final double CLIMBER_POS_UP_LEFT = 0.0;
+    public static final double CLIMBER_POS_UP_RIGHT = 0.0;
+
   }
 
   public static final class IntakeConstants {

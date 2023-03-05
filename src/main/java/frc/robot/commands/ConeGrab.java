@@ -1,7 +1,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.PickupArmBase;
+import frc.robot.subsystems.IntakeBase;
+import frc.robot.subsystems.SuctionArmBase;
 
 
 public class ConeGrab extends CommandBase {
@@ -12,22 +13,26 @@ public class ConeGrab extends CommandBase {
    * This command will lower the intake system.
    */
 
-  private final PickupArmBase m_armSubsystem;
-
-
-  public ConeGrab(PickupArmBase subsystem) {
-    m_armSubsystem = subsystem;
-    addRequirements(m_armSubsystem);
-  }
+   private final SuctionArmBase m_suctionArmSubsystem;
+   private final IntakeBase m_intakeSubsystem;
+ 
+ 
+   public ConeGrab(SuctionArmBase suctionSubsystem, IntakeBase intakeSubsystem) {
+     m_suctionArmSubsystem = suctionSubsystem;
+     m_intakeSubsystem = intakeSubsystem;
+     addRequirements(m_suctionArmSubsystem, m_intakeSubsystem);
+   }
 
   @Override
   public void end(boolean isInterrupted) {
-    m_armSubsystem.release_cone();
+    m_suctionArmSubsystem.release_cone();
+    m_intakeSubsystem.release_cone();
   }
 
   @Override
   public void initialize() {
-    m_armSubsystem.grab_cone();
+    m_suctionArmSubsystem.grab_cone();
+    m_intakeSubsystem.grab_cone();
   }
 
   @Override

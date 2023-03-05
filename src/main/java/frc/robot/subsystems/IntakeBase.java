@@ -1,10 +1,13 @@
 package frc.robot.subsystems;
 
+import frc.robot.Constants.HardwareCAN;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.PneumaticChannels;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -19,6 +22,7 @@ public class IntakeBase extends SubsystemBase {
   /** Creates a new IntakeBase. */
 
   private CANSparkMax intakeMotor;
+  private SparkMaxPIDController intakeMotorPID;
   private RelativeEncoder intakeMotorEncoder;
   private DoubleSolenoid intakeExtender;
   private DoubleSolenoid intakeGrabber;
@@ -29,21 +33,26 @@ public class IntakeBase extends SubsystemBase {
     intakeMotorEncoder = intakeMotor.getEncoder();
 
     intakeExtender = new DoubleSolenoid(
+      HardwareCAN.PNEUMATIC_HUB,
       PneumaticsModuleType.REVPH,
-      PneumaticChannels.FLOOR_EXTEND_OFF,
-      PneumaticChannels.FLOOR_EXTEND_ON
+      PneumaticChannels.FLOOR_EXTEND_ON,
+      PneumaticChannels.FLOOR_EXTEND_OFF
     );
 
     intakeGrabber = new DoubleSolenoid(
+      HardwareCAN.PNEUMATIC_HUB,
       PneumaticsModuleType.REVPH,
-      PneumaticChannels.FLOOR_GRAB_OFF,
-      PneumaticChannels.FLOOR_GRAB_ON
+      PneumaticChannels.FLOOR_GRAB_ON,
+      PneumaticChannels.FLOOR_GRAB_OFF
     );
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    // double pos = intakeMotorEncoder.getPosition();
+    // System.out.println("intake motor pos: " + pos);
+
   }
 
   @Override
@@ -59,7 +68,7 @@ public class IntakeBase extends SubsystemBase {
     double power = IntakeConstants.INTAKE_MOTOR_POWER;
     double pos = intakeMotorEncoder.getPosition();
 
-    System.out.println("intake motor pos: " + pos);
+    // System.out.println("intake motor pos: " + pos);
 
     if (direction) {
         intakeMotor.set(power);
@@ -69,20 +78,31 @@ public class IntakeBase extends SubsystemBase {
     }
   }
 
-  public void extend_intake(){
+  public void go_to_position(double position) {
+    intakeMotorPID = intakeMotor.getPIDController();
+    intakeMotorPID.setP(0.1);
+    intakeMotorPID.setI(0.0);
+    intakeMotorPID.setD(0.0);
+    intakeMotorPID.setIZone(0.0);
+    intakeMotorPID.setFF(0.0);
+    intakeMotorPID.setOutputRange(-100.0, 200.0);
+    intakeMotorPID.setReference(position, ControlType.kPosition);
+  }
+
+  public void extend_intake() {
     intakeExtender.set(Value.kForward);
   }
 
-  public void retract_intake(){
+  public void retract_intake() {
     intakeExtender.set(Value.kReverse);
   }
-  
-  public void grab_cone(){
-    intakeGrabber.set(Value.kForward);
+
+  public void grab_cone() {
+    intakeGrabber.set(Value.kReverse);
   }
 
-  public void release_cone(){
-    intakeGrabber.set(Value.kReverse);
+  public void release_cone() {
+    intakeGrabber.set(Value.kForward);
   }
 
   public void stop() {

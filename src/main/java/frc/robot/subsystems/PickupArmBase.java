@@ -5,6 +5,8 @@ import frc.robot.Constants.HardwareCAN;
 import frc.robot.Constants.PneumaticChannels;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 //import com.revrobotics.RelativeEncoder;
 //import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -24,6 +26,7 @@ public class PickupArmBase extends SubsystemBase {
   /** Creates a new ArmBase. */
 
   private CANSparkMax armMotor;
+  private SparkMaxPIDController armMotorPID;
   private DutyCycleEncoder armMotorEncoder;
   private DoubleSolenoid armLocker;
   private Solenoid cubeGrabber;
@@ -38,36 +41,19 @@ public class PickupArmBase extends SubsystemBase {
     armMotor = new CANSparkMax(ArmConstants.ARM_MOTOR_ID, MotorType.kBrushless);
     armMotorEncoder = new DutyCycleEncoder(1);
     armMotorEncoder.setDistancePerRotation(360.0);
-
-    armLocker = new DoubleSolenoid(
-      HardwareCAN.PNEUMATIC_HUB,
-      PneumaticsModuleType.REVPH,
-      PneumaticChannels.ARM_LOCKER_OFF,
-      PneumaticChannels.ARM_LOCKER_ON
-    );
-
-    cubeGrabber = new Solenoid(
-      HardwareCAN.PNEUMATIC_HUB,
-      PneumaticsModuleType.REVPH,
-      PneumaticChannels.CUBE_GRAB
-    );
-
-    coneGrabber = new Solenoid(
-      HardwareCAN.PNEUMATIC_HUB,
-      PneumaticsModuleType.REVPH,
-      PneumaticChannels.CONE_GRAB
-    );
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    double pos = getEncoderValue();
-    boolean isSafe = getIsSafe(arm_direction, pos);
-    if (!isSafe) {
-      stop();
-      return;
-    }
+    System.out.println(armMotor.getEncoder().getPosition());
+
+    // double pos = getEncoderValue();
+    // boolean isSafe = getIsSafe(arm_direction, pos);
+    // if (!isSafe) {
+    //   stop();
+    //   return;
+    // }
 
   }
 
@@ -133,24 +119,6 @@ public class PickupArmBase extends SubsystemBase {
     return true;
   }
 
-  public void grab_cube(){
-    cubeGrabber.set(true);
-  }
-
-  public void release_cube(){
-    cubeGrabber.set(false);
-  }
-
-  public void grab_cone() {
-    grab_cube();
-    coneGrabber.set(false); //cone grabber is engaged AFTER cube grabber
-  }
-
-  public void release_cone(){
-    coneGrabber.set(true);//cone grabber is released BEFORE cube grabber
-    release_cube();
-  }
-
   public void lock_arm(){
     armLocker.set(Value.kForward);
   }
@@ -166,4 +134,16 @@ public class PickupArmBase extends SubsystemBase {
 
     armMotor.set(0.0);
   }
+
+  public void go_to_position(double position) {
+    armMotorPID = armMotor.getPIDController();
+    armMotorPID.setP(0.02);
+    armMotorPID.setI(0.0);
+    armMotorPID.setD(0.0);
+    armMotorPID.setIZone(0.0);
+    armMotorPID.setFF(0.0);
+    armMotorPID.setOutputRange(-0.5, 0.5);
+    armMotorPID.setReference(position, ControlType.kPosition);
+  }
+
 }

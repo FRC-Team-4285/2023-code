@@ -5,6 +5,8 @@ import frc.robot.Constants.HardwareCAN;
 import frc.robot.Constants.PneumaticChannels;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 // import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -21,6 +23,8 @@ public class ClimberArmBase extends SubsystemBase {
 
   private CANSparkMax climberMotorLeft;
   private CANSparkMax climberMotorRight;
+  private SparkMaxPIDController climberMotorRightPID;
+  private SparkMaxPIDController climberMotorLeftPID;
   private DutyCycleEncoder climberMotorEncoder;
   private Solenoid climberLiftSolenoid;
   private boolean climber_direction;
@@ -45,7 +49,7 @@ public class ClimberArmBase extends SubsystemBase {
     // This method will be called once per scheduler run
     double pos = getEncoderValue();
 
-    System.out.println("climb motor pos: " + pos);
+    // System.out.println("climb motor pos: " + pos);
 
     boolean isSafe = getIsSafe(climber_direction, pos);
     if (!isSafe) {
@@ -56,7 +60,7 @@ public class ClimberArmBase extends SubsystemBase {
   }
 
   private boolean getIsSafe(boolean direction, double pos) {
-    System.out.println(direction + " " + pos);
+    // System.out.println(direction + " " + pos);
     boolean isSafe = (pos > 0 && pos < 101);
     if (!isSafe) {
       // We know that when within this block we are already out of bounds.
@@ -101,7 +105,7 @@ public class ClimberArmBase extends SubsystemBase {
     double pos = getEncoderValue();
     climber_direction = direction;
 
-    System.out.println("climb motor pos: " + pos);
+    // System.out.println("climb motor pos: " + pos);
 
     // ----------------------
     // !!! VERY IMPORTANT !!!
@@ -149,5 +153,25 @@ public class ClimberArmBase extends SubsystemBase {
 
     climberMotorLeft.set(0.0);
     climberMotorRight.set(0.0);
+  }
+
+  public void go_to_position(double leftMotorPos, double rightMotorPos) {
+    climberMotorLeftPID = climberMotorLeft.getPIDController();
+    climberMotorLeftPID.setP(0.1);
+    climberMotorLeftPID.setI(0.0);
+    climberMotorLeftPID.setD(0.0);
+    climberMotorLeftPID.setIZone(0.0);
+    climberMotorLeftPID.setFF(0.0);
+    climberMotorLeftPID.setOutputRange(-100.0, 200.0);
+    climberMotorLeftPID.setReference(leftMotorPos, ControlType.kPosition);
+
+    climberMotorRightPID = climberMotorRight.getPIDController();
+    climberMotorRightPID.setP(0.1);
+    climberMotorRightPID.setI(0.0);
+    climberMotorRightPID.setD(0.0);
+    climberMotorRightPID.setIZone(0.0);
+    climberMotorRightPID.setFF(0.0);
+    climberMotorRightPID.setOutputRange(-100.0, 200.0);
+    climberMotorRightPID.setReference(rightMotorPos, ControlType.kPosition);
   }
 }
