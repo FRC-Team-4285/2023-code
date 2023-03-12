@@ -138,7 +138,7 @@ public class PickupArmBase extends SubsystemBase {
     armMotorPID.setD(0.0);
     armMotorPID.setIZone(0.0);
     armMotorPID.setFF(0.0);
-    armMotorPID.setOutputRange(-0.4, 0.4);
+    armMotorPID.setOutputRange(-1.0, 1.0);
     armMotorPID.setReference(position, ControlType.kPosition);
   }
 
