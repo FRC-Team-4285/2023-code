@@ -88,7 +88,7 @@ public class ClimberArmBase extends SubsystemBase {
   }
 
   public double getEncoderValue() {
-    return climberMotorEncoder.getDistance() - 354;
+    return climberMotorEncoder.getAbsolutePosition();
   }
 
   @Override
