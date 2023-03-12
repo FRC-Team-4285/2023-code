@@ -68,7 +68,7 @@ public class ClimberSuctionEngage extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 
 }
