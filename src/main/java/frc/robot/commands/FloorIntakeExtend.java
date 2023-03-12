@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.IntakeBase;
 import frc.robot.subsystems.SuctionArmBase;
 
@@ -29,7 +30,7 @@ public class FloorIntakeExtend extends CommandBase {
   @Override
   public void initialize() {
     m_intakeSubsystem.extend_intake();
-    m_intakeSubsystem.go_to_position(-1.547);
+    m_intakeSubsystem.go_to_position(IntakeConstants.INTAKE_EXTEND_POS);
   }
 
   @Override
