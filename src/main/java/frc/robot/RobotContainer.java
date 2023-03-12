@@ -9,7 +9,6 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.Swerve;
 import frc.robot.commands.*;
 import frc.robot.subsystems.ClimberArmBase;
 import frc.robot.subsystems.IntakeBase;

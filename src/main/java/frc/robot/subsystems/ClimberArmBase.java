@@ -60,35 +60,36 @@ public class ClimberArmBase extends SubsystemBase {
   }
 
   private boolean getIsSafe(boolean direction, double pos) {
-    // System.out.println(direction + " " + pos);
-    boolean isSafe = (pos > 0 && pos < 101);
-    if (!isSafe) {
-      // We know that when within this block we are already out of bounds.
-      // So we only need to know about one side to know whether or not we exceeded
-      // the other side. If we are not below 0, we must be above 100; if we are not above 100,
-      // we must be below 0.
-      boolean bound_dir_exceeded = (pos < 0) ? true : false;
-  
-      // bound_dir_exceeded = TRUE when we are BELOW 0
-      // bound_dir_exceeded = FALSE when we are ABOVE 100
-      // direction = TRUE when we are INCREASING/RAISING ARM
-      // direction = FALSE when we are DECREASING/LOWERING ARM
-  
-      if (direction && bound_dir_exceeded) {
-        // if we are INCEASING and we are ABOVE 100, this is NOT OK.
-        return false;
-      }
-      else if (!direction && !bound_dir_exceeded) {
-        // if we are DECREASING and we are BELOW 0, this is NOT OK.
-        return false;
-      }
-    }
-
     return true;
+    // // System.out.println(direction + " " + pos);
+    // boolean isSafe = (pos > 0 && pos < 101);
+    // if (!isSafe) {
+    //   // We know that when within this block we are already out of bounds.
+    //   // So we only need to know about one side to know whether or not we exceeded
+    //   // the other side. If we are not below 0, we must be above 100; if we are not above 100,
+    //   // we must be below 0.
+    //   boolean bound_dir_exceeded = (pos < 0) ? true : false;
+  
+    //   // bound_dir_exceeded = TRUE when we are BELOW 0
+    //   // bound_dir_exceeded = FALSE when we are ABOVE 100
+    //   // direction = TRUE when we are INCREASING/RAISING ARM
+    //   // direction = FALSE when we are DECREASING/LOWERING ARM
+  
+    //   if (direction && bound_dir_exceeded) {
+    //     // if we are INCEASING and we are ABOVE 100, this is NOT OK.
+    //     return false;
+    //   }
+    //   else if (!direction && !bound_dir_exceeded) {
+    //     // if we are DECREASING and we are BELOW 0, this is NOT OK.
+    //     return false;
+    //   }
+    // }
+
+    // return true;
   }
 
   public double getEncoderValue() {
-    return climberMotorEncoder.getAbsolutePosition();
+    return climberMotorEncoder.getDistance() - 354;
   }
 
   @Override
@@ -155,23 +156,44 @@ public class ClimberArmBase extends SubsystemBase {
     climberMotorRight.set(0.0);
   }
 
-  public void go_to_position(double motorPos) {
-    climberMotorLeftPID = climberMotorLeft.getPIDController();
-    climberMotorLeftPID.setP(0.05);
-    climberMotorLeftPID.setI(0.0);
-    climberMotorLeftPID.setD(0.0);
-    climberMotorLeftPID.setIZone(0.0);
-    climberMotorLeftPID.setFF(0.0);
-    climberMotorLeftPID.setOutputRange(-0.3, 0.3);
-    climberMotorLeftPID.setReference(motorPos, ControlType.kPosition);
-
-    // climberMotorRightPID = climberMotorRight.getPIDController();
-    // climberMotorRightPID.setP(0.05);
-    // climberMotorRightPID.setI(0.0);
-    // climberMotorRightPID.setD(0.0);
-    // climberMotorRightPID.setIZone(0.0);
-    // climberMotorRightPID.setFF(0.0);
-    // climberMotorRightPID.setOutputRange(0.3, -0.3);
-    //  climberMotorRightPID.setReference(motorPos, ControlType.kPosition);
+  public void go_to_position(double motorPos, boolean direction) {
+    if (direction) {
+      climberMotorLeftPID = climberMotorLeft.getPIDController();
+      climberMotorLeftPID.setP(0.05);
+      climberMotorLeftPID.setI(0.0);
+      climberMotorLeftPID.setD(0.0);
+      climberMotorLeftPID.setIZone(0.0);
+      climberMotorLeftPID.setFF(0.0);
+      climberMotorLeftPID.setOutputRange(0.3, -0.3);
+      climberMotorLeftPID.setReference(motorPos, ControlType.kPosition);
+  
+      climberMotorRightPID = climberMotorRight.getPIDController();
+      climberMotorRightPID.setP(0.05);
+      climberMotorRightPID.setI(0.0);
+      climberMotorRightPID.setD(0.0);
+      climberMotorRightPID.setIZone(0.0);
+      climberMotorRightPID.setFF(0.0);
+      climberMotorRightPID.setOutputRange(-0.3, 0.3);
+      climberMotorRightPID.setReference(motorPos, ControlType.kPosition);
+    }
+    else {
+      climberMotorLeftPID = climberMotorLeft.getPIDController();
+      climberMotorLeftPID.setP(0.05);
+      climberMotorLeftPID.setI(0.0);
+      climberMotorLeftPID.setD(0.0);
+      climberMotorLeftPID.setIZone(0.0);
+      climberMotorLeftPID.setFF(0.0);
+      climberMotorLeftPID.setOutputRange(-0.3, 0.3);
+      climberMotorLeftPID.setReference(motorPos, ControlType.kPosition);
+  
+      climberMotorRightPID = climberMotorRight.getPIDController();
+      climberMotorRightPID.setP(0.05);
+      climberMotorRightPID.setI(0.0);
+      climberMotorRightPID.setD(0.0);
+      climberMotorRightPID.setIZone(0.0);
+      climberMotorRightPID.setFF(0.0);
+      climberMotorRightPID.setOutputRange(0.3, -0.3);
+      climberMotorRightPID.setReference(motorPos, ControlType.kPosition);
+    }
   }
 }
