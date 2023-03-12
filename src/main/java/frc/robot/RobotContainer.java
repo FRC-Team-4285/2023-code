@@ -115,7 +115,7 @@ public class RobotContainer {
     zeroGyro = new JoystickButton(driverJoystick, 7); //resets field-centric heading
     zeroGyro.whenPressed(
       new InstantCommand(
-          () -> swerveBase.getPigeonSensor().reset()
+          () -> swerveBase.zeroPigeon()
         )
       );
 
