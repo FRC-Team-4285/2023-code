@@ -148,7 +148,7 @@ public class SuctionCupBase extends SubsystemBase {
     return System.currentTimeMillis();
   }
 
-  private int checkIsPumpReady() {
+  public int checkIsPumpReady() {
     /*
      * Evaluates current state of suction cup system
      * and determines the next action to be performed.

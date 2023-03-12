@@ -62,6 +62,8 @@ public class RobotContainer {
   private JoystickButton btnFloorIntakeRelease;
   private JoystickButton btnClimberDownPos;
   private JoystickButton btnClimberUpPos;
+  private JoystickButton btnClimberSuctionEngage;
+
   /* Subsystems */
   public final SwerveBase swerveBase;
   public final ClimberArmBase climberArmBase;
@@ -150,13 +152,17 @@ public class RobotContainer {
     //btnClimberDown = new JoystickButton(streamDeck, 14);
     //btnClimberDown.whileHeld(new ClimberDown(climberArmBase));
 
-    //Climber Up Pos PID
+    // Climber Up Pos PID
     btnClimberUpPos = new JoystickButton(streamDeck, 13);
     btnClimberUpPos.whileHeld(new ClimberUpPos(climberArmBase));
 
-    //CLimber Down Pos PID
+    // Climber Down Pos PID
     btnClimberDownPos = new JoystickButton(streamDeck, 14);
     btnClimberDownPos.whileHeld(new ClimberDownPos(climberArmBase));
+
+    // Climber Arm Suction Engage (MOVES CLIMBER ARM + ENGAGES)
+    btnClimberSuctionEngage = new JoystickButton(streamDeck, 15);
+    btnClimberSuctionEngage.whileHeld(new ClimberSuctionEngage(climberArmBase, suctionCupBase));
 
     // Intake Raise
     // btnIntakeUp = new JoystickButton(streamDeck, 13);

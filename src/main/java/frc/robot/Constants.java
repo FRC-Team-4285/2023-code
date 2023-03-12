@@ -122,6 +122,7 @@ public final class Constants {
     public static final boolean CLIMBER_DIRECTION_DOWN = false;
 
     // PID Positions
+    public static final double CLIMBER_POS_DOWN_SUCTION = -116.0;
     public static final double CLIMBER_POS_DOWN = -115.0;
     public static final double CLIMBER_POS_UP = 0.0;
 
