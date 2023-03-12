@@ -50,8 +50,8 @@ public class IntakeBase extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // double pos = intakeMotorEncoder.getPosition();
-    // System.out.println("intake motor pos: " + pos);
+    double pos = intakeMotorEncoder.getPosition();
+    System.out.println("intake motor pos: " + pos);
 
   }
 
@@ -80,12 +80,12 @@ public class IntakeBase extends SubsystemBase {
 
   public void go_to_position(double position) {
     intakeMotorPID = intakeMotor.getPIDController();
-    intakeMotorPID.setP(0.1);
+    intakeMotorPID.setP(0.3);
     intakeMotorPID.setI(0.0);
     intakeMotorPID.setD(0.0);
     intakeMotorPID.setIZone(0.0);
     intakeMotorPID.setFF(0.0);
-    intakeMotorPID.setOutputRange(-0.5, 0.5);
+    intakeMotorPID.setOutputRange(-0.7, 0.7);
     intakeMotorPID.setReference(position, ControlType.kPosition);
   }
 

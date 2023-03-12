@@ -121,12 +121,12 @@ public class RobotContainer {
       );
 
     //Arm Manual Raise
-    //btnArmRaise = new JoystickButton(streamDeck, 13);
-    // btnArmRaise.whileHeld(new PickupArmUp(pickupArmBase));
+    //btnArmRaise = new JoystickButton(streamDeck, 6);
+    //btnArmRaise.whileHeld(new PickupArmUp(pickupArmBase));
 
     // Arm Manual Lower
-     //btnArmLower = new JoystickButton(streamDeck, 14);
-    // btnArmLower.whileHeld(new PickupArmDown(pickupArmBase));
+    //btnArmLower = new JoystickButton(streamDeck, 10);
+    //btnArmLower.whileHeld(new PickupArmDown(pickupArmBase));
 
     // Jiggle
     btnJiggle = new JoystickButton(streamDeck, 9);

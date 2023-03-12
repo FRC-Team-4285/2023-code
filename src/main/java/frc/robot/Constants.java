@@ -139,8 +139,8 @@ public final class Constants {
     public static final boolean INTAKE_DIRECTION_UP = true;
     public static final boolean INTAKE_DIRECTION_DOWN = false;
 
-    public static final double INTAKE_EXTEND_POS = -1.547;
-    public static final double INTAKE_RETRACT_POS = -60.453;
+    public static final double INTAKE_EXTEND_POS = 11.14;
+    public static final double INTAKE_RETRACT_POS = -47.73;
   }
 
   public static final class SuctionConstants {
