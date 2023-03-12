@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
       HardwareCAN.PNEUMATIC_HUB, 
       PneumaticsModuleType.REVPH
     );
-    compressor.enableAnalog(90.0, 120.0);
+    compressor.enableAnalog(102.5, 115.0);
     CameraServer.startAutomaticCapture(0);
     CameraServer.startAutomaticCapture(1);
     CameraServer.startAutomaticCapture(2);
