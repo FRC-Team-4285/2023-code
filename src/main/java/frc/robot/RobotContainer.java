@@ -118,7 +118,7 @@ public class RobotContainer {
         )
       );
 
-     //Arm Manual Raise
+    //Arm Manual Raise
     //btnArmRaise = new JoystickButton(streamDeck, 13);
     // btnArmRaise.whileHeld(new PickupArmUp(pickupArmBase));
 

@@ -102,7 +102,7 @@ public final class Constants {
 
     // PID Positions
     public static final double START_POS = 96.8;
-    public static final double FEEDER_POS = 4.114;
+    public static final double FEEDER_POS = 1.114;
     public static final double DROP_POS = 272.734;
 
   }
