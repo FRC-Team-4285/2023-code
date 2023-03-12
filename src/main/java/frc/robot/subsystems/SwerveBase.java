@@ -39,15 +39,6 @@ public class SwerveBase extends SubsystemBase {
     pigeonSensor.configFactoryDefault();
     pigeonSensor.reset();
     odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
-
-    // new Thread(() -> {
-    //   try {
-    //     Thread.sleep(1000);
-    //     pigeonSensor.reset();
-    //     odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
-    //   } catch (Exception e) {
-    //   }
-    // }).start();
   }
 
   public void zeroPigeon() {
@@ -320,7 +311,7 @@ public class SwerveBase extends SubsystemBase {
 
   // get the current heading of the robot based on the gyro
   public Rotation2d getHeading() {
-    return Rotation2d.fromDegrees(pigeonSensor.getYaw());
+    return Rotation2d.fromDegrees(pigeonSensor.getYaw() + 90);
     // navX: return Rotation2d.fromDegrees(-navX.getYaw() + 90);
   }
 
