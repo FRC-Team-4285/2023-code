@@ -7,7 +7,7 @@ import frc.robot.subsystems.ClimberArmBase;
 import frc.robot.subsystems.SuctionCupBase;
 
 
-public class ClimberSuctionEngage extends CommandBase {
+public class ClimberSuctionEngagePos extends CommandBase {
   /*
    * Climber Down Command
    * --------------------
@@ -21,7 +21,7 @@ public class ClimberSuctionEngage extends CommandBase {
   private double startTime = 0;
 
 
-  public ClimberSuctionEngage(ClimberArmBase climberSubsystem, SuctionCupBase suctionSubsystem) {
+  public ClimberSuctionEngagePos(ClimberArmBase climberSubsystem, SuctionCupBase suctionSubsystem) {
     m_climberSubsystem = climberSubsystem;
     m_suctionSubsystem = suctionSubsystem;
     addRequirements(m_climberSubsystem, m_suctionSubsystem);
@@ -36,6 +36,8 @@ public class ClimberSuctionEngage extends CommandBase {
   }
 
   public void periodic() {
+    m_climberSubsystem.go_to_position(ClimberConstants.CLIMBER_POS_DOWN_SUCTION, false);
+
     if (commandState == 0 && getCurrentTime() - startTime > 200) {
       // give a few moments for the arm to go down.
       commandState = 1;
@@ -63,7 +65,6 @@ public class ClimberSuctionEngage extends CommandBase {
   @Override
   public void initialize() {
     startTime = getCurrentTime();
-    m_climberSubsystem.go_to_position(ClimberConstants.CLIMBER_POS_DOWN_SUCTION, false);
   }
 
   @Override
