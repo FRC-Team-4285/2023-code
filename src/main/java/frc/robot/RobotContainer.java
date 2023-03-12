@@ -162,7 +162,7 @@ public class RobotContainer {
 
     // Climber Arm Suction Engage (MOVES CLIMBER ARM + ENGAGES)
     btnClimberSuctionEngage = new JoystickButton(streamDeck, 15);
-    btnClimberSuctionEngage.whileHeld(new ClimberSuctionEngage(climberArmBase, suctionCupBase));
+    btnClimberSuctionEngage.onTrue(new ClimberSuctionEngage(climberArmBase, suctionCupBase));
 
     // Intake Raise
     // btnIntakeUp = new JoystickButton(streamDeck, 13);
