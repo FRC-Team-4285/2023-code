@@ -129,7 +129,8 @@ public class ClimberArmBase extends SubsystemBase {
       climberLiftSolenoid.set(true);
       climberMotorLeft.set(power);
       climberMotorRight.set(power);
-    } else {
+    }
+    else {
       climberLiftSolenoid.set(false);
       climberMotorLeft.set(-power);
       climberMotorRight.set(-power);
