@@ -85,7 +85,7 @@ public class IntakeBase extends SubsystemBase {
     intakeMotorPID.setD(0.0);
     intakeMotorPID.setIZone(0.0);
     intakeMotorPID.setFF(0.0);
-    intakeMotorPID.setOutputRange(-100.0, 200.0);
+    intakeMotorPID.setOutputRange(-0.5, 0.5);
     intakeMotorPID.setReference(position, ControlType.kPosition);
   }
 
