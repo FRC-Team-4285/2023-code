@@ -48,7 +48,8 @@ public class PickupArmBase extends SubsystemBase {
       inPosition = false;
     }
     
-    // double pos = getEncoderValue();
+    //double pos = getEncoderValue();
+    //System.out.println(direction + " " + pos);
     // boolean isSafe = getIsSafe(arm_direction, pos);
     // if (!isSafe) {
     //   stop();
@@ -132,12 +133,12 @@ public class PickupArmBase extends SubsystemBase {
   public void go_to_position(double position) {
     desiredPosition = position;
     armMotorPID = armMotor.getPIDController();
-    armMotorPID.setP(0.02);
+    armMotorPID.setP(0.05);
     armMotorPID.setI(0.0);
     armMotorPID.setD(0.0);
     armMotorPID.setIZone(0.0);
     armMotorPID.setFF(0.0);
-    armMotorPID.setOutputRange(-0.3, 0.3);
+    armMotorPID.setOutputRange(-0.4, 0.4);
     armMotorPID.setReference(position, ControlType.kPosition);
   }
 

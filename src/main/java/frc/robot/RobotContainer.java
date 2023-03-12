@@ -152,12 +152,12 @@ public class RobotContainer {
     //btnClimberDown.whileHeld(new ClimberDown(climberArmBase));
 
     //Climber Up Pos PID
-    //btnClimberUpPos = new JoystickButton(streamDeck, 13);
-    //btnClimberUpPos.whileHeld(new ClimberUpPos(climberArmBase));
+    btnClimberUpPos = new JoystickButton(streamDeck, 13);
+    btnClimberUpPos.whileHeld(new ClimberUpPos(climberArmBase));
 
     //CLimber Down Pos PID
-    //btnClimberDownPos = new JoystickButton(streamDeck, 14);
-    //btnClimberDownPos.whileHeld(new ClimberDownPos(climberArmBase));
+    btnClimberDownPos = new JoystickButton(streamDeck, 14);
+    btnClimberDownPos.whileHeld(new ClimberDownPos(climberArmBase));
 
     // Intake Raise
     // btnIntakeUp = new JoystickButton(streamDeck, 13);
