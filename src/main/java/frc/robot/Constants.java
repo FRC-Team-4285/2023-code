@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -68,6 +70,12 @@ public final class Constants {
 
     public static final double cameraToFrontEdgeDistanceMeters = Units.inchesToMeters(7);
 
+    public static final int PigeonID = 0;
+
+    public static Object zeroPigeon() {
+        return null;
+    }
+
   }
 
   public static class OperatorConstants {
@@ -75,11 +83,11 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double MAX_SPEED = 0.3;
-    public static final double MAX_ACCELLERATION = 0.3;
+    public static final double MAX_SPEED = 0.5;
+    public static final double MAX_ACCELLERATION = 0.5;
 
     // AUTO CONFIGURATIONS
-    public static final String A_AUTO_CLIMB_CUBE_CONE = "A_AutoClimbCubeCone";
+    public static final String A_AUTO_CLIMB_CUBE_CONE = "New New Path";
 
     // CURRENTLY SELECTED AUTO.
     public static final String SELECTED_AUTO = AutoConstants.A_AUTO_CLIMB_CUBE_CONE;
@@ -118,10 +126,9 @@ public final class Constants {
     public static final boolean CLIMBER_DIRECTION_DOWN = false;
 
     // PID Positions
-    public static final double CLIMBER_POS_DOWN_LEFT = 0.0;
-    public static final double CLIMBER_POS_DOWN_RIGHT = 0.0;
-    public static final double CLIMBER_POS_UP_LEFT = 0.0;
-    public static final double CLIMBER_POS_UP_RIGHT = 0.0;
+    public static final double CLIMBER_POS_DOWN = 0.0;
+    public static final double CLIMBER_POS_UP = 0.0;
+    
 
   }
 

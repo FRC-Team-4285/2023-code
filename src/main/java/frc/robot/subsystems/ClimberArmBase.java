@@ -49,7 +49,7 @@ public class ClimberArmBase extends SubsystemBase {
     // This method will be called once per scheduler run
     double pos = getEncoderValue();
 
-    // System.out.println("climb motor pos: " + pos);
+     //System.out.println("climb motor pos: " + pos);
 
     boolean isSafe = getIsSafe(climber_direction, pos);
     if (!isSafe) {
@@ -157,21 +157,23 @@ public class ClimberArmBase extends SubsystemBase {
 
   public void go_to_position(double leftMotorPos, double rightMotorPos) {
     climberMotorLeftPID = climberMotorLeft.getPIDController();
-    climberMotorLeftPID.setP(0.1);
+    climberMotorLeftPID.setP(0.05);
     climberMotorLeftPID.setI(0.0);
     climberMotorLeftPID.setD(0.0);
     climberMotorLeftPID.setIZone(0.0);
     climberMotorLeftPID.setFF(0.0);
-    climberMotorLeftPID.setOutputRange(-100.0, 200.0);
+    //climberMotorLeftPID.setOutputRange(-100.0, 200.0);
+    climberMotorLeftPID.setOutputRange(-0.3, 0.3);
     climberMotorLeftPID.setReference(leftMotorPos, ControlType.kPosition);
 
     climberMotorRightPID = climberMotorRight.getPIDController();
-    climberMotorRightPID.setP(0.1);
+    climberMotorRightPID.setP(0.05);
     climberMotorRightPID.setI(0.0);
     climberMotorRightPID.setD(0.0);
     climberMotorRightPID.setIZone(0.0);
     climberMotorRightPID.setFF(0.0);
-    climberMotorRightPID.setOutputRange(-100.0, 200.0);
+    //climberMotorRightPID.setOutputRange(-100.0, 200.0);
+    climberMotorRightPID.setOutputRange(-0.3, 0.3);
     climberMotorRightPID.setReference(rightMotorPos, ControlType.kPosition);
   }
 }
