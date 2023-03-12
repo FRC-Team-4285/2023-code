@@ -159,7 +159,16 @@ public class ClimberArmBase extends SubsystemBase {
     climberMotorRight.set(0.0);
   }
 
-  public void go_to_position(double motorPos) {
+  public void go_to_position(double motorPos, boolean direction) {
+    climber_direction = direction;
+
+    if (direction) {
+      climberLiftSolenoid.set(true);
+    }
+    else {
+      climberLiftSolenoid.set(false);
+    }
+
     climberMotorLeftPID = climberMotorLeft.getPIDController();
     climberMotorLeftPID.setP(0.05);
     climberMotorLeftPID.setI(0.0);
