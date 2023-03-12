@@ -155,16 +155,15 @@ public class ClimberArmBase extends SubsystemBase {
     climberMotorRight.set(0.0);
   }
 
-  public void go_to_position(double leftMotorPos, double rightMotorPos) {
+  public void go_to_position(double motorPos) {
     climberMotorLeftPID = climberMotorLeft.getPIDController();
     climberMotorLeftPID.setP(0.05);
     climberMotorLeftPID.setI(0.0);
     climberMotorLeftPID.setD(0.0);
     climberMotorLeftPID.setIZone(0.0);
     climberMotorLeftPID.setFF(0.0);
-    //climberMotorLeftPID.setOutputRange(-100.0, 200.0);
     climberMotorLeftPID.setOutputRange(-0.3, 0.3);
-    climberMotorLeftPID.setReference(leftMotorPos, ControlType.kPosition);
+    climberMotorLeftPID.setReference(motorPos, ControlType.kPosition);
 
     climberMotorRightPID = climberMotorRight.getPIDController();
     climberMotorRightPID.setP(0.05);
@@ -172,8 +171,7 @@ public class ClimberArmBase extends SubsystemBase {
     climberMotorRightPID.setD(0.0);
     climberMotorRightPID.setIZone(0.0);
     climberMotorRightPID.setFF(0.0);
-    //climberMotorRightPID.setOutputRange(-100.0, 200.0);
-    climberMotorRightPID.setOutputRange(-0.3, 0.3);
-    climberMotorRightPID.setReference(rightMotorPos, ControlType.kPosition);
+    climberMotorRightPID.setOutputRange(0.3, -0.3);
+    climberMotorRightPID.setReference(motorPos, ControlType.kPosition);
   }
 }

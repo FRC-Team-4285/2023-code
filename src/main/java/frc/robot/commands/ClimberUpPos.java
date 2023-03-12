@@ -28,10 +28,7 @@ public class ClimberUpPos extends CommandBase {
 
   @Override
   public void initialize() {
-    m_climberSubsystem.go_to_position(
-      ClimberConstants.CLIMBER_POS_UP,
-      ClimberConstants.CLIMBER_POS_UP
-    );
+    m_climberSubsystem.go_to_position(ClimberConstants.CLIMBER_POS_UP);
   }
 
   @Override
