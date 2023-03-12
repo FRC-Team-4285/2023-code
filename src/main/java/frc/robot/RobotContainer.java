@@ -129,8 +129,8 @@ public class RobotContainer {
     // btnArmLower.whileHeld(new PickupArmDown(pickupArmBase));
 
     // Arm Manual Piston
-     btnArmPiston = new JoystickButton(streamDeck, 9);
-     btnArmPiston.whileHeld(new ArmPiston(suctionArmBase));
+     btnJiggle = new JoystickButton(streamDeck, 9);
+     btnJiggle.whileHeld(new Jiggle(suctionArmBase));
 
     // Arm Drop Config
     btnArmDropPos = new JoystickButton(streamDeck, 2);
