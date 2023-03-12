@@ -52,7 +52,7 @@ public class RobotContainer {
   private JoystickButton btnConeGrab;
   private JoystickButton btnFloorIntakeExtend;
   private JoystickButton btnFloorIntakeRetract;
-  private JoystickButton btnArmPiston;
+  private JoystickButton btnJiggle;
   private JoystickButton btnArmStartPos;
   private JoystickButton btnArmDropPos;
   private JoystickButton btnArmFeederPos;
@@ -128,9 +128,9 @@ public class RobotContainer {
      //btnArmLower = new JoystickButton(streamDeck, 14);
     // btnArmLower.whileHeld(new PickupArmDown(pickupArmBase));
 
-    // Arm Manual Piston
-     btnJiggle = new JoystickButton(streamDeck, 9);
-     btnJiggle.whileHeld(new Jiggle(suctionArmBase));
+    // Jiggle
+    btnJiggle = new JoystickButton(streamDeck, 9);
+    btnJiggle.whileHeld(new Jiggle(suctionArmBase));
 
     // Arm Drop Config
     btnArmDropPos = new JoystickButton(streamDeck, 2);
