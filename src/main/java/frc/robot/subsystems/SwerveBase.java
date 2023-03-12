@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.kauailabs.navx.frc.AHRS;
 import com.ctre.phoenix.sensors.BasePigeon;
+import com.ctre.phoenix.sensors.Pigeon2Configuration;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
@@ -33,6 +34,9 @@ public class SwerveBase extends SubsystemBase {
   public SwerveBase() {
     navX = new AHRS(SPI.Port.kMXP);
     pigeonSensor = new WPI_Pigeon2(Constants.Swerve.PIGEON_SENSOR_ID);
+    Pigeon2Configuration config = new Pigeon2Configuration();
+    pigeonSensor.configAllSettings(config);
+    pigeonSensor.configFactoryDefault();
     new Thread(() -> {
       try {
         Thread.sleep(1000);
