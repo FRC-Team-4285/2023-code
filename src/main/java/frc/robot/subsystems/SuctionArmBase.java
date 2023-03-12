@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants.HardwareCAN;
 import frc.robot.Constants.PneumaticChannels;
-
+import frc.robot.Constants.SuctionConstants;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -18,6 +18,11 @@ public class SuctionArmBase extends SubsystemBase {
   private DoubleSolenoid armLocker;
   private Solenoid cubeGrabber;
   private Solenoid coneGrabber;
+
+  private boolean isEngaged = false;
+  private boolean isJiggled = false;
+  private double lastJiggleEventTime = 0.0;
+  private int jiggleCount = 0;
 
   public SuctionArmBase() {
     armLocker = new DoubleSolenoid(
@@ -43,6 +48,38 @@ public class SuctionArmBase extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    // This method will be called once per scheduler run
+
+    // If we are engaged...
+    if (isEngaged) {
+
+      // Get jiggle status.
+      int jiggleStatus = checkIsJiggleReady();
+
+      // Jiggle is ready!
+      if (jiggleStatus == SuctionConstants.PUMP_READY) {
+        // So JIGGLE!
+        doJiggle();
+      }
+      // Pump is ready for a reset!
+      else if (jiggleStatus == SuctionConstants.PUMP_NEED_RESET) {
+        // So RESET IT!
+        resetJiggle();
+      }
+      else if (jiggleStatus == SuctionConstants.PUMP_COMPLETE) {
+        stop();
+      }
+      else {
+        // Everything that requires us to do something has been handled
+        // so if we land into this block we do nothing.
+      }
+    }
+    // We are not engaged, are we still jiggled position?
+    else if (isJiggled) {
+      // We are still jiggled.
+      // Call stop to clear everything.
+      stop();
+    }
   }
 
   @Override
@@ -77,5 +114,101 @@ public class SuctionArmBase extends SubsystemBase {
   }
 
   public void stop() {
+    /*
+     * Stop subsystem and reset.
+     */
+
+     resetJiggle();
+     lastJiggleEventTime = 0.0;
+     jiggleCount = 0;
+     isEngaged = false;
+  }
+
+  public void engage_jiggle(boolean jiggleEngage) {
+    /*
+     * Engages jiggle system. See periodic() for
+     * further implementation.
+     */
+
+    // If we are telling it to turn on.
+    if (jiggleEngage) {
+      // Engage the system.
+      isEngaged = true;
+    }
+    else {
+      stop();
+    }
+  }
+
+  public void doJiggle() {
+    /*
+     * Moves the jiggler.
+     */
+
+    lastJiggleEventTime = getCurrentTime();
+    coneGrabber.set(true);
+    isJiggled = true;
+    jiggleCount++;
+  }
+
+  public void resetJiggle() {
+    /* 
+     * Pulls in the pumping solenoid so we can
+     * later engage it again.
+     */
+
+    lastJiggleEventTime = getCurrentTime();
+    coneGrabber.set(false);
+    isJiggled = false;
+  }
+
+
+  private double getCurrentTime() {
+    /*
+     * Returns current time in milliseconds.
+     */
+
+    return System.currentTimeMillis();
+  }
+
+  public int checkIsJiggleReady() {
+    /*
+     * Evaluates current state of jiggle system
+     * and determines the next action to be performed.
+     */
+
+    boolean deltaJiggleTime = (getCurrentTime() - lastJiggleEventTime) > SuctionConstants.PUMP_DELAY_MS;
+
+    // If we are past the delay interval...
+    if (deltaJiggleTime) {
+      // ... and we are pumped 
+      if (isJiggled) {
+        // Reset the solenoid.
+        return SuctionConstants.PUMP_NEED_RESET;
+      }
+      // ... we are not pumped and we haven't pumped enough yet.
+      else if (jiggleCount < 10) {
+        // Pump!
+        return SuctionConstants.PUMP_READY;
+      }
+      // OK we are ready to exit!
+      else if (jiggleCount >= 10) {
+        // Tell it we're done.
+        return SuctionConstants.PUMP_COMPLETE;
+      }
+      else {
+        // ... so do nothing!
+        return SuctionConstants.PUMP_WAIT;
+      }
+    }
+    // We are not past the delay interval yet...
+    else {
+      // ... so do nothing!
+      return SuctionConstants.PUMP_WAIT;
+    }
+  }
+
+  public boolean getIsEngaged() {
+    return isEngaged;
   }
 }

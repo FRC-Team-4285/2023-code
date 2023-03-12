@@ -1,9 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeBase;
 import frc.robot.subsystems.SuctionArmBase;
-import frc.robot.subsystems.SuctionCupBase;
 
 
 public class Jiggle extends CommandBase {
@@ -24,12 +22,12 @@ public class Jiggle extends CommandBase {
 
   @Override
   public void end(boolean isInterrupted) {
-    m_suctionArmSubsystem.unlock_arm();
+    m_suctionArmSubsystem.engage_jiggle(false);
   }
 
   @Override
   public void initialize() {
-    m_suctionArmSubsystem.lock_arm();
+    m_suctionArmSubsystem.engage_jiggle(true);
   }
 
   @Override
