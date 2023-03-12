@@ -19,8 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.kauailabs.navx.frc.AHRS;
 import com.ctre.phoenix.sensors.BasePigeon;
-import com.ctre.phoenix.sensors.Pigeon2;
-// import com.ctre.phoenix.sensors.WPI_Pigeon2;
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.wpilibj.SPI;
@@ -28,16 +27,16 @@ import frc.robot.Constants;
 
 
 public class SwerveBase extends SubsystemBase {  
-  private final Pigeon2 pigeonSensor;
+  private final WPI_Pigeon2 pigeonSensor;
   private final AHRS navX;
 
   public SwerveBase() {
     navX = new AHRS(SPI.Port.kMXP);
-    pigeonSensor = new Pigeon2(Constants.Swerve.PIGEON_SENSOR_ID);
+    pigeonSensor = new WPI_Pigeon2(Constants.Swerve.PIGEON_SENSOR_ID);
     new Thread(() -> {
       try {
-        // Thread.sleep(1000);
-        // pigeonSensor.reset();
+        Thread.sleep(1000);
+        pigeonSensor.reset();
         odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
       } catch (Exception e) {
       }
@@ -45,7 +44,7 @@ public class SwerveBase extends SubsystemBase {
   }
 
   public void zeroPigeon() {
-    pigeonSensor.setYaw(0);
+    pigeonSensor.reset();
   }
 
   /**
@@ -154,8 +153,8 @@ public class SwerveBase extends SubsystemBase {
         getPose().toString());
     SmartDashboard.putNumber("Bot Heading",
         getHeading().getDegrees());
-    // SmartDashboard.putString("Pigeon Rotation",
-    // pigeonSensor.getRotation2d().toString());
+    SmartDashboard.putString("Pigeon Rotation",
+    pigeonSensor.getRotation2d().toString());
     SmartDashboard.putNumber("Pigeon Yaw",
     pigeonSensor.getYaw());
     SmartDashboard.putNumber("Pigeon Compass",
@@ -325,7 +324,7 @@ public class SwerveBase extends SubsystemBase {
     rearLeft.stop();
   }
 
-  public Pigeon2 getPigeonSensor() {
+  public WPI_Pigeon2 getPigeonSensor() {
     return pigeonSensor;
   }
 
