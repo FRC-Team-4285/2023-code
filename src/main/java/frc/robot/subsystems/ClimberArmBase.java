@@ -31,7 +31,10 @@ public class ClimberArmBase extends SubsystemBase {
 
   public ClimberArmBase() {
     climberMotorLeft = new CANSparkMax(ClimberConstants.CLIMBER_MOTOR_LEFT_ID, MotorType.kBrushless);
+
     climberMotorRight = new CANSparkMax(ClimberConstants.CLIMBER_MOTOR_RIGHT_ID, MotorType.kBrushless);
+    climberMotorRight.setInverted(true);
+
     climberMotorEncoder = new DutyCycleEncoder(0);
     climberMotorEncoder.setDistancePerRotation(360.0);
 
@@ -123,14 +126,13 @@ public class ClimberArmBase extends SubsystemBase {
     // Yes, that means YOU.
 
     if (direction) {
-        climberLiftSolenoid.set(true);
-        climberMotorLeft.set(power);
-        climberMotorRight.set(-power);
-    }
-    else {
-        climberLiftSolenoid.set(false);
-        climberMotorLeft.set(-power);
-        climberMotorRight.set(power);
+      climberLiftSolenoid.set(true);
+      climberMotorLeft.set(power);
+      climberMotorRight.set(power);
+    } else {
+      climberLiftSolenoid.set(false);
+      climberMotorLeft.set(-power);
+      climberMotorRight.set(-power);
     }
   }
 
@@ -157,43 +159,22 @@ public class ClimberArmBase extends SubsystemBase {
   }
 
   public void go_to_position(double motorPos, boolean direction) {
-    if (direction) {
-      climberMotorLeftPID = climberMotorLeft.getPIDController();
-      climberMotorLeftPID.setP(0.05);
-      climberMotorLeftPID.setI(0.0);
-      climberMotorLeftPID.setD(0.0);
-      climberMotorLeftPID.setIZone(0.0);
-      climberMotorLeftPID.setFF(0.0);
-      climberMotorLeftPID.setOutputRange(0.3, -0.3);
-      climberMotorLeftPID.setReference(motorPos, ControlType.kPosition);
-  
-      climberMotorRightPID = climberMotorRight.getPIDController();
-      climberMotorRightPID.setP(0.05);
-      climberMotorRightPID.setI(0.0);
-      climberMotorRightPID.setD(0.0);
-      climberMotorRightPID.setIZone(0.0);
-      climberMotorRightPID.setFF(0.0);
-      climberMotorRightPID.setOutputRange(-0.3, 0.3);
-      climberMotorRightPID.setReference(motorPos, ControlType.kPosition);
-    }
-    else {
-      climberMotorLeftPID = climberMotorLeft.getPIDController();
-      climberMotorLeftPID.setP(0.05);
-      climberMotorLeftPID.setI(0.0);
-      climberMotorLeftPID.setD(0.0);
-      climberMotorLeftPID.setIZone(0.0);
-      climberMotorLeftPID.setFF(0.0);
-      climberMotorLeftPID.setOutputRange(-0.3, 0.3);
-      climberMotorLeftPID.setReference(motorPos, ControlType.kPosition);
-  
-      climberMotorRightPID = climberMotorRight.getPIDController();
-      climberMotorRightPID.setP(0.05);
-      climberMotorRightPID.setI(0.0);
-      climberMotorRightPID.setD(0.0);
-      climberMotorRightPID.setIZone(0.0);
-      climberMotorRightPID.setFF(0.0);
-      climberMotorRightPID.setOutputRange(0.3, -0.3);
-      climberMotorRightPID.setReference(motorPos, ControlType.kPosition);
-    }
+    climberMotorLeftPID = climberMotorLeft.getPIDController();
+    climberMotorLeftPID.setP(0.05);
+    climberMotorLeftPID.setI(0.0);
+    climberMotorLeftPID.setD(0.0);
+    climberMotorLeftPID.setIZone(0.0);
+    climberMotorLeftPID.setFF(0.0);
+    climberMotorLeftPID.setOutputRange(0.3, -0.3);
+    climberMotorLeftPID.setReference(motorPos, ControlType.kPosition);
+
+    climberMotorRightPID = climberMotorRight.getPIDController();
+    climberMotorRightPID.setP(0.05);
+    climberMotorRightPID.setI(0.0);
+    climberMotorRightPID.setD(0.0);
+    climberMotorRightPID.setIZone(0.0);
+    climberMotorRightPID.setFF(0.0);
+    climberMotorRightPID.setOutputRange(0.3, -0.3);
+    climberMotorRightPID.setReference(motorPos, ControlType.kPosition);
   }
 }
