@@ -24,7 +24,7 @@ public class ClimberSuctionEngagePos extends CommandBase {
   public ClimberSuctionEngagePos(ClimberArmBase climberSubsystem, SuctionCupBase suctionSubsystem) {
     m_climberSubsystem = climberSubsystem;
     m_suctionSubsystem = suctionSubsystem;
-    addRequirements(m_climberSubsystem);
+    addRequirements(m_climberSubsystem, m_suctionSubsystem);
   }
 
   private double getCurrentTime() {
