@@ -37,14 +37,14 @@ public class SwerveBase extends SubsystemBase {
     Pigeon2Configuration config = new Pigeon2Configuration();
     pigeonSensor.configAllSettings(config);
     pigeonSensor.configFactoryDefault();
-    new Thread(() -> {
-      try {
-        Thread.sleep(1000);
-        pigeonSensor.reset();
-        odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
-      } catch (Exception e) {
-      }
-    }).start();
+    // new Thread(() -> {
+    //   try {
+    //     Thread.sleep(1000);
+    //     pigeonSensor.reset();
+    //     odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
+    //   } catch (Exception e) {
+    //   }
+    // }).start();
   }
 
   public void zeroPigeon() {
