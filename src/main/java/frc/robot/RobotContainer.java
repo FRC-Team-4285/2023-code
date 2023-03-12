@@ -113,7 +113,11 @@ public class RobotContainer {
   private void configureBindings() {
     // Zero Gyro
     zeroGyro = new JoystickButton(driverJoystick, 7); //resets field-centric heading
-    zeroGyro.whenPressed(new InstantCommand(() -> swerveBase.zeroGyro()));
+    zeroGyro.whenPressed(
+      new InstantCommand(
+          () -> swerveBase.getPigeonSensor().reset()
+        )
+      );
 
      //Arm Manual Raise
     //btnArmRaise = new JoystickButton(streamDeck, 13);

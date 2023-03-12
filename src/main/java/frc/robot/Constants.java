@@ -70,11 +70,7 @@ public final class Constants {
 
     public static final double cameraToFrontEdgeDistanceMeters = Units.inchesToMeters(7);
 
-    public static final int PigeonID = 0;
-
-    public static Object zeroPigeon() {
-        return null;
-    }
+    public static final int PIGEON_SENSOR_ID = 0;
 
   }
 

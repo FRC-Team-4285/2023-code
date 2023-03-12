@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.kauailabs.navx.frc.AHRS;
 import com.ctre.phoenix.sensors.BasePigeon;
-import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
@@ -27,26 +26,27 @@ import edu.wpi.first.wpilibj.SPI;
 import frc.robot.Constants;
 
 
-public class SwerveBase extends SubsystemBase {
-  private Pigeon2 gyro;
-  
-  public void SwerveBase() {
-  gyro = new Pigeon2(Constants.Swerve.PigeonID);
-  gyro.configFactoryDefault();
-  zeroGyro();
-  }
+public class SwerveBase extends SubsystemBase {  
+  private final WPI_Pigeon2 pigeonSensor;
+  private final AHRS navX;
 
-  public void zeroGyro() {
-    gyro.setYaw(0);
+  public SwerveBase() {
+    navX = new AHRS(SPI.Port.kMXP);
+    pigeonSensor = new WPI_Pigeon2(Constants.Swerve.PIGEON_SENSOR_ID);
+    new Thread(() -> {
+      try {
+        //Thread.sleep(1000);
+        //pigeonSensor.reset();
+        odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
+      } catch (Exception e) {
+      }
+    }).start();
   }
 
   /**
    * Subsystem that controls the drivetrain of the robot
    * Handles all the odometry and base movement for the chassis
    */
-
-  //private void zeroGyro() {
-  //}
 
   /**
    * absolute encoder offsets for the wheels
@@ -112,9 +112,6 @@ public class SwerveBase extends SubsystemBase {
     return odometry;
   }
 
-  private WPI_Pigeon2 pigeon2;
-  //private final AHRS navX;
-
  {
     //odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
 
@@ -153,11 +150,11 @@ public class SwerveBase extends SubsystemBase {
     SmartDashboard.putNumber("Bot Heading",
         getHeading().getDegrees());
     SmartDashboard.putString("Pigeon Rotation",
-    pigeon2.getRotation2d().toString());
+    pigeonSensor.getRotation2d().toString());
     SmartDashboard.putNumber("Pigeon Yaw",
-    pigeon2.getYaw());
+    pigeonSensor.getYaw());
     SmartDashboard.putNumber("Pigeon Compass",
-    pigeon2.getCompassHeading());
+    pigeonSensor.getCompassHeading());
 
     SmartDashboard.putString("FL Wheel Angle", frontLeft.getCanCoderAngle().toString());
     SmartDashboard.putString("FR Wheel Angle", frontRight.getCanCoderAngle().toString());
@@ -204,7 +201,7 @@ public class SwerveBase extends SubsystemBase {
   }
 
   public Rotation2d getGyroscopeRotation() {
-    return Rotation2d.fromDegrees(pigeon2.getCompassHeading());
+    return Rotation2d.fromDegrees(pigeonSensor.getCompassHeading());
   }
 
   public void drive(double forward, double strafe, double rotation, boolean isFieldRelative, boolean isAutoBalancing) {
@@ -312,7 +309,8 @@ public class SwerveBase extends SubsystemBase {
 
   // get the current heading of the robot based on the gyro
   public Rotation2d getHeading() {
-    return Rotation2d.fromDegrees(pigeon2.getYaw()- 0); // was -
+    return Rotation2d.fromDegrees(pigeonSensor.getYaw());
+    // navX: return Rotation2d.fromDegrees(-navX.getYaw() + 90);
   }
 
   public void stopModules() {
@@ -323,12 +321,12 @@ public class SwerveBase extends SubsystemBase {
   }
 
   public WPI_Pigeon2 getPigeonSensor() {
-    return pigeon2;
+    return pigeonSensor;
   }
 
-  //public AHRS getNavX() {
-  //  return navX;
-  //}
+  public AHRS getNavX() {
+   return navX;
+  }
 
   public SwerveDriveKinematics getKinematics() {
     return Swerve.kinematics;
