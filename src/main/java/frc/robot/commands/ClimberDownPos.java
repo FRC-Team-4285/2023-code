@@ -23,6 +23,7 @@ public class ClimberDownPos extends CommandBase {
 
   @Override
   public void end(boolean isInterrupted) {
+    System.out.println("CAN YOU SEE ME? HELLO FROM THE OTHER SIDEEEEEEE.");
     m_climberSubsystem.stop();
   }
 
