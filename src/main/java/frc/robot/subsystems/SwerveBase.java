@@ -37,6 +37,9 @@ public class SwerveBase extends SubsystemBase {
     Pigeon2Configuration config = new Pigeon2Configuration();
     pigeonSensor.configAllSettings(config);
     pigeonSensor.configFactoryDefault();
+    pigeonSensor.reset();
+    odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
+
     // new Thread(() -> {
     //   try {
     //     Thread.sleep(1000);
