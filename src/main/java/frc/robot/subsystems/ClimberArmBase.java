@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import frc.robot.RobotContainer;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.HardwareCAN;
 import frc.robot.Constants.PneumaticChannels;
@@ -28,8 +29,11 @@ public class ClimberArmBase extends SubsystemBase {
   private DutyCycleEncoder climberMotorEncoder;
   private Solenoid climberLiftSolenoid;
   private boolean climber_direction;
+  private RobotContainer robotContainer;
 
-  public ClimberArmBase() {
+  public ClimberArmBase(RobotContainer container) {
+    robotContainer = container;
+    
     climberMotorLeft = new CANSparkMax(ClimberConstants.CLIMBER_MOTOR_LEFT_ID, MotorType.kBrushless);
 
     climberMotorRight = new CANSparkMax(ClimberConstants.CLIMBER_MOTOR_RIGHT_ID, MotorType.kBrushless);

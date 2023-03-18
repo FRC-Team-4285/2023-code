@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import frc.robot.RobotContainer;
 import frc.robot.Constants.HardwareCAN;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.PneumaticChannels;
@@ -26,9 +27,11 @@ public class IntakeBase extends SubsystemBase {
   private RelativeEncoder intakeMotorEncoder;
   private DoubleSolenoid intakeExtender;
   private DoubleSolenoid intakeGrabber;
+  private RobotContainer robotContainer;
 
 
-  public IntakeBase() {
+  public IntakeBase(RobotContainer container) {
+    robotContainer = container;
     intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_ID, MotorType.kBrushless);
     intakeMotorEncoder = intakeMotor.getEncoder();
 

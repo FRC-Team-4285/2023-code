@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants.SuctionConstants;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.HardwareCAN;
 import frc.robot.Constants.PneumaticChannels;
 
@@ -27,13 +28,15 @@ public class SuctionCupBase extends SubsystemBase {
 
   private Solenoid pump_solenoid;
   private DoubleSolenoid release_solenoid;
+  private RobotContainer robotContainer;
 
   private boolean isEngaged = false;
   private boolean isPumped = false;
   private double lastPumpEventTime = 0.0;
   private int suctionCount = 0;
 
-  public SuctionCupBase() {
+  public SuctionCupBase(RobotContainer container) {
+    robotContainer = container;
     // This solenoid pumps the suction cup,
     // holding us to the balance station.
     pump_solenoid = new Solenoid(

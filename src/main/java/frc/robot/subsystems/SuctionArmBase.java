@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.HardwareCAN;
 import frc.robot.Constants.PneumaticChannels;
 import frc.robot.Constants.SuctionConstants;
@@ -18,13 +20,16 @@ public class SuctionArmBase extends SubsystemBase {
   private DoubleSolenoid armLocker;
   private Solenoid cubeGrabber;
   private Solenoid coneGrabber;
+  private RobotContainer robotContainer;
 
   private boolean isEngaged = false;
   private boolean isJiggled = false;
   private double lastJiggleEventTime = 0.0;
   private int jiggleCount = 0;
 
-  public SuctionArmBase() {
+  public SuctionArmBase(RobotContainer container) {
+    robotContainer = container;
+
     armLocker = new DoubleSolenoid(
       HardwareCAN.PNEUMATIC_HUB,
       PneumaticsModuleType.REVPH,
@@ -88,20 +93,27 @@ public class SuctionArmBase extends SubsystemBase {
   }
 
   public void grab_cube(){
+    robotContainer.ledCubeIndicator.set(false);
     cubeGrabber.set(true);
   }
 
   public void release_cube(){
+    robotContainer.ledCubeIndicator.set(true);
     cubeGrabber.set(false);
   }
 
   public void grab_cone() {
     grab_cube();
-    coneGrabber.set(false); //cone grabber is engaged AFTER cube grabber
+    robotContainer.ledConeIndicator.set(false);
+    // cone grabber is engaged AFTER cube grabber
+    coneGrabber.set(false);
   }
 
   public void release_cone() {
-    coneGrabber.set(true);//cone grabber is released BEFORE cube grabber
+    robotContainer.ledConeIndicator.set(true);
+    // cone grabber is released BEFORE cube grabber
+    coneGrabber.set(true);
+
     release_cube();
   }
 

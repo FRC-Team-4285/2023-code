@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
 
 import com.revrobotics.CANSparkMax;
@@ -27,12 +28,15 @@ public class PickupArmBase extends SubsystemBase {
   private RelativeEncoder encoder;
   private double desiredPosition;
   private boolean inPosition;
+  private RobotContainer robotContainer;
 
   //pickup arm has an encoder connected to SPARK MAX
   //said encoder is capable of operating in duty-cycle mode
   //How do you specify the encoder mode to the SPARK MAX???
 
-  public PickupArmBase() {
+
+  public PickupArmBase(RobotContainer container) {
+    robotContainer = container;
     armMotor = new CANSparkMax(ArmConstants.ARM_MOTOR_ID, MotorType.kBrushless);
 
     // armMotorEncoder = armMotor.getAbsoluteEncoder(Type.kDutyCycle);

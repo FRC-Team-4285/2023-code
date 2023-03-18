@@ -16,6 +16,7 @@ import frc.robot.subsystems.PickupArmBase;
 import frc.robot.subsystems.SuctionArmBase;
 import frc.robot.subsystems.SuctionCupBase;
 import frc.robot.subsystems.SwerveBase;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -72,6 +73,12 @@ public class RobotContainer {
   public final SuctionCupBase suctionCupBase;
   public final SuctionArmBase suctionArmBase;
 
+  /* LEDs */
+  public final DigitalOutput ledCubeIndicator;
+  public final DigitalOutput ledConeIndicator;
+  public final DigitalOutput ledBlueAlliance;
+  public final DigitalOutput ledRedAlliance;
+
   public Joystick getJoystick() {
     return driverJoystick;
   }
@@ -100,15 +107,28 @@ public class RobotContainer {
         () -> false //inverted=fieldCentric, non-inverted=RobotCentric
       )
     );
+    
+    ledCubeIndicator = new DigitalOutput(2);
+    ledConeIndicator = new DigitalOutput(3);
+    ledBlueAlliance = new DigitalOutput(4);
+    ledRedAlliance = new DigitalOutput(5);
 
-    climberArmBase = new ClimberArmBase();
-    intakeBase = new IntakeBase();
-    pickupArmBase = new PickupArmBase();
-    suctionCupBase = new SuctionCupBase();  
-    suctionArmBase = new SuctionArmBase();
+    climberArmBase = new ClimberArmBase(this);
+    intakeBase = new IntakeBase(this);
+    pickupArmBase = new PickupArmBase(this);
+    suctionCupBase = new SuctionCupBase(this);  
+    suctionArmBase = new SuctionArmBase(this);
 
     // Configure the trigger bindings
     configureBindings();
+    configureLights();
+  }
+
+  private void configureLights() {
+    ledCubeIndicator.set(true);
+    ledConeIndicator.set(true);
+    ledBlueAlliance.set(true);
+    ledRedAlliance.set(true);
   }
 
   private void configureBindings() {
@@ -193,8 +213,8 @@ public class RobotContainer {
     btnSuctionEngage.onTrue(new SuctionCupEngage(suctionCupBase));
 
     //Suction Release
-     btnSuctionRelease = new JoystickButton(streamDeck, 16);
-     btnSuctionRelease.onTrue(new SuctionCupRelease(suctionCupBase));
+    btnSuctionRelease = new JoystickButton(streamDeck, 16);
+    btnSuctionRelease.onTrue(new SuctionCupRelease(suctionCupBase));
 
     // Pickup Arm Grab
     btnPickupArmGrab = new JoystickButton(streamDeck, 5);
