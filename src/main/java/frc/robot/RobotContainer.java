@@ -121,28 +121,28 @@ public class RobotContainer {
       );
 
     //Arm Manual Raise
-    //btnArmRaise = new JoystickButton(streamDeck, 6);
-    //btnArmRaise.whileHeld(new PickupArmUp(pickupArmBase));
+    btnArmRaise = new JoystickButton(streamDeck, 6);
+    btnArmRaise.whileHeld(new PickupArmUp(pickupArmBase));
 
     // Arm Manual Lower
-    //btnArmLower = new JoystickButton(streamDeck, 10);
-    //btnArmLower.whileHeld(new PickupArmDown(pickupArmBase));
+    btnArmLower = new JoystickButton(streamDeck, 10);
+    btnArmLower.whileHeld(new PickupArmDown(pickupArmBase));
 
     // Jiggle
     btnJiggle = new JoystickButton(streamDeck, 9);
     btnJiggle.whileHeld(new Jiggle(suctionArmBase));
 
     // Arm Drop Config
-    btnArmDropPos = new JoystickButton(streamDeck, 2);
-    btnArmDropPos.whileHeld(new PickupArmDropPos(pickupArmBase, suctionArmBase));
+    //btnArmDropPos = new JoystickButton(streamDeck, 2);
+    //btnArmDropPos.whileHeld(new PickupArmDropPos(pickupArmBase, suctionArmBase));
 
     // Arm Start Config
-    btnArmStartPos = new JoystickButton(streamDeck, 6);
-    btnArmStartPos.whileHeld(new PickupArmStartPos(pickupArmBase, suctionArmBase));
+    //btnArmStartPos = new JoystickButton(streamDeck, 6);
+    //btnArmStartPos.whileHeld(new PickupArmStartPos(pickupArmBase, suctionArmBase));
 
     // Arm Feeder Pos
-    btnArmFeederPos = new JoystickButton(streamDeck, 10);
-    btnArmFeederPos.whileHeld(new PickupArmFeederPos(pickupArmBase, suctionArmBase));
+    //btnArmFeederPos = new JoystickButton(streamDeck, 10);
+    //btnArmFeederPos.whileHeld(new PickupArmFeederPos(pickupArmBase, suctionArmBase));
 
     // Climber Manual Raise
     //btnClimberUp = new JoystickButton(streamDeck, 13);
@@ -221,7 +221,7 @@ public class RobotContainer {
    */
   public CommandBase getAutonomousCommand() {
     PathPlannerTrajectory path_a = PathPlanner.loadPath(
-      "New New Path",
+      "A_AutoGrabCubetoCone",
       new PathConstraints(
         AutoConstants.MAX_SPEED,
         AutoConstants.MAX_ACCELLERATION
@@ -229,18 +229,26 @@ public class RobotContainer {
     );
 
     PathPlannerTrajectory path_b = PathPlanner.loadPath(
-      "A_AutoClimbCubeCone_2",
+      "A_AutoGrabConetoDropCone",
       new PathConstraints(
         AutoConstants.MAX_SPEED,
         AutoConstants.MAX_ACCELLERATION
       )
     );
 
+    PathPlannerTrajectory path_c = PathPlanner.loadPath(
+      "A_AutoDropConetoGrabCone",
+      new PathConstraints(
+        AutoConstants.MAX_SPEED,
+        AutoConstants.MAX_ACCELLERATION
+      )
+    );
 
     // How to chain link commands SEQUENTIALLY.
     return new SequentialCommandGroup(
-      swerveBase.followTrajectoryCommand(path_a, true)
-      //swerveBase.followTrajectoryCommand(path_b, false)
+      swerveBase.followTrajectoryCommand(path_a, true),
+      swerveBase.followTrajectoryCommand(path_b, false),
+      swerveBase.followTrajectoryCommand(path_c, false)
     );
 
   }

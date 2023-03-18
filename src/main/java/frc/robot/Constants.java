@@ -101,9 +101,9 @@ public final class Constants {
     public static final boolean ARM_DIRECTION_DOWN = false;
 
     // PID Positions
-    public static final double START_POS = 96.8;
+    public static final double START_POS = 0.0;
     public static final double FEEDER_POS = 1.114;
-    public static final double DROP_POS = 272.734;
+    public static final double DROP_POS = 265.734;
 
   }
 
@@ -139,8 +139,8 @@ public final class Constants {
     public static final boolean INTAKE_DIRECTION_UP = true;
     public static final boolean INTAKE_DIRECTION_DOWN = false;
 
-    public static final double INTAKE_EXTEND_POS = 11.14;
-    public static final double INTAKE_RETRACT_POS = -47.73;
+    public static final double INTAKE_EXTEND_POS = 0.0;
+    public static final double INTAKE_RETRACT_POS = -60.97;
   }
 
   public static final class SuctionConstants {

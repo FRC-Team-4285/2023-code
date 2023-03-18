@@ -48,8 +48,8 @@ public class PickupArmBase extends SubsystemBase {
       inPosition = false;
     }
     
-    //double pos = getEncoderValue();
-    //System.out.println(direction + " " + pos);
+    double pos = getEncoderValue();
+    System.out.println("Pickup Arm: " + pos);
     // boolean isSafe = getIsSafe(arm_direction, pos);
     // if (!isSafe) {
     //   stop();

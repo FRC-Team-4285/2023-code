@@ -50,8 +50,8 @@ public class IntakeBase extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    double pos = intakeMotorEncoder.getPosition();
-    System.out.println("intake motor pos: " + pos);
+    // double pos = intakeMotorEncoder.getPosition();
+    // System.out.println("intake motor pos: " + pos);
 
   }
 
@@ -68,7 +68,7 @@ public class IntakeBase extends SubsystemBase {
     double power = IntakeConstants.INTAKE_MOTOR_POWER;
     double pos = intakeMotorEncoder.getPosition();
 
-    System.out.println("intake motor pos: " + pos);
+    //System.out.println("intake motor pos: " + pos);
 
     if (direction) {
         intakeMotor.set(power);
