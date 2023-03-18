@@ -5,7 +5,10 @@ import frc.robot.Constants.ArmConstants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -19,9 +22,7 @@ public class PickupArmBase extends SubsystemBase {
 
   private CANSparkMax armMotor;
   private SparkMaxPIDController armMotorPID;
-  private DutyCycleEncoder armMotorEncoder;
-  private Solenoid cubeGrabber;
-  private Solenoid coneGrabber;
+  private SparkMaxAbsoluteEncoder armMotorEncoder;
   private boolean arm_direction;
   private double desiredPosition;
   private boolean inPosition;
@@ -32,8 +33,12 @@ public class PickupArmBase extends SubsystemBase {
 
   public PickupArmBase() {
     armMotor = new CANSparkMax(ArmConstants.ARM_MOTOR_ID, MotorType.kBrushless);
-    armMotorEncoder = new DutyCycleEncoder(1);
-    armMotorEncoder.setDistancePerRotation(360.0);
+    armMotor.restoreFactoryDefaults();
+    armMotor.setIdleMode(IdleMode.kBrake);
+    armMotor.burnFlash();
+
+    armMotorEncoder = armMotor.getAbsoluteEncoder(Type.kDutyCycle);
+
     desiredPosition = 99999; // starting value.
     inPosition = false;
   }
@@ -41,7 +46,8 @@ public class PickupArmBase extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    double currentPosition = armMotor.getEncoder().getPosition();
+    double currentPosition = getEncoderValue();
+    System.out.println("arm position " + currentPosition);
     if (Math.abs(currentPosition - desiredPosition) < 0.25) {
       inPosition = true;
     } else {
@@ -64,8 +70,7 @@ public class PickupArmBase extends SubsystemBase {
   }
 
   public double getEncoderValue() {
-    //encoder is backwards, fixed by - sign
-    return 50.0 - armMotorEncoder.getDistance();
+    return 50.0 - armMotorEncoder.getPosition();
   }
 
   public void engage_arm(boolean direction) {
@@ -94,28 +99,29 @@ public class PickupArmBase extends SubsystemBase {
   }
 
   private boolean getIsSafe(boolean direction, double pos) {
-    boolean isSafe = (pos > 0 && pos < 230);
-    if (!isSafe) {
-      // We know that when within this block we are already out of bounds.
-      // So we only need to know about one side to know whether or not we exceeded
-      // the other side. If we are not below 0, we must be above 100; if we are not above 100,
-      // we must be below 0.
-      boolean bound_dir_exceeded = (pos < 0) ? true : false;
+    
+    // boolean isSafe = (pos > 0 && pos < 230);
+    // if (!isSafe) {
+    //   // We know that when within this block we are already out of bounds.
+    //   // So we only need to know about one side to know whether or not we exceeded
+    //   // the other side. If we are not below 0, we must be above 100; if we are not above 100,
+    //   // we must be below 0.
+    //   boolean bound_dir_exceeded = (pos < 0) ? true : false;
   
-      // bound_dir_exceeded = TRUE when we are BELOW 0
-      // bound_dir_exceeded = FALSE when we are ABOVE 100
-      // direction = TRUE when we are INCREASING/RAISING ARM
-      // direction = FALSE when we are DECREASING/LOWERING ARM
+    //   // bound_dir_exceeded = TRUE when we are BELOW 0
+    //   // bound_dir_exceeded = FALSE when we are ABOVE 100
+    //   // direction = TRUE when we are INCREASING/RAISING ARM
+    //   // direction = FALSE when we are DECREASING/LOWERING ARM
   
-      if (direction && !bound_dir_exceeded) {
-        // if we are INCEASING and we are ABOVE 100, this is NOT OK.
-        return false;
-      }
-      else if (!direction && bound_dir_exceeded) {
-        // if we are DECREASING and we are BELOW 0, this is NOT OK.
-        return false;
-      }
-    }
+    //   if (direction && !bound_dir_exceeded) {
+    //     // if we are INCEASING and we are ABOVE 100, this is NOT OK.
+    //     return false;
+    //   }
+    //   else if (!direction && bound_dir_exceeded) {
+    //     // if we are DECREASING and we are BELOW 0, this is NOT OK.
+    //     return false;
+    //   }
+    // }
 
     return true;
   }
@@ -133,6 +139,7 @@ public class PickupArmBase extends SubsystemBase {
   public void go_to_position(double position) {
     desiredPosition = position;
     armMotorPID = armMotor.getPIDController();
+    armMotorPID.setFeedbackDevice(armMotorEncoder);
     armMotorPID.setP(0.05);
     armMotorPID.setI(0.0);
     armMotorPID.setD(0.0);
