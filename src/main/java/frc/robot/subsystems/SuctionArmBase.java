@@ -98,19 +98,24 @@ public class SuctionArmBase extends SubsystemBase {
   }
 
   public void release_cube(){
-    robotContainer.ledCubeIndicator.set(true);
     cubeGrabber.set(false);
+  }
+
+  public void toggle_cube_light(boolean disabled) {
+    robotContainer.ledCubeIndicator.set(disabled);
+  }
+
+  public void toggle_cone_light(boolean disabled) {
+    robotContainer.ledConeIndicator.set(disabled);
   }
 
   public void grab_cone() {
     grab_cube();
-    robotContainer.ledConeIndicator.set(false);
     // cone grabber is engaged AFTER cube grabber
     coneGrabber.set(false);
   }
 
   public void release_cone() {
-    robotContainer.ledConeIndicator.set(true);
     // cone grabber is released BEFORE cube grabber
     coneGrabber.set(true);
 

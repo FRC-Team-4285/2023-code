@@ -147,7 +147,7 @@ public class PickupArmBase extends SubsystemBase {
   public void go_to_position(double position) {
     desiredPosition = position;
     armMotorPID = armMotor.getPIDController();
-    armMotorPID.setP(0.05);
+    armMotorPID.setP(0.3);
     armMotorPID.setI(0.0);
     armMotorPID.setD(0.0);
     armMotorPID.setIZone(0.0);

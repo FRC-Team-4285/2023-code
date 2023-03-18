@@ -64,6 +64,8 @@ public class RobotContainer {
   private JoystickButton btnClimberDownPos;
   private JoystickButton btnClimberUpPos;
   private JoystickButton btnClimberSuctionEngage;
+  private JoystickButton btnCubeGrabLight;
+  private JoystickButton btnConeGrabLight;
 
   /* Subsystems */
   public final SwerveBase swerveBase;
@@ -140,29 +142,34 @@ public class RobotContainer {
         )
       );
 
-    //Arm Manual Raise
-    btnArmRaise = new JoystickButton(streamDeck, 6);
-    btnArmRaise.whileHeld(new PickupArmUp(pickupArmBase));
-
-    // Arm Manual Lower
-    btnArmLower = new JoystickButton(streamDeck, 10);
-    btnArmLower.whileHeld(new PickupArmDown(pickupArmBase));
-
     // Jiggle
     btnJiggle = new JoystickButton(streamDeck, 9);
     btnJiggle.whileHeld(new Jiggle(suctionArmBase));
 
-    // Arm Drop Config
-    //btnArmDropPos = new JoystickButton(streamDeck, 2);
-    //btnArmDropPos.whileHeld(new PickupArmDropPos(pickupArmBase, suctionArmBase));
+    boolean WANT_MANUAL_ARM = false;
 
-    // Arm Start Config
-    //btnArmStartPos = new JoystickButton(streamDeck, 6);
-    //btnArmStartPos.whileHeld(new PickupArmStartPos(pickupArmBase, suctionArmBase));
+    if (!WANT_MANUAL_ARM) {
+      // Arm Drop Config
+      btnArmDropPos = new JoystickButton(streamDeck, 2);
+      btnArmDropPos.whileHeld(new PickupArmDropPos(pickupArmBase, suctionArmBase));
 
-    // Arm Feeder Pos
-    //btnArmFeederPos = new JoystickButton(streamDeck, 10);
-    //btnArmFeederPos.whileHeld(new PickupArmFeederPos(pickupArmBase, suctionArmBase));
+      // Arm Start Config
+      btnArmStartPos = new JoystickButton(streamDeck, 6);
+      btnArmStartPos.whileHeld(new PickupArmStartPos(pickupArmBase, suctionArmBase));
+
+      // Arm Feeder Pos
+      btnArmFeederPos = new JoystickButton(streamDeck, 10);
+      btnArmFeederPos.whileHeld(new PickupArmFeederPos(pickupArmBase, suctionArmBase)); 
+    }
+    else {
+      //Arm Manual Raise
+      btnArmRaise = new JoystickButton(streamDeck, 6);
+      btnArmRaise.whileHeld(new PickupArmUp(pickupArmBase));
+
+      // Arm Manual Lower
+      btnArmLower = new JoystickButton(streamDeck, 10);
+      btnArmLower.whileHeld(new PickupArmDown(pickupArmBase));
+    }
 
     // Climber Manual Raise
     //btnClimberUp = new JoystickButton(streamDeck, 13);
@@ -171,6 +178,14 @@ public class RobotContainer {
     // Climber Manual Lower
     //btnClimberDown = new JoystickButton(streamDeck, 14);
     //btnClimberDown.whileHeld(new ClimberDown(climberArmBase));
+
+    // Grab Cube
+    btnCubeGrabLight = new JoystickButton(streamDeck, 11);
+    btnCubeGrabLight.whileHeld(new CubeGrabLight(suctionArmBase));
+
+    // Grab Cone Light Indicator
+    btnConeGrabLight = new JoystickButton(streamDeck, 12);
+    btnConeGrabLight.whileHeld(new ConeGrabLight(suctionArmBase));
 
     // // Climber Up Pos PID
     // btnClimberUpPos = new JoystickButton(streamDeck, 13);
