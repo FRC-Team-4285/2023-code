@@ -179,13 +179,13 @@ public class RobotContainer {
     //btnClimberDown = new JoystickButton(streamDeck, 14);
     //btnClimberDown.whileHeld(new ClimberDown(climberArmBase));
 
-    // Grab Cube
-    btnCubeGrabLight = new JoystickButton(streamDeck, 11);
-    btnCubeGrabLight.whileHeld(new CubeGrabLight(suctionArmBase));
-
     // Grab Cone Light Indicator
-    btnConeGrabLight = new JoystickButton(streamDeck, 12);
+    btnConeGrabLight = new JoystickButton(streamDeck, 11);
     btnConeGrabLight.whileHeld(new ConeGrabLight(suctionArmBase));
+
+    // Grab Cube Light Indicator
+    btnCubeGrabLight = new JoystickButton(streamDeck, 12);
+    btnCubeGrabLight.whileHeld(new CubeGrabLight(suctionArmBase));
 
     // // Climber Up Pos PID
     // btnClimberUpPos = new JoystickButton(streamDeck, 13);

@@ -101,8 +101,8 @@ public final class Constants {
     public static final boolean ARM_DIRECTION_DOWN = false;
 
     // PID Positions
-    public static final double START_POS = 0.201416015625;
-    public static final double FEEDER_POS = -0.047119140625;
+    public static final double START_POS = -0.047119140625;
+    public static final double FEEDER_POS = 0.201416015625;
     public static final double DROP_POS = -0.707275390625;
 
   }
