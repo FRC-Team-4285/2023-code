@@ -3,15 +3,14 @@ package frc.robot.subsystems;
 import frc.robot.Constants.ArmConstants;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
-import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
-import com.revrobotics.SparkMaxAbsoluteEncoder;
+import com.revrobotics.SparkMaxAlternateEncoder;
 
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import com.revrobotics.AbsoluteEncoder;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -22,8 +21,10 @@ public class PickupArmBase extends SubsystemBase {
 
   private CANSparkMax armMotor;
   private SparkMaxPIDController armMotorPID;
-  private SparkMaxAbsoluteEncoder armMotorEncoder;
+  private AbsoluteEncoder armMotorEncoder;
+  private RelativeEncoder armMotorRelEncoder;
   private boolean arm_direction;
+  private RelativeEncoder encoder;
   private double desiredPosition;
   private boolean inPosition;
 
@@ -33,11 +34,13 @@ public class PickupArmBase extends SubsystemBase {
 
   public PickupArmBase() {
     armMotor = new CANSparkMax(ArmConstants.ARM_MOTOR_ID, MotorType.kBrushless);
-    armMotor.restoreFactoryDefaults();
-    armMotor.setIdleMode(IdleMode.kBrake);
-    armMotor.burnFlash();
 
-    armMotorEncoder = armMotor.getAbsoluteEncoder(Type.kDutyCycle);
+    // armMotorEncoder = armMotor.getAbsoluteEncoder(Type.kDutyCycle);
+    // armMotorEncoder.setPositionConversionFactor(0.1);
+    armMotorRelEncoder = armMotor.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 4096);
+
+    armMotorPID = armMotor.getPIDController();
+    armMotorPID.setFeedbackDevice(armMotorRelEncoder);
 
     desiredPosition = 99999; // starting value.
     inPosition = false;
@@ -53,9 +56,9 @@ public class PickupArmBase extends SubsystemBase {
     } else {
       inPosition = false;
     }
-    
+
     double pos = getEncoderValue();
-    System.out.println("Pickup Arm: " + pos);
+    // System.out.println("Pickup Arm: " + pos);
     // boolean isSafe = getIsSafe(arm_direction, pos);
     // if (!isSafe) {
     //   stop();
@@ -70,7 +73,7 @@ public class PickupArmBase extends SubsystemBase {
   }
 
   public double getEncoderValue() {
-    return 50.0 - armMotorEncoder.getPosition();
+    return armMotorRelEncoder.getPosition();
   }
 
   public void engage_arm(boolean direction) {
@@ -90,6 +93,7 @@ public class PickupArmBase extends SubsystemBase {
       return;
     }
 
+    System.out.println(power);
     if (direction) {
       armMotor.set(power);
     }
@@ -139,7 +143,6 @@ public class PickupArmBase extends SubsystemBase {
   public void go_to_position(double position) {
     desiredPosition = position;
     armMotorPID = armMotor.getPIDController();
-    armMotorPID.setFeedbackDevice(armMotorEncoder);
     armMotorPID.setP(0.05);
     armMotorPID.setI(0.0);
     armMotorPID.setD(0.0);

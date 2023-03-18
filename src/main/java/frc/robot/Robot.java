@@ -9,6 +9,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.HardwareCAN;
 import edu.wpi.first.cameraserver.*;
+import edu.wpi.first.wpilibj.DigitalOutput;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -34,6 +36,10 @@ public class Robot extends TimedRobot {
 
   // Must be static so we can access this via Robot.compressor
   public static Compressor compressor;
+  private DigitalOutput led_output_a;
+  private DigitalOutput led_output_b;
+  private DigitalOutput led_output_c;
+  private DigitalOutput led_output_d;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -52,6 +58,15 @@ public class Robot extends TimedRobot {
     CameraServer.startAutomaticCapture(0);
     CameraServer.startAutomaticCapture(1);
     CameraServer.startAutomaticCapture(2);
+
+    led_output_a = new DigitalOutput(2);
+    led_output_a.set(true);
+    led_output_b = new DigitalOutput(3);
+    led_output_b.set(true);
+    led_output_c = new DigitalOutput(4);
+    led_output_c.set(true);
+    led_output_d = new DigitalOutput(5);
+    led_output_d.set(true);
 
   }
 
