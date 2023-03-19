@@ -106,7 +106,7 @@ public class RobotContainer {
         () -> driverJoystick.getRawAxis(translationAxis),
         () -> driverJoystick.getRawAxis(strafeAxis),
         () -> -driverJoystick.getRawAxis(rotationAxis),
-        () -> false //inverted=fieldCentric, non-inverted=RobotCentric
+        () -> !driverJoystick.getRawButton(1) //inverted=fieldCentric, non-inverted=RobotCentric
       )
     );
     
@@ -256,36 +256,45 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public CommandBase getAutonomousCommand() {
-    PathPlannerTrajectory path_a = PathPlanner.loadPath(
-      "A_AutoGrabCubetoCone",
-      new PathConstraints(
-        AutoConstants.MAX_SPEED,
-        AutoConstants.MAX_ACCELLERATION
-      )
+    CommandBase autonomousCommand = new AutoCDropCubeOutInCommunity(
+      swerveBase,
+      pickupArmBase,
+      suctionArmBase
     );
 
-    PathPlannerTrajectory path_b = PathPlanner.loadPath(
-      "A_AutoGrabConetoDropCone",
-      new PathConstraints(
-        AutoConstants.MAX_SPEED,
-        AutoConstants.MAX_ACCELLERATION
-      )
-    );
 
-    PathPlannerTrajectory path_c = PathPlanner.loadPath(
-      "A_AutoDropConetoGrabCone",
-      new PathConstraints(
-        AutoConstants.MAX_SPEED,
-        AutoConstants.MAX_ACCELLERATION
-      )
-    );
 
-    // How to chain link commands SEQUENTIALLY.
-    return new SequentialCommandGroup(
-      swerveBase.followTrajectoryCommand(path_a, true),
-      swerveBase.followTrajectoryCommand(path_b, false),
-      swerveBase.followTrajectoryCommand(path_c, false)
-    );
+    return autonomousCommand;
+    // PathPlannerTrajectory path_a = PathPlanner.loadPath(
+    //   "A_AutoGrabCubetoCone",
+    //   new PathConstraints(
+    //     AutoConstants.MAX_SPEED,
+    //     AutoConstants.MAX_ACCELLERATION
+    //   )
+    // );
+
+    // PathPlannerTrajectory path_b = PathPlanner.loadPath(
+    //   "A_AutoGrabConetoDropCone",
+    //   new PathConstraints(
+    //     AutoConstants.MAX_SPEED,
+    //     AutoConstants.MAX_ACCELLERATION
+    //   )
+    // );
+
+    // PathPlannerTrajectory path_c = PathPlanner.loadPath(
+    //   "A_AutoDropConetoGrabCone",
+    //   new PathConstraints(
+    //     AutoConstants.MAX_SPEED,
+    //     AutoConstants.MAX_ACCELLERATION
+    //   )
+    // );
+
+    // // How to chain link commands SEQUENTIALLY.
+    // return new SequentialCommandGroup(
+    //   swerveBase.followTrajectoryCommand(path_a, true),
+    //   swerveBase.followTrajectoryCommand(path_b, false),
+    //   swerveBase.followTrajectoryCommand(path_c, false)
+    // );
 
   }
 

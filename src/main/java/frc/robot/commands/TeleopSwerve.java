@@ -29,21 +29,21 @@ public class TeleopSwerve extends CommandBase {
   private final DoubleSupplier forwardY;
   private final DoubleSupplier rotation;
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
-  private final Supplier<Boolean> fieldOrientedFunction;
+  private final Supplier<Boolean> isFieldOriented;
 
   public TeleopSwerve(
       SwerveBase subsystem,
       DoubleSupplier fwdX,
       DoubleSupplier fwdY,
       DoubleSupplier rot,
-      Supplier<Boolean> fieldOrientedFunction) {
+      Supplier<Boolean> isFieldOriented) {
 
     drive = subsystem;
     forwardX = fwdX;
     forwardY = fwdY;
     rotation = rot;
 
-    this.fieldOrientedFunction = fieldOrientedFunction;
+    this.isFieldOriented = isFieldOriented;
 
     this.xLimiter = new SlewRateLimiter(Swerve.kTeleDriveMaxAccelerationUnitsPerSecond);
     this.yLimiter = new SlewRateLimiter(Swerve.kTeleDriveMaxAccelerationUnitsPerSecond);
@@ -78,7 +78,7 @@ public class TeleopSwerve extends CommandBase {
         -fwdX,
         -fwdY,
         rot,
-        true
+        isFieldOriented.get()
       );
   }
 }

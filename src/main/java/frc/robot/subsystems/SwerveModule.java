@@ -26,6 +26,7 @@ public class SwerveModule extends SubsystemBase {
    * for both rotation and linear movement
    */
 
+  private static SwerveBase swerveDrive;
   public PIDController testRotationController;
 
   private static final double rotationkP = 0.5;
@@ -60,7 +61,10 @@ public class SwerveModule extends SubsystemBase {
       int driveMotorId,
       int rotationMotorId,
       int canCoderId,
-      double measuredOffsetRadians) {
+      double measuredOffsetRadians,
+      SwerveBase swerveSubsystem) {
+
+    swerveDrive = swerveSubsystem;
 
     driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);
     rotationMotor = new CANSparkMax(rotationMotorId, MotorType.kBrushless);

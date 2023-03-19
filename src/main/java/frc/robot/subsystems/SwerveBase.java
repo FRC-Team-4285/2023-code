@@ -28,17 +28,20 @@ import frc.robot.Constants;
 public class SwerveBase extends SubsystemBase {  
   private final WPI_Pigeon2 pigeonSensor;
   private final AHRS navX;
+  private Pigeon2Configuration pigeonConfig;
+  private double oldPigeonYaw = 0.0;
 
   public SwerveBase() {
     navX = new AHRS(SPI.Port.kMXP);
     pigeonSensor = new WPI_Pigeon2(Constants.Swerve.PIGEON_SENSOR_ID);
-    Pigeon2Configuration config = new Pigeon2Configuration();
-    pigeonSensor.configAllSettings(config);
+    pigeonConfig = new Pigeon2Configuration();
     pigeonSensor.configFactoryDefault();
     pigeonSensor.reset();
-    odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
+    zeroPigeon();
+    pigeonSensor.getAllConfigs(pigeonConfig);
 
-    //odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
+
+    odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
 
     // initialize the rotation offsets for the CANCoders
     frontLeft.initRotationOffset();
@@ -80,9 +83,9 @@ public class SwerveBase extends SubsystemBase {
    * doesn't spin in place
    */
   private static final double frontLeftAngleOffset = Units.degreesToRadians(190 - 180);///(179.23);(190 - 180);
-  private static final double frontRightAngleOffset = Units.degreesToRadians(146);//(178.67);//(146);
-  private static final double rearLeftAngleOffset = Units.degreesToRadians(-124 + 180);//(180.69);
-  private static final double rearRightAngleOffset = Units.degreesToRadians(-121.5+3);//(179.95);
+  private static final double frontRightAngleOffset = Units.degreesToRadians(147.5);//(178.67);//(146);
+  private static final double rearLeftAngleOffset = Units.degreesToRadians(-124 + 181);//(180.69);
+  private static final double rearRightAngleOffset = Units.degreesToRadians(-122);//(179.95);
 
   private Pose2d m_pose = new Pose2d(0, 0, new Rotation2d());
   private final double SCALE_X = -1/0.9;
@@ -101,13 +104,15 @@ public class SwerveBase extends SubsystemBase {
       Swerve.frontLeftDriveMotorId,
       Swerve.frontLeftRotationMotorId,
       Swerve.frontLeftRotationEncoderId,
-      frontLeftAngleOffset);
+      frontLeftAngleOffset,
+      this);
 
   private final SwerveModule frontRight = new SwerveModule(
       Swerve.frontRightDriveMotorId,
       Swerve.frontRightRotationMotorId,
       Swerve.frontRightRotationEncoderId,
-      frontRightAngleOffset);
+      frontRightAngleOffset,
+      this);
 
   public SwerveModule getFrontRight() {
     return frontRight;
@@ -117,13 +122,15 @@ public class SwerveBase extends SubsystemBase {
       Swerve.rearLeftDriveMotorId,
       Swerve.rearLeftRotationMotorId,
       Swerve.rearLeftRotationEncoderId,
-      rearLeftAngleOffset);
+      rearLeftAngleOffset,
+      this);
 
   private final SwerveModule rearRight = new SwerveModule(
       Swerve.rearRightDriveMotorId,
       Swerve.rearRightRotationMotorId,
       Swerve.rearRightRotationEncoderId,
-      rearRightAngleOffset);
+      rearRightAngleOffset,
+      this);
 
 
   /**
@@ -133,11 +140,12 @@ public class SwerveBase extends SubsystemBase {
    */
   private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(Swerve.kinematics, new Rotation2d(),
       getModulePositions());
+  private boolean needPigeonReset = false;
 
   public SwerveDriveOdometry getOdometry() {
     return odometry;
   }
-
+  
   @Override
   public void periodic() {
 
@@ -179,10 +187,25 @@ public class SwerveBase extends SubsystemBase {
      * speeds is set to field relative or default (robot relative) based on
      * parameter
      */
-    ChassisSpeeds speeds = isFieldRelative
-        ? ChassisSpeeds.fromFieldRelativeSpeeds(
-            forward, strafe, rotation, getHeading())
-        : new ChassisSpeeds(forward, strafe, rotation);
+
+    if (!isFieldRelative) {
+      if (!needPigeonReset) {
+        needPigeonReset = true;
+        oldPigeonYaw = pigeonSensor.getYaw();
+      }
+
+      zeroPigeon();
+    }
+    else if (needPigeonReset) {
+      needPigeonReset = false;
+      pigeonSensor.setYaw(oldPigeonYaw);
+    }
+
+    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+      forward, strafe, rotation, getHeading()
+    );
+
+    // new ChassisSpeeds(forward, strafe, rotation)
 
     // use kinematics (wheel placements) to convert overall robot state to array of
     // individual module states
