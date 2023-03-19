@@ -79,8 +79,8 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double MAX_SPEED = 0.9;
-    public static final double MAX_ACCELLERATION = 0.9;
+    public static final double MAX_SPEED = 1.0;
+    public static final double MAX_ACCELLERATION = 0.4;
 
     // AUTO CONFIGURATIONS
     public static final String A_AUTO_CLIMB_CUBE_CONE = "New New Path";
