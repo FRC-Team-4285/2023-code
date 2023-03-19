@@ -103,7 +103,7 @@ public final class Constants {
     // PID Positions
     public static final double START_POS = -0.23; //3;
     public static final double FEEDER_POS = 0.02; //05;
-    public static final double DROP_POS = -0.92; //727;
+    public static final double DROP_POS = -0.87; //727;
 
   }
 
@@ -123,8 +123,8 @@ public final class Constants {
 
     // PID Positions
     public static final double CLIMBER_POS_DOWN_SUCTION = -119.0;
-    public static final double CLIMBER_POS_DOWN = -115.0;
-    public static final double CLIMBER_POS_UP = 0.0;
+    public static final double CLIMBER_POS_DOWN = 94.10;
+    public static final double CLIMBER_POS_UP = -9.25;
 
   }
 

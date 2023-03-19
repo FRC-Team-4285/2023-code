@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  private static final boolean WANT_MANUAL_CLIMBER = false;
   // The robot's subsystems and commands are defined here...
   private final Joystick driverJoystick;
   private final Joystick streamDeck;
@@ -171,13 +172,26 @@ public class RobotContainer {
       btnArmLower.whileHeld(new PickupArmDown(pickupArmBase));
     }
 
-    // Climber Manual Raise
-    //btnClimberUp = new JoystickButton(streamDeck, 13);
-    //btnClimberUp.whileHeld(new ClimberUp(climberArmBase));
+    boolean WANT_MANUAL_CLIMBER = true;
 
-    // Climber Manual Lower
-    //btnClimberDown = new JoystickButton(streamDeck, 14);
-    //btnClimberDown.whileHeld(new ClimberDown(climberArmBase));
+    if (!WANT_MANUAL_CLIMBER) {
+      // Climber Up Pos PID
+      btnClimberUpPos = new JoystickButton(streamDeck, 13);
+      btnClimberUpPos.whileHeld(new ClimberUpPos(climberArmBase));
+
+     // Climber Down Pos PID
+      btnClimberDownPos = new JoystickButton(streamDeck, 14);
+      btnClimberDownPos.whileHeld(new ClimberDownPos(climberArmBase));
+    }
+    else {
+      // Climber Manual Raise
+       btnClimberUp = new JoystickButton(streamDeck, 13);
+       btnClimberUp.whileHeld(new ClimberUp(climberArmBase));
+
+      // Climber Manual Lower
+       btnClimberDown = new JoystickButton(streamDeck, 14);
+       btnClimberDown.whileHeld(new ClimberDown(climberArmBase));
+    }
 
     // Grab Cone Light Indicator
     btnConeGrabLight = new JoystickButton(streamDeck, 11);
@@ -187,17 +201,9 @@ public class RobotContainer {
     btnCubeGrabLight = new JoystickButton(streamDeck, 12);
     btnCubeGrabLight.whileHeld(new CubeGrabLight(suctionArmBase));
 
-    // // Climber Up Pos PID
-    // btnClimberUpPos = new JoystickButton(streamDeck, 13);
-    // btnClimberUpPos.whileHeld(new ClimberUpPos(climberArmBase));
-
-    // // Climber Down Pos PID
-    // btnClimberDownPos = new JoystickButton(streamDeck, 14);
-    // btnClimberDownPos.whileHeld(new ClimberDownPos(climberArmBase));
-
     // Climber Arm Suction Engage (MOVES CLIMBER ARM + ENGAGES)
-    btnClimberSuctionEngage = new JoystickButton(streamDeck, 15);
-    btnClimberSuctionEngage.whileHeld(new ClimberSuctionEngagePos(climberArmBase, suctionCupBase));
+    // btnClimberSuctionEngage = new JoystickButton(streamDeck, 15);
+    // btnClimberSuctionEngage.whileHeld(new ClimberSuctionEngagePos(climberArmBase, suctionCupBase));
 
     // Intake Raise
     // btnIntakeUp = new JoystickButton(streamDeck, 13);
@@ -224,12 +230,12 @@ public class RobotContainer {
     btnFloorIntakeRetract.whileHeld(new FloorIntakeRetract(intakeBase));
 
     //Climber Engage
-    btnSuctionEngage = new JoystickButton(streamDeck, 15);
-    btnSuctionEngage.onTrue(new SuctionCupEngage(suctionCupBase));
+    // btnSuctionEngage = new JoystickButton(streamDeck, 15);
+    // btnSuctionEngage.onTrue(new SuctionCupEngage(suctionCupBase));
 
     //Suction Release
-    btnSuctionRelease = new JoystickButton(streamDeck, 16);
-    btnSuctionRelease.onTrue(new SuctionCupRelease(suctionCupBase));
+    // btnSuctionRelease = new JoystickButton(streamDeck, 16);
+    // btnSuctionRelease.onTrue(new SuctionCupRelease(suctionCupBase));
 
     // Pickup Arm Grab
     btnPickupArmGrab = new JoystickButton(streamDeck, 5);
