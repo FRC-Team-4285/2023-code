@@ -6,6 +6,8 @@ import frc.robot.Constants.HardwareCAN;
 import frc.robot.Constants.PneumaticChannels;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 // import com.revrobotics.RelativeEncoder;
@@ -24,9 +26,10 @@ public class ClimberArmBase extends SubsystemBase {
 
   private CANSparkMax climberMotorLeft;
   private CANSparkMax climberMotorRight;
+  private RelativeEncoder climberMotorEncoderLeft;
+  private RelativeEncoder climberMotorEncoderRight;
   private SparkMaxPIDController climberMotorRightPID;
   private SparkMaxPIDController climberMotorLeftPID;
-  private DutyCycleEncoder climberMotorEncoder;
   private Solenoid climberLiftSolenoid;
   private boolean climber_direction;
   private RobotContainer robotContainer;
@@ -39,26 +42,23 @@ public class ClimberArmBase extends SubsystemBase {
     climberMotorRight = new CANSparkMax(ClimberConstants.CLIMBER_MOTOR_RIGHT_ID, MotorType.kBrushless);
     climberMotorRight.setInverted(true);
 
-    climberMotorEncoder = new DutyCycleEncoder(0);
-    climberMotorEncoder.setDistancePerRotation(360.0);
+    climberMotorEncoderLeft = climberMotorLeft.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 4096);
+    climberMotorEncoderRight = climberMotorRight.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 4096);
 
-    // This solenoid pumps the suction cup,
-    // holding us to the balance station.
-    climberLiftSolenoid = new Solenoid(
-      HardwareCAN.PNEUMATIC_HUB,
-      PneumaticsModuleType.REVPH,
-      PneumaticChannels.CLIMBER_ARM_LIFTER
-    );
+    climberMotorLeftPID = climberMotorLeft.getPIDController();
+    climberMotorLeftPID.setFeedbackDevice(climberMotorEncoderLeft);
+    climberMotorRightPID = climberMotorRight.getPIDController();
+    climberMotorRightPID.setFeedbackDevice(climberMotorEncoderRight);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    double pos = getEncoderValue();
-
+    double posLeft = getEncoderValueLeft();
+    double posRight = getEncoderValueRight();
     // System.out.println("climb motor pos: " + pos);
 
-    boolean isSafe = getIsSafe(climber_direction, pos);
+    boolean isSafe = getIsSafe(climber_direction, posLeft, posRight);
     if (!isSafe) {
       stop();
       return;
@@ -66,8 +66,7 @@ public class ClimberArmBase extends SubsystemBase {
 
   }
 
-  private boolean getIsSafe(boolean direction, double pos) {
-    return true;
+  private boolean getIsSafe(boolean direction, double posLeft, double posRight) {
     // // System.out.println(direction + " " + pos);
     // boolean isSafe = (pos > 0 && pos < 101);
     // if (!isSafe) {
@@ -92,15 +91,20 @@ public class ClimberArmBase extends SubsystemBase {
     //   }
     // }
 
-    // return true;
+    return true;
   }
 
-  public double getEncoderValue() {
-    return climberMotorEncoder.getDistance() - 354;
+  public double getEncoderValueLeft() {
+    return climberMotorEncoderLeft.getPosition();
+  }
+
+  public double getEncoderValueRight() {
+    return climberMotorEncoderRight.getPosition();
   }
 
   @Override
   public void simulationPeriodic() {
+    // UNUSED
     // This method will be called once per scheduler run during simulation
   }
 
@@ -110,21 +114,21 @@ public class ClimberArmBase extends SubsystemBase {
      */
 
     double power = ClimberConstants.CLIMBER_MOTOR_POWER;
-    double pos = getEncoderValue();
     climber_direction = direction;
 
+    // double pos = getEncoderValue();
     // System.out.println("climb motor pos: " + pos);
 
     // ----------------------
     // !!! VERY IMPORTANT !!!
     // ----------------------
-    // Each motor's power MUST be the opposite of each other.
+    // Each motor's power MUST be the same as of each other.
     // If you don't, you will cause a large mechanical error
     // requiring an untimely and difficult manual fix.
     // 
     // More literally:
-    //   - If left is power, right must be -power;
-    //   - If left is -power, right must be power.
+    //   - If left is + power, right must be + power;
+    //   - If left is - power, right must be - power.
     //
     // You have been warned. If you break it, YOU fix it!
     // Yes, that means YOU.
@@ -141,15 +145,14 @@ public class ClimberArmBase extends SubsystemBase {
     }
   }
 
-  public void engage_lift(){
+  public void engage_lift() {
     // engages cylinders and disables operator control of the climbing motors
     // climbing motors MUST BE IN COAST while cylinder is extending
     // Use PID to set climber motors to assist cylinder???
     climberLiftSolenoid.set(false);
-
   }
 
-  public void disengage_lift(){
+  public void disengage_lift() {
     // default state of lift
     climberLiftSolenoid.set(true); //solenoid is inverted so true == retracted
   }
@@ -164,6 +167,10 @@ public class ClimberArmBase extends SubsystemBase {
   }
 
   public void go_to_position(double motorPos, boolean direction) {
+    /*
+     * Go to climber position using PID values.
+     */
+
     climber_direction = direction;
 
     if (direction) {
@@ -173,7 +180,6 @@ public class ClimberArmBase extends SubsystemBase {
       climberLiftSolenoid.set(false);
     }
 
-    climberMotorLeftPID = climberMotorLeft.getPIDController();
     climberMotorLeftPID.setP(0.1);
     climberMotorLeftPID.setI(0.0);
     climberMotorLeftPID.setD(0.0);
@@ -182,7 +188,6 @@ public class ClimberArmBase extends SubsystemBase {
     climberMotorLeftPID.setOutputRange(-0.3, 0.3);
     climberMotorLeftPID.setReference(motorPos, ControlType.kPosition);
 
-    climberMotorRightPID = climberMotorRight.getPIDController();
     climberMotorRightPID.setP(0.1);
     climberMotorRightPID.setI(0.0);
     climberMotorRightPID.setD(0.0);

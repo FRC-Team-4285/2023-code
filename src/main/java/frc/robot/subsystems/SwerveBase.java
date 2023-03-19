@@ -37,6 +37,32 @@ public class SwerveBase extends SubsystemBase {
     pigeonSensor.configFactoryDefault();
     pigeonSensor.reset();
     odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
+
+    //odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
+
+    // initialize the rotation offsets for the CANCoders
+    frontLeft.initRotationOffset();
+    frontRight.initRotationOffset();
+    rearLeft.initRotationOffset();
+    rearRight.initRotationOffset();
+
+    // reset the measured distance driven for each module
+    frontLeft.resetDistance();
+    frontRight.resetDistance();
+    rearLeft.resetDistance();
+    rearRight.resetDistance();
+
+    rearRight.getDriveMotor().setInverted(false);
+    rearLeft.getDriveMotor().setInverted(false);
+    frontRight.getDriveMotor().setInverted(false);
+    frontLeft.getDriveMotor().setInverted(false);
+
+    rearRight.getRotationMotor().setInverted(false);
+    rearLeft.getRotationMotor().setInverted(false);
+    frontRight.getRotationMotor().setInverted(false);
+    frontLeft.getRotationMotor().setInverted(false);
+
+
   }
 
   public void zeroPigeon() {
@@ -110,33 +136,6 @@ public class SwerveBase extends SubsystemBase {
 
   public SwerveDriveOdometry getOdometry() {
     return odometry;
-  }
-
- {
-    //odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
-
-    // initialize the rotation offsets for the CANCoders
-    frontLeft.initRotationOffset();
-    frontRight.initRotationOffset();
-    rearLeft.initRotationOffset();
-    rearRight.initRotationOffset();
-
-    // reset the measured distance driven for each module
-    frontLeft.resetDistance();
-    frontRight.resetDistance();
-    rearLeft.resetDistance();
-    rearRight.resetDistance();
-
-    rearRight.getDriveMotor().setInverted(false);
-    rearLeft.getDriveMotor().setInverted(false);
-    frontRight.getDriveMotor().setInverted(false);
-    frontLeft.getDriveMotor().setInverted(false);
-
-    rearRight.getRotationMotor().setInverted(false);
-    rearLeft.getRotationMotor().setInverted(false);
-    frontRight.getRotationMotor().setInverted(false);
-    frontLeft.getRotationMotor().setInverted(false);
-
   }
 
   @Override

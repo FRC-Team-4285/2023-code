@@ -249,6 +249,7 @@ public class RobotContainer {
 
   }
 
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -256,34 +257,34 @@ public class RobotContainer {
    */
   public CommandBase getAutonomousCommand() {
     PathPlannerTrajectory path_a = PathPlanner.loadPath(
-      "New New Path",
+      "A_AutoGrabCubetoCone",
       new PathConstraints(
         AutoConstants.MAX_SPEED,
         AutoConstants.MAX_ACCELLERATION
       )
     );
 
-    // PathPlannerTrajectory path_b = PathPlanner.loadPath(
-    //   "New New New Path",
-    //   new PathConstraints(
-    //     AutoConstants.MAX_SPEED,
-    //     AutoConstants.MAX_ACCELLERATION
-    //   )
-    // );
+    PathPlannerTrajectory path_b = PathPlanner.loadPath(
+      "A_AutoGrabConetoDropCone",
+      new PathConstraints(
+        AutoConstants.MAX_SPEED,
+        AutoConstants.MAX_ACCELLERATION
+      )
+    );
 
-    // PathPlannerTrajectory path_c = PathPlanner.loadPath(
-    //   "A_AutoDropConetoGrabCone",
-    //   new PathConstraints(
-    //     AutoConstants.MAX_SPEED,
-    //     AutoConstants.MAX_ACCELLERATION
-    //   )
-    // );
+    PathPlannerTrajectory path_c = PathPlanner.loadPath(
+      "A_AutoDropConetoGrabCone",
+      new PathConstraints(
+        AutoConstants.MAX_SPEED,
+        AutoConstants.MAX_ACCELLERATION
+      )
+    );
 
     // How to chain link commands SEQUENTIALLY.
     return new SequentialCommandGroup(
-      swerveBase.followTrajectoryCommand(path_a, true)
-      // swerveBase.followTrajectoryCommand(path_b, false)
-      // swerveBase.followTrajectoryCommand(path_c, false)
+      swerveBase.followTrajectoryCommand(path_a, true),
+      swerveBase.followTrajectoryCommand(path_b, false),
+      swerveBase.followTrajectoryCommand(path_c, false)
     );
 
   }
