@@ -79,8 +79,8 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double MAX_SPEED = 0.5;
-    public static final double MAX_ACCELLERATION = 0.5;
+    public static final double MAX_SPEED = 0.9;
+    public static final double MAX_ACCELLERATION = 0.9;
 
     // AUTO CONFIGURATIONS
     public static final String A_AUTO_CLIMB_CUBE_CONE = "New New Path";
@@ -94,16 +94,16 @@ public final class Constants {
     public static final int ARM_MOTOR_ID = 9;
 
     // Motor Speed
-    public static final double ARM_MOTOR_POWER = 0.35;    
+    public static final double ARM_MOTOR_POWER = .7;    
 
     // Direction
     public static final boolean ARM_DIRECTION_UP = true;
     public static final boolean ARM_DIRECTION_DOWN = false;
 
     // PID Positions
-    public static final double START_POS = -0.233;
-    public static final double FEEDER_POS = 0.0205;
-    public static final double DROP_POS = -0.70727;
+    public static final double START_POS = -0.23; //3;
+    public static final double FEEDER_POS = 0.02; //05;
+    public static final double DROP_POS = -0.92; //727;
 
   }
 
@@ -139,8 +139,8 @@ public final class Constants {
     public static final boolean INTAKE_DIRECTION_UP = true;
     public static final boolean INTAKE_DIRECTION_DOWN = false;
 
-    public static final double INTAKE_EXTEND_POS = 0.0;
-    public static final double INTAKE_RETRACT_POS = -60.97;
+    public static final double INTAKE_EXTEND_POS = 54.97;
+    public static final double INTAKE_RETRACT_POS = 0.0;
   }
 
   public static final class SuctionConstants {

@@ -69,9 +69,9 @@ public class IntakeBase extends SubsystemBase {
      */
 
     double power = IntakeConstants.INTAKE_MOTOR_POWER;
+    
     double pos = intakeMotorEncoder.getPosition();
-
-    //System.out.println("intake motor pos: " + pos);
+    System.out.println("intake motor pos: " + pos);
 
     if (direction) {
         intakeMotor.set(power);
