@@ -54,7 +54,7 @@ public class PickupArmBase extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     double currentPosition = getEncoderValue();
-    // System.out.println("arm position " + currentPosition);
+     //System.out.println("arm position " + currentPosition);
     if (Math.abs(currentPosition - desiredPosition) < 0.25) {
       inPosition = true;
     } else {
@@ -152,7 +152,7 @@ public class PickupArmBase extends SubsystemBase {
     armMotorPID.setD(1.0);
     armMotorPID.setIZone(0.0);
     armMotorPID.setFF(0.0);
-    armMotorPID.setOutputRange(-5.5, 5.5);
+    armMotorPID.setOutputRange(-30.5, 30.5);
     armMotorPID.setReference(position, ControlType.kPosition);
   }
 

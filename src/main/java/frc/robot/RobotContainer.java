@@ -172,7 +172,7 @@ public class RobotContainer {
       btnArmLower.whileHeld(new PickupArmDown(pickupArmBase));
     }
 
-    boolean WANT_MANUAL_CLIMBER = true;
+    boolean WANT_MANUAL_CLIMBER = false;
 
     if (!WANT_MANUAL_CLIMBER) {
       // Climber Up Pos PID
