@@ -62,7 +62,7 @@ public class ClimberArmBase extends SubsystemBase {
   }
 
   private boolean getIsSafe(boolean direction, double pos) {
-    System.out.println("climb motor pos: " + direction + " " + pos);
+    // System.out.println("climb motor pos: " + direction + " " + pos);
     return true;
     // boolean isSafe = (pos > 0 && pos < 101);
     // if (!isSafe) {

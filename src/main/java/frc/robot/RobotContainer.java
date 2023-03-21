@@ -255,7 +255,7 @@ public class RobotContainer {
     btnFloorIntakeRelease.whileHeld(new FloorIntakeRelease(intakeBase));
 
     // Limelight Track Drive
-    btnLimelightTrackDrive = new JoystickButton(streamDeck, 16);
+    btnLimelightTrackDrive = new JoystickButton(driverJoystick, 11);
     btnLimelightTrackDrive.whileHeld(new LimelightTrackDrive(swerveBase));
 
   }
@@ -267,7 +267,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public CommandBase getAutonomousCommand() {
-    CommandBase autonomousCommand = new AutoCDropCubeOutInCommunity(
+    CommandBase autonomousCommand = new AutoADropCubeOutInCommunity(
       swerveBase,
       pickupArmBase,
       suctionArmBase

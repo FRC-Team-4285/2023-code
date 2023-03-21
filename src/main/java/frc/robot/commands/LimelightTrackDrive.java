@@ -15,12 +15,14 @@ public class LimelightTrackDrive extends CommandBase {
    private final SwerveBase drive;
    private NetworkTable table;
    private NetworkTableEntry ty;
+   private NetworkTableEntry tx;
 
     public LimelightTrackDrive(SwerveBase swerveBase) {
         drive = swerveBase;
 
         table = NetworkTableInstance.getDefault().getTable("limelight");
         ty = table.getEntry("ty");
+        tx = table.getEntry("tx");
 
         addRequirements(swerveBase);
     }
@@ -29,7 +31,6 @@ public class LimelightTrackDrive extends CommandBase {
     @Override
     public void initialize() {
         startTime = getCurrentTime();
-        drive.zeroPigeon();
     }
 
     private double getCurrentTime() {
@@ -43,7 +44,36 @@ public class LimelightTrackDrive extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-        System.out.println(ty.getDouble(0.0));
+        double currentTx = tx.getDouble(0.0);
+        System.out.println(currentTx);
+        if (currentTx >= 6) {
+            drive.drive(0.0, 0.5, 0.0, true);
+        }
+        else if (currentTx >= 2.5) {
+            drive.drive(0.0, 0.3, 0.0, true);
+        }
+        else if (currentTx >= 1) {
+            drive.drive(0.0, 0.25, 0.0, true);
+        }
+        else if (currentTx >= 0.25) {
+            drive.drive(0.0, 0.15, 0.0, true);
+        }
+
+        else if (currentTx <= -6) {
+            drive.drive(0.0, -0.5, 0.0, true);
+        }
+        else if (currentTx <= -2.5) {
+            drive.drive(0.0, -0.3, 0.0, true);
+        }
+        else if (currentTx <= -1) {
+            drive.drive(0.0, -0.25, 0.0, true);
+        }
+        else if (currentTx <= -0.25) {
+            drive.drive(0.0, -0.15, 0.0, true);
+        }
+        else {
+            drive.drive(0.0, 0.0, 0.0, true);
+        }
     }
 
     // Make this return true when this Command no longer needs to run execute()

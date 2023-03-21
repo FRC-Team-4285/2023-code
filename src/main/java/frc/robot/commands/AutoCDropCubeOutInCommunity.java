@@ -51,7 +51,7 @@ public class AutoCDropCubeOutInCommunity extends CommandBase {
     @Override
     public void execute() {
         double timeSinceInitialized = getTimeSinceInitialized();
-        System.out.println(getTimeSinceInitialized());
+        //System.out.println(getTimeSinceInitialized());
         if (timeSinceInitialized < 100) {
             drive.drive(0.05, 0.0, 0, true);
         }
