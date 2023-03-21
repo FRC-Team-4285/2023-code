@@ -8,6 +8,10 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
+import java.util.function.DoubleSupplier;
+import java.util.function.BiFunction;
+import java.lang.Math;
+
 import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.ClimberArmBase;
@@ -22,7 +26,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
 
 /*
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -40,6 +43,7 @@ public class RobotContainer {
   private final int translationAxis = 1;
   private final int strafeAxis = 0;
   private final int rotationAxis = 2; //was 4 on Xbox
+  private final int sliderAxis = 3;
 
   /* Drive Buttons */
   private JoystickButton zeroGyro;
@@ -99,15 +103,18 @@ public class RobotContainer {
   public RobotContainer() {
     driverJoystick = new Joystick(0);
     streamDeck = new Joystick(1);
-
+    DoubleSupplier limit = () -> (1.5 - driverJoystick.getRawAxis(sliderAxis))/2.5;
+    /*maps sliderAxis to be between 0.2 and 1.0*/
+    BiFunction<Double, Double, Double> Clamp = (val,lim) -> (Math.abs(val) < lim) ? val:Math.copySign(lim,val);
+    /*clamps value to be within a certain limit, also preserves sign */
     swerveBase = new SwerveBase();
     swerveBase.setDefaultCommand(
       new TeleopSwerve(
         swerveBase,
         // currently code has no deadband, add deadband here if needed in future
-        () -> driverJoystick.getRawAxis(translationAxis),
-        () -> driverJoystick.getRawAxis(strafeAxis),
-        () -> -driverJoystick.getRawAxis(rotationAxis),
+        () -> Clamp.apply(driverJoystick.getRawAxis(translationAxis), limit.getAsDouble()),
+        () -> Clamp.apply(driverJoystick.getRawAxis(strafeAxis), limit.getAsDouble()),
+        () -> -Clamp.apply(driverJoystick.getRawAxis(rotationAxis), limit.getAsDouble()),
         () -> !driverJoystick.getRawButton(1) //inverted=fieldCentric, non-inverted=RobotCentric
       )
     );
