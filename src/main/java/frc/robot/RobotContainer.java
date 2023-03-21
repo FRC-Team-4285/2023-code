@@ -67,6 +67,7 @@ public class RobotContainer {
   private JoystickButton btnClimberSuctionEngage;
   private JoystickButton btnCubeGrabLight;
   private JoystickButton btnConeGrabLight;
+  private JoystickButton btnLimelightTrackDrive;
 
   /* Subsystems */
   public final SwerveBase swerveBase;
@@ -229,11 +230,11 @@ public class RobotContainer {
     btnFloorIntakeRetract = new JoystickButton(streamDeck, 3);
     btnFloorIntakeRetract.whileHeld(new FloorIntakeRetract(intakeBase));
 
-    //Climber Engage
+    // //Climber Engage
     // btnSuctionEngage = new JoystickButton(streamDeck, 15);
     // btnSuctionEngage.onTrue(new SuctionCupEngage(suctionCupBase));
 
-    //Suction Release
+    // //Suction Release
     // btnSuctionRelease = new JoystickButton(streamDeck, 16);
     // btnSuctionRelease.onTrue(new SuctionCupRelease(suctionCupBase));
 
@@ -252,6 +253,10 @@ public class RobotContainer {
     // Floor Intake Release
     btnFloorIntakeRelease = new JoystickButton(streamDeck, 8);
     btnFloorIntakeRelease.whileHeld(new FloorIntakeRelease(intakeBase));
+
+    // Limelight Track Drive
+    btnLimelightTrackDrive = new JoystickButton(streamDeck, 16);
+    btnLimelightTrackDrive.whileHeld(new LimelightTrackDrive(swerveBase));
 
   }
 
