@@ -72,6 +72,7 @@ public class RobotContainer {
   private JoystickButton btnCubeGrabLight;
   private JoystickButton btnConeGrabLight;
   private JoystickButton btnLimelightTrackDrive;
+  private JoystickButton speedControlToggle;
 
   /* Subsystems */
   public final SwerveBase swerveBase;
@@ -107,11 +108,16 @@ public class RobotContainer {
     /*maps sliderAxis to be between 0.2 and 1.0*/
     BiFunction<Double, Double, Double> Clamp = (val,lim) -> (Math.abs(val) < lim) ? val:Math.copySign(lim,val);
     /*clamps value to be within a certain limit, also preserves sign */
+    double translationSpeed;
+    double rotationSpeed;
+
     swerveBase = new SwerveBase();
     swerveBase.setDefaultCommand(
       new TeleopSwerve(
         swerveBase,
         // currently code has no deadband, add deadband here if needed in future
+        //TODO: make separate DoubleSuppliers for translation & roation 
+        //TODO: make button 12 toggle the supplier that is being updated by limitSupplier
         () -> Clamp.apply(driverJoystick.getRawAxis(translationAxis), limit.getAsDouble()),
         () -> Clamp.apply(driverJoystick.getRawAxis(strafeAxis), limit.getAsDouble()),
         () -> -Clamp.apply(driverJoystick.getRawAxis(rotationAxis), limit.getAsDouble()),
@@ -265,6 +271,10 @@ public class RobotContainer {
     btnLimelightTrackDrive = new JoystickButton(driverJoystick, 11);
     btnLimelightTrackDrive.whileHeld(new LimelightTrackDrive(swerveBase));
 
+    speedControlToggle = new JoystickButton(driverJoystick, 12);
+    //speedControlToggle.whileFalse(new updateTranslationSpeed);
+    //speedControlToggle.whileTrue(new updateRotationSpeed);
+    //TODO: make commands that can influence the behavior of DoubleSuppliers in the RobotContainer Constructor
   }
 
 
