@@ -28,7 +28,7 @@ public class ClimberUp extends CommandBase {
 
   @Override
   public void initialize() {
-    m_climberSubsystem.engage_climber(ClimberConstants.CLIMBER_DIRECTION_UP);
+    m_climberSubsystem.engage_climber(ClimberConstants.CLIMBER_DIRECTION_UP, ClimberConstants.CLIMBER_MOTOR_POWER);
   }
 
   @Override

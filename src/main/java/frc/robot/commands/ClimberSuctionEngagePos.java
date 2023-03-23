@@ -36,7 +36,7 @@ public class ClimberSuctionEngagePos extends CommandBase {
   }
 
   public void periodic() {
-    m_climberSubsystem.go_to_position(ClimberConstants.CLIMBER_POS_DOWN_SUCTION, false);
+    m_climberSubsystem.go_to_position(ClimberConstants.CLIMBER_POS_DOWN_SUCTION);
 
     if (commandState == 0 && getCurrentTime() - startTime > 200) {
       // give a few moments for the arm to go down.

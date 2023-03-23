@@ -99,16 +99,12 @@ public class ClimberArmBase extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 
-  public void engage_climber(boolean direction) {
+  public void engage_climber(boolean direction, double power) {
     /*
      * Engage climber motors.
      */
 
-    double power = ClimberConstants.CLIMBER_MOTOR_POWER;
-    double pos = getEncoderValue();
     climber_direction = direction;
-
-     //System.out.println("climb motor pos: " + pos);
 
     // ----------------------
     // !!! VERY IMPORTANT !!!
@@ -158,32 +154,31 @@ public class ClimberArmBase extends SubsystemBase {
     climberMotorRight.set(0.0);
   }
 
-  public void go_to_position(double motorPos, boolean direction) {
-    climber_direction = direction;
-
-    if (direction) {
-      climberLiftSolenoid.set(true);
+  public void go_to_position(double desiredPos) {
+    double currentPos = climberMotorEncoder.get();
+    double offset;
+    boolean direction;
+    if (currentPos < desiredPos) {
+      offset = desiredPos - currentPos;
+      direction = false;
     }
     else {
-      climberLiftSolenoid.set(false);
+      offset = currentPos - desiredPos;
+      direction = true;
     }
 
-    climberMotorLeftPID = climberMotorLeft.getPIDController();
-    climberMotorLeftPID.setP(0.1);
-    climberMotorLeftPID.setI(0.0);
-    climberMotorLeftPID.setD(0.0);
-    climberMotorLeftPID.setIZone(0.0);
-    climberMotorLeftPID.setFF(0.0);
-    climberMotorLeftPID.setOutputRange(-0.3, 0.3);
-    climberMotorLeftPID.setReference(motorPos, ControlType.kPosition);
-
-    climberMotorRightPID = climberMotorRight.getPIDController();
-    climberMotorRightPID.setP(0.1);
-    climberMotorRightPID.setI(0.0);
-    climberMotorRightPID.setD(0.0);
-    climberMotorRightPID.setIZone(0.0);
-    climberMotorRightPID.setFF(0.0);
-    climberMotorRightPID.setOutputRange(0.3, -0.3);
-    climberMotorRightPID.setReference(motorPos, ControlType.kPosition);
+    if (offset >= 2.5) {
+        engage_climber(direction, 0.5);
+    }
+    else if (offset >= 2) {
+        engage_climber(direction, 0.25);
+    }
+    else if (offset >= 1) {
+        engage_climber(direction, 0.1);
+    }
+    else {
+      engage_climber(direction, 0.0);
+    }
+ 
   }
 }

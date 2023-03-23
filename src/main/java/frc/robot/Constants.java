@@ -43,8 +43,8 @@ public final class Constants {
     );
 
     /* Swerve Profiling Values */
-    public static final double maxSpeed = 4.5; // NOT a speed unit; robot gets faster if this is lower 2.0
-    public static final double maxAngularVelocity = 8.0;
+    public static final double maxSpeed = 3.0; // NOT a speed unit; robot gets faster if this is lower 2.0
+    public static final double maxAngularVelocity = 12.0;
 
     public static final int frontLeftRotationMotorId = 8;
     public static final int frontLeftDriveMotorId = 23;
@@ -101,7 +101,8 @@ public final class Constants {
     public static final boolean ARM_DIRECTION_DOWN = false;
 
     // PID Positions
-    public static final double START_POS = -0.23; //3;
+    public static final double START_POS = -0.25; //3;
+    public static final double START_PLUS_POS = -0.3; //3;
     public static final double FEEDER_POS = 0.02; //05;
     public static final double DROP_POS = -0.89; //727;
 

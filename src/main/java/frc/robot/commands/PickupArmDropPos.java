@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.PickupArmBase;
 import frc.robot.subsystems.SuctionArmBase;
@@ -17,11 +18,13 @@ public class PickupArmDropPos extends CommandBase {
 
   private final PickupArmBase m_armSubsystem;
   private final SuctionArmBase m_suctionSubsystem;
+  private final RobotContainer robotContainer;
 
 
-  public PickupArmDropPos(PickupArmBase armSubsystem, SuctionArmBase suctionSubsystem) {
+  public PickupArmDropPos(PickupArmBase armSubsystem, SuctionArmBase suctionSubsystem, RobotContainer container) {
     m_armSubsystem = armSubsystem;
     m_suctionSubsystem = suctionSubsystem;
+    robotContainer = container;
     addRequirements(m_armSubsystem);
   }
 
@@ -32,7 +35,7 @@ public class PickupArmDropPos extends CommandBase {
 
   @Override
   public void initialize() {
-    // m_suctionSubsystem.unlock_arm();
+    m_suctionSubsystem.unlock_arm();
   }
 
   @Override
@@ -42,7 +45,7 @@ public class PickupArmDropPos extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return m_armSubsystem.getInPosition();
+    return !robotContainer.getArmDropStatus();
   }
 
 }

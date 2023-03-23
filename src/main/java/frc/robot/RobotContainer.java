@@ -166,15 +166,15 @@ public class RobotContainer {
     if (!WANT_MANUAL_ARM) {
       // Arm Drop Config
       btnArmDropPos = new JoystickButton(streamDeck, 2);
-      btnArmDropPos.whileHeld(new PickupArmDropPos(pickupArmBase, suctionArmBase));
+      btnArmDropPos.onTrue(new PickupArmDropPos(pickupArmBase, suctionArmBase, this));
 
       // Arm Start Config
       btnArmStartPos = new JoystickButton(streamDeck, 6);
-      btnArmStartPos.whileHeld(new PickupArmStartPos(pickupArmBase, suctionArmBase));
+      btnArmStartPos.onTrue(new PickupArmStartPos(pickupArmBase, suctionArmBase, this));
 
       // Arm Feeder Pos
       btnArmFeederPos = new JoystickButton(streamDeck, 10);
-      btnArmFeederPos.whileHeld(new PickupArmFeederPos(pickupArmBase, suctionArmBase)); 
+      btnArmFeederPos.onTrue(new PickupArmFeederPos(pickupArmBase, suctionArmBase, this)); 
     }
     else {
       //Arm Manual Raise
@@ -186,26 +186,13 @@ public class RobotContainer {
       btnArmLower.whileHeld(new PickupArmDown(pickupArmBase));
     }
 
-    boolean WANT_MANUAL_CLIMBER = true;
+    // Climber Manual Raise
+    btnClimberUp = new JoystickButton(streamDeck, 13);
+    btnClimberUp.whileHeld(new ClimberUp(climberArmBase));
 
-    if (!WANT_MANUAL_CLIMBER) {
-      // Climber Up Pos PID
-      btnClimberUpPos = new JoystickButton(streamDeck, 13);
-      btnClimberUpPos.whileHeld(new ClimberUpPos(climberArmBase));
-
-     // Climber Down Pos PID
-      btnClimberDownPos = new JoystickButton(streamDeck, 14);
-      btnClimberDownPos.whileHeld(new ClimberDownPos(climberArmBase));
-    }
-    else {
-      // Climber Manual Raise
-       btnClimberUp = new JoystickButton(streamDeck, 13);
-       btnClimberUp.whileHeld(new ClimberUp(climberArmBase));
-
-      // Climber Manual Lower
-       btnClimberDown = new JoystickButton(streamDeck, 14);
-       btnClimberDown.whileHeld(new ClimberDown(climberArmBase));
-    }
+    // Climber Manual Lower
+    btnClimberDown = new JoystickButton(streamDeck, 14);
+    btnClimberDown.whileHeld(new ClimberDown(climberArmBase));
 
     // Grab Cone Light Indicator
     btnConeGrabLight = new JoystickButton(streamDeck, 11);
@@ -364,6 +351,18 @@ public class RobotContainer {
 
   public boolean getConeGrabBtnStatus() {
     return btnConeGrab.getAsBoolean();
+  }
+
+  public boolean getArmDropStatus() {
+    return btnArmDropPos.getAsBoolean();
+  }
+
+  public boolean getArmFeedStatus () {
+    return btnArmFeederPos.getAsBoolean();
+  }
+
+  public boolean getArmStartStatus () {
+    return btnArmStartPos.getAsBoolean();
   }
 
 }
