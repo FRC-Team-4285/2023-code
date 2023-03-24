@@ -46,8 +46,8 @@ public class PickupArmFeederPos extends CommandBase {
     double timeSinceInitialized = getTimeSinceInitialized();
 
     if (ArmConstants.START_PLUS_POS < currentEncoderPos && timeSinceInitialized < 500) {
-      System.out.println(currentEncoderPos);
-      System.out.println(timeSinceInitialized);
+      //System.out.println(currentEncoderPos);
+      //System.out.println(timeSinceInitialized);
       m_armSubsystem.go_to_position(ArmConstants.START_PLUS_POS);
       m_suctionSubsystem.unlock_arm();
     }

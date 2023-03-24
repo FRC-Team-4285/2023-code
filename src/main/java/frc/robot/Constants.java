@@ -101,10 +101,17 @@ public final class Constants {
     public static final boolean ARM_DIRECTION_DOWN = false;
 
     // PID Positions
-    public static final double START_POS = -0.25; //3;
-    public static final double START_PLUS_POS = -0.3; //3;
-    public static final double FEEDER_POS = 0.02; //05;
-    public static final double DROP_POS = -0.89; //727;
+    // This is if feeder config is when robot starts.
+    // public static final double FEEDER_POS = 0.02; //05;
+    // public static final double START_POS = -0.25; //3;
+    // public static final double START_PLUS_POS = -0.3; //3;
+    // public static final double DROP_POS = -0.89; //727;
+
+    // This is if start config is when robot starts.
+    public static final double FEEDER_POS = 0.25;
+    public static final double START_POS = 0.02;
+    public static final double START_PLUS_POS = -0.05;
+    public static final double DROP_POS = -0.59;
 
   }
 
