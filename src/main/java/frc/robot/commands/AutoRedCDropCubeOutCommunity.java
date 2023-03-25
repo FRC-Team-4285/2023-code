@@ -25,7 +25,7 @@ public class AutoRedCDropCubeOutCommunity extends CommandBase {
         drive = swerveBase;
         armBase = pickupArmBase;
         armBaseCone = suctionArmBase;
-        addRequirements(swerveBase);
+        addRequirements(swerveBase, armBase, armBaseCone);
     }
 
     // Called just before this Command runs the first time
@@ -53,9 +53,12 @@ public class AutoRedCDropCubeOutCommunity extends CommandBase {
         double timeSinceInitialized = getTimeSinceInitialized();
         //System.out.println(getTimeSinceInitialized());
         if (timeSinceInitialized < 100) {
+            armBaseCone.unlock_arm();
             drive.drive(0.05, 0.0, 0, true);
         }
         else if (timeSinceInitialized < 2000) {
+            armBaseCone.unlock_arm();
+            armBaseCone.grab_cone();
             armBase.go_to_position(ArmConstants.DROP_POS);
             drive.drive(0.0, 0.0, 0.0, true);
         }
@@ -69,15 +72,15 @@ public class AutoRedCDropCubeOutCommunity extends CommandBase {
         }
         else if (timeSinceInitialized < 4000) {
             drive.drive(1.0, -0.05, 0.0, true);
-            armBase.go_to_position(ArmConstants.START_POS);
+            armBase.go_to_position(ArmConstants.FEEDER_POS);
         }
-        else if (timeSinceInitialized < 6000) {
+        else if (timeSinceInitialized < 5800) {
             drive.drive(1.0, 0.0, 0.0, true);
-            armBase.go_to_position(ArmConstants.START_POS);
+            armBase.go_to_position(ArmConstants.FEEDER_POS);
         }
         else { // stop
             drive.drive(0.0, 0, 0, true);
-            armBase.go_to_position(ArmConstants.START_POS);
+            armBase.go_to_position(ArmConstants.FEEDER_POS);
         }
     }
 

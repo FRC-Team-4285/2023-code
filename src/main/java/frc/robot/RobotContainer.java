@@ -106,7 +106,7 @@ public class RobotContainer {
     streamDeck = new Joystick(1);
     DoubleSupplier limit = () -> (1.5 - driverJoystick.getRawAxis(sliderAxis))/2.5;
     /*maps sliderAxis to be between 0.2 and 1.0*/
-    BiFunction<Double, Double, Double> Clamp = (val,lim) -> (Math.abs(val) < lim) ? val:Math.copySign(lim,val);
+    BiFunction<Double, Double, Double> Clamp = (val,lim) -> (Math.abs(val) < lim) ? val : Math.copySign(lim,val);
     /*clamps value to be within a certain limit, also preserves sign */
 
     swerveBase = new SwerveBase();
@@ -270,7 +270,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public CommandBase getAutonomousCommand() {
-    CommandBase autonomousCommand = new AutoBlueADropCubeOutCommunity(
+    CommandBase autonomousCommand = new AutoRedADropCubeOutCommunity(
       swerveBase,
       pickupArmBase,
       suctionArmBase

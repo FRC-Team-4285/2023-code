@@ -21,7 +21,7 @@ public class AutoRedADropCubeOutCommunity extends CommandBase {
         drive = swerveBase;
         armBase = pickupArmBase;
         armBaseCone = suctionArmBase;
-        addRequirements(swerveBase, armBaseCone);
+        addRequirements(swerveBase, armBase, armBaseCone);
     }
 
     // Called just before this Command runs the first time
@@ -62,15 +62,15 @@ public class AutoRedADropCubeOutCommunity extends CommandBase {
         }
         else if (timeSinceInitialized < 5000) {
             drive.drive(1.0, 0.1, 0.0, true);
-            armBase.go_to_position(ArmConstants.START_POS);
+            armBase.go_to_position(ArmConstants.FEEDER_POS);
         }
-        else if (timeSinceInitialized < 6000) {
+        else if (timeSinceInitialized < 6300) {
             drive.drive(1.0, 0.0, 0.0, true);
-            armBase.go_to_position(ArmConstants.START_POS);
+            armBase.go_to_position(ArmConstants.FEEDER_POS);
         }
         else { // stop
             drive.drive(0.0, 0, 0, true);
-            armBase.go_to_position(ArmConstants.START_POS);
+            armBase.go_to_position(ArmConstants.FEEDER_POS);
         }
     }
 

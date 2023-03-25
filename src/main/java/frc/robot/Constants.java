@@ -43,7 +43,7 @@ public final class Constants {
     );
 
     /* Swerve Profiling Values */
-    public static final double maxSpeed = 2.0; // NOT a speed unit; robot gets faster if this is lower 2.0
+    public static final double maxSpeed = 1.3; // NOT a speed unit; robot gets faster if this is lower 2.0
     public static final double maxAngularVelocity = 12.0;
 
     public static final int frontLeftRotationMotorId = 8;

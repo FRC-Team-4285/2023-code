@@ -24,7 +24,7 @@ public class AutoDropCube extends CommandBase {
         drive = swerveBase;
         armBase = pickupArmBase;
         armBaseCone = suctionArmBase;
-        addRequirements(swerveBase);
+        addRequirements(swerveBase, armBaseCone);
     }
 
     // Called just before this Command runs the first time
@@ -55,10 +55,12 @@ public class AutoDropCube extends CommandBase {
         drive.drive(0.0, 0.0, 0.0, true);
 
         if (timeSinceInitialized < 2000) {
+            armBaseCone.unlock_arm();
             armBase.go_to_position(ArmConstants.DROP_POS);
         }
         else if (timeSinceInitialized < 2300) {
             armBaseCone.release_cone();
+            armBaseCone.release_cube();
         }
         else {
             armBase.go_to_position(ArmConstants.START_POS);
