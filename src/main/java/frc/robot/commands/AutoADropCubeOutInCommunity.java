@@ -65,8 +65,8 @@ public class AutoADropCubeOutInCommunity extends CommandBase {
             drive.drive(1.0, 0.2, 0.0, true);
             armBase.go_to_position(ArmConstants.START_POS);
         }
-        else if (timeSinceInitialized < 7500) {
-            drive.drive(-1.0, -0.2, 0.0, true);
+        else if (timeSinceInitialized < 6000) {
+            drive.drive(1.0, 0.0, 0.0, true);
             armBase.go_to_position(ArmConstants.START_POS);
         }
         else { // stop
