@@ -108,8 +108,6 @@ public class RobotContainer {
     /*maps sliderAxis to be between 0.2 and 1.0*/
     BiFunction<Double, Double, Double> Clamp = (val,lim) -> (Math.abs(val) < lim) ? val:Math.copySign(lim,val);
     /*clamps value to be within a certain limit, also preserves sign */
-    double translationSpeed;
-    double rotationSpeed;
 
     swerveBase = new SwerveBase();
     swerveBase.setDefaultCommand(
@@ -259,6 +257,7 @@ public class RobotContainer {
     btnLimelightTrackDrive.whileHeld(new LimelightTrackDrive(swerveBase));
 
     speedControlToggle = new JoystickButton(driverJoystick, 12);
+    //speedControlToggle.whileHeld(new U)
     //speedControlToggle.whileFalse(new updateTranslationSpeed);
     //speedControlToggle.whileTrue(new updateRotationSpeed);
     //TODO: make commands that can influence the behavior of DoubleSuppliers in the RobotContainer Constructor
@@ -271,46 +270,13 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public CommandBase getAutonomousCommand() {
-    CommandBase autonomousCommand = new AutoADropCubeOutInCommunity(
+    CommandBase autonomousCommand = new AutoBlueADropCubeOutCommunity(
       swerveBase,
       pickupArmBase,
       suctionArmBase
     );
 
-
-
     return autonomousCommand;
-    // PathPlannerTrajectory path_a = PathPlanner.loadPath(
-    //   "A_AutoGrabCubetoCone",
-    //   new PathConstraints(
-    //     AutoConstants.MAX_SPEED,
-    //     AutoConstants.MAX_ACCELLERATION
-    //   )
-    // );
-
-    // PathPlannerTrajectory path_b = PathPlanner.loadPath(
-    //   "A_AutoGrabConetoDropCone",
-    //   new PathConstraints(
-    //     AutoConstants.MAX_SPEED,
-    //     AutoConstants.MAX_ACCELLERATION
-    //   )
-    // );
-
-    // PathPlannerTrajectory path_c = PathPlanner.loadPath(
-    //   "A_AutoDropConetoGrabCone",
-    //   new PathConstraints(
-    //     AutoConstants.MAX_SPEED,
-    //     AutoConstants.MAX_ACCELLERATION
-    //   )
-    // );
-
-    // // How to chain link commands SEQUENTIALLY.
-    // return new SequentialCommandGroup(
-    //   swerveBase.followTrajectoryCommand(path_a, true),
-    //   swerveBase.followTrajectoryCommand(path_b, false),
-    //   swerveBase.followTrajectoryCommand(path_c, false)
-    // );
-
   }
 
   public boolean getZeroGyroBtnStatus() {

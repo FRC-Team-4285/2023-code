@@ -6,26 +6,22 @@ import frc.robot.subsystems.PickupArmBase;
 import frc.robot.subsystems.SuctionArmBase;
 import frc.robot.subsystems.SwerveBase;
 
-public class AutoCDropCubeOutInCommunity extends CommandBase {
+public class AutoRedADropCubeOutCommunity extends CommandBase {
   /*
    * Autonomous Command
    * ------------------
-   * 
-   * This command is a stub that runs during autonomous.
-   * Currently unused, will be filled soon.
    */
 
-    private double startTime = 0.0;
-    private final SwerveBase drive;
-    private final PickupArmBase armBase;
-    private final SuctionArmBase armBaseCone;
-    private boolean released_cone = false;
+   private double startTime = 0.0;
+   private final SwerveBase drive;
+   private final PickupArmBase armBase;
+   private final SuctionArmBase armBaseCone;
 
-    public AutoCDropCubeOutInCommunity(SwerveBase swerveBase, PickupArmBase pickupArmBase, SuctionArmBase suctionArmBase) {
+    public AutoRedADropCubeOutCommunity(SwerveBase swerveBase, PickupArmBase pickupArmBase, SuctionArmBase suctionArmBase) {
         drive = swerveBase;
         armBase = pickupArmBase;
         armBaseCone = suctionArmBase;
-        addRequirements(swerveBase);
+        addRequirements(swerveBase, armBaseCone);
     }
 
     // Called just before this Command runs the first time
@@ -54,33 +50,22 @@ public class AutoCDropCubeOutInCommunity extends CommandBase {
         //System.out.println(getTimeSinceInitialized());
         if (timeSinceInitialized < 100) {
             drive.drive(0.05, 0.0, 0, true);
+            armBaseCone.unlock_arm();
         }
         else if (timeSinceInitialized < 2000) {
+            armBaseCone.unlock_arm();
             armBase.go_to_position(ArmConstants.DROP_POS);
             drive.drive(0.0, 0.0, 0.0, true);
         }
         else if (timeSinceInitialized < 2300) {
-            armBase.go_to_position(ArmConstants.DROP_POS);
-            drive.drive(0.0, 0.0, 0.0, true);
-            if (!released_cone) {
-                released_cone = true;
-                armBaseCone.release_cone();
-            }
+            armBaseCone.release_cone();
         }
-        else if (timeSinceInitialized < 4000) {
-            drive.drive(1.0, -0.5, 0.0, true);
+        else if (timeSinceInitialized < 5000) {
+            drive.drive(1.0, 0.1, 0.0, true);
             armBase.go_to_position(ArmConstants.START_POS);
         }
         else if (timeSinceInitialized < 6000) {
             drive.drive(1.0, 0.0, 0.0, true);
-            armBase.go_to_position(ArmConstants.START_POS);
-        }
-        else if (timeSinceInitialized < 7700) {
-            drive.drive(-1.0, 0.0, 0.0, true);
-            armBase.go_to_position(ArmConstants.START_POS);
-        }
-        else if (timeSinceInitialized < 9700) {
-            drive.drive(-1.0, 0.5, 0.0, true);
             armBase.go_to_position(ArmConstants.START_POS);
         }
         else { // stop

@@ -6,7 +6,7 @@ import frc.robot.subsystems.PickupArmBase;
 import frc.robot.subsystems.SuctionArmBase;
 import frc.robot.subsystems.SwerveBase;
 
-public class AutoADropCubeOutInCommunity extends CommandBase {
+public class AutoBlueCDropCubeOutCommunity extends CommandBase {
   /*
    * Autonomous Command
    * ------------------
@@ -15,12 +15,13 @@ public class AutoADropCubeOutInCommunity extends CommandBase {
    * Currently unused, will be filled soon.
    */
 
-   private double startTime = 0.0;
-   private final SwerveBase drive;
-   private final PickupArmBase armBase;
-   private final SuctionArmBase armBaseCone;
+    private double startTime = 0.0;
+    private final SwerveBase drive;
+    private final PickupArmBase armBase;
+    private final SuctionArmBase armBaseCone;
+    private boolean released_cone = false;
 
-    public AutoADropCubeOutInCommunity(SwerveBase swerveBase, PickupArmBase pickupArmBase, SuctionArmBase suctionArmBase) {
+    public AutoBlueCDropCubeOutCommunity(SwerveBase swerveBase, PickupArmBase pickupArmBase, SuctionArmBase suctionArmBase) {
         drive = swerveBase;
         armBase = pickupArmBase;
         armBaseCone = suctionArmBase;
@@ -58,15 +59,20 @@ public class AutoADropCubeOutInCommunity extends CommandBase {
             armBase.go_to_position(ArmConstants.DROP_POS);
             drive.drive(0.0, 0.0, 0.0, true);
         }
-        else if (timeSinceInitialized < 2300) {
-            armBaseCone.release_cone();
+        else if (timeSinceInitialized < 2500) {
+            armBase.go_to_position(ArmConstants.DROP_POS);
+            drive.drive(0.0, 0.0, 0.0, true);
+            if (!released_cone) {
+                released_cone = true;
+                armBaseCone.release_cone();
+            }
         }
-        else if (timeSinceInitialized < 5000) {
-            drive.drive(1.0, 0.2, 0.0, true);
+        else if (timeSinceInitialized < 4000) {
+            drive.drive(1.0, -0.1, 0.0, true);
             armBase.go_to_position(ArmConstants.START_POS);
         }
-        else if (timeSinceInitialized < 7500) {
-            drive.drive(-1.0, -0.2, 0.0, true);
+        else if (timeSinceInitialized < 6000) {
+            drive.drive(1.0, 0.0, 0.0, true);
             armBase.go_to_position(ArmConstants.START_POS);
         }
         else { // stop
