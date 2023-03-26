@@ -63,7 +63,7 @@ public class AutoDropCube extends CommandBase {
             armBaseCone.release_cube();
         }
         else {
-            armBase.go_to_position(ArmConstants.START_POS);
+            armBase.go_to_position(ArmConstants.FEEDER_POS);
         }
     }
 

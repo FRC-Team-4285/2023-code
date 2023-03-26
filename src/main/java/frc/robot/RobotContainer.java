@@ -22,6 +22,7 @@ import frc.robot.subsystems.SuctionCupBase;
 import frc.robot.subsystems.SwerveBase;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -38,6 +39,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Joystick driverJoystick;
   private final Joystick streamDeck;
+  private SendableChooser<CommandBase> m_auto_chooser;
 
   /* Drive Controls */
   private final int translationAxis = 1;
@@ -66,13 +68,9 @@ public class RobotContainer {
   private JoystickButton btnPickupArmRelease;
   private JoystickButton btnFloorIntakeGrab;
   private JoystickButton btnFloorIntakeRelease;
-  private JoystickButton btnClimberDownPos;
-  private JoystickButton btnClimberUpPos;
-  private JoystickButton btnClimberSuctionEngage;
   private JoystickButton btnCubeGrabLight;
   private JoystickButton btnConeGrabLight;
   private JoystickButton btnLimelightTrackDrive;
-  private JoystickButton speedControlToggle;
 
   /* Subsystems */
   public final SwerveBase swerveBase;
@@ -106,6 +104,8 @@ public class RobotContainer {
     streamDeck = new Joystick(1);
     DoubleSupplier limit = () -> (1.5 - driverJoystick.getRawAxis(sliderAxis))/2.5;
     /*maps sliderAxis to be between 0.2 and 1.0*/
+    DoubleSupplier stopRotation = () -> driverJoystick.getRawButton(12) ? 0.0 : 1.0;
+    /* clamps rotation to zero if button 12 is pressed */
     BiFunction<Double, Double, Double> Clamp = (val,lim) -> (Math.abs(val) < lim) ? val : Math.copySign(lim,val);
     /*clamps value to be within a certain limit, also preserves sign */
 
@@ -118,7 +118,7 @@ public class RobotContainer {
         //TODO: make button 12 toggle the supplier that is being updated by limitSupplier
         () -> Clamp.apply(driverJoystick.getRawAxis(translationAxis), limit.getAsDouble()),
         () -> Clamp.apply(driverJoystick.getRawAxis(strafeAxis), limit.getAsDouble()),
-        () -> -Clamp.apply(driverJoystick.getRawAxis(rotationAxis), limit.getAsDouble()),
+        () -> -Clamp.apply(driverJoystick.getRawAxis(rotationAxis), limit.getAsDouble()*stopRotation.getAsDouble()),
         () -> !driverJoystick.getRawButton(1) //inverted=fieldCentric, non-inverted=RobotCentric
       )
     );
@@ -134,6 +134,14 @@ public class RobotContainer {
     suctionCupBase = new SuctionCupBase(this);  
     suctionArmBase = new SuctionArmBase(this);
 
+    m_auto_chooser = new SendableChooser<CommandBase>();
+    m_auto_chooser.addOption("Cube Only",new AutoDropCube(swerveBase, pickupArmBase, suctionArmBase));
+    m_auto_chooser.addOption("Blue A", new AutoBlueADropCubeOutCommunity(swerveBase, pickupArmBase,suctionArmBase));
+    m_auto_chooser.addOption("Blue C", new AutoBlueCDropCubeOutCommunity(swerveBase, pickupArmBase,suctionArmBase));
+    m_auto_chooser.addOption("Red A", new AutoRedADropCubeOutCommunity(swerveBase, pickupArmBase,suctionArmBase));
+    m_auto_chooser.addOption("Red C", new AutoRedCDropCubeOutCommunity(swerveBase, pickupArmBase,suctionArmBase));
+    m_auto_chooser.addOption("Cube B and Balance", new AutoBDropCubeOnBalance(swerveBase, pickupArmBase,suctionArmBase));
+    m_auto_chooser.setDefaultOption("Cube Only", new AutoDropCube(swerveBase, pickupArmBase, suctionArmBase));
     // Configure the trigger bindings
     configureBindings();
     configureLights();
@@ -255,12 +263,6 @@ public class RobotContainer {
     // Limelight Track Drive
     btnLimelightTrackDrive = new JoystickButton(driverJoystick, 11);
     btnLimelightTrackDrive.whileHeld(new LimelightTrackDrive(swerveBase));
-
-    speedControlToggle = new JoystickButton(driverJoystick, 12);
-    //speedControlToggle.whileHeld(new U)
-    //speedControlToggle.whileFalse(new updateTranslationSpeed);
-    //speedControlToggle.whileTrue(new updateRotationSpeed);
-    //TODO: make commands that can influence the behavior of DoubleSuppliers in the RobotContainer Constructor
   }
 
 
@@ -270,6 +272,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public CommandBase getAutonomousCommand() {
+    return m_auto_chooser.getSelected();
+    /*
     CommandBase autonomousCommand = new AutoRedADropCubeOutCommunity(
       swerveBase,
       pickupArmBase,
@@ -277,6 +281,7 @@ public class RobotContainer {
     );
 
     return autonomousCommand;
+    */
   }
 
   public boolean getZeroGyroBtnStatus() {
