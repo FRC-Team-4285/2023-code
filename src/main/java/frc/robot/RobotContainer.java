@@ -23,6 +23,7 @@ import frc.robot.subsystems.SwerveBase;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -39,7 +40,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Joystick driverJoystick;
   private final Joystick streamDeck;
-  private SendableChooser<CommandBase> m_auto_chooser;
+  private SendableChooser<CommandBase> auto_chooser;
 
   /* Drive Controls */
   private final int translationAxis = 1;
@@ -134,14 +135,16 @@ public class RobotContainer {
     suctionCupBase = new SuctionCupBase(this);  
     suctionArmBase = new SuctionArmBase(this);
 
-    m_auto_chooser = new SendableChooser<CommandBase>();
-    m_auto_chooser.addOption("Cube Only",new AutoDropCube(swerveBase, pickupArmBase, suctionArmBase));
-    m_auto_chooser.addOption("Blue A", new AutoBlueADropCubeOutCommunity(swerveBase, pickupArmBase,suctionArmBase));
-    m_auto_chooser.addOption("Blue C", new AutoBlueCDropCubeOutCommunity(swerveBase, pickupArmBase,suctionArmBase));
-    m_auto_chooser.addOption("Red A", new AutoRedADropCubeOutCommunity(swerveBase, pickupArmBase,suctionArmBase));
-    m_auto_chooser.addOption("Red C", new AutoRedCDropCubeOutCommunity(swerveBase, pickupArmBase,suctionArmBase));
-    m_auto_chooser.addOption("Cube B and Balance", new AutoBDropCubeOnBalance(swerveBase, pickupArmBase,suctionArmBase));
-    m_auto_chooser.setDefaultOption("Cube Only", new AutoDropCube(swerveBase, pickupArmBase, suctionArmBase));
+    auto_chooser = new SendableChooser<CommandBase>();
+    auto_chooser.addOption("Red/Blue - Cube Only", new AutoDropCube(swerveBase, pickupArmBase, suctionArmBase));
+    auto_chooser.addOption("Blue A - Cube", new AutoBlueADropCubeOutCommunity(swerveBase, pickupArmBase, suctionArmBase));
+    auto_chooser.addOption("Blue C - Cube", new AutoBlueCDropCubeOutCommunity(swerveBase, pickupArmBase, suctionArmBase));
+    auto_chooser.addOption("Red A - Cube", new AutoRedADropCubeOutCommunity(swerveBase, pickupArmBase, suctionArmBase));
+    auto_chooser.addOption("Red C - Cube", new AutoRedCDropCubeOutCommunity(swerveBase, pickupArmBase, suctionArmBase));
+    auto_chooser.addOption("Red A - Cone", new AutoRedADropConeOutCommunity(swerveBase, pickupArmBase, suctionArmBase));
+    auto_chooser.addOption("Red/Blue B - Cube Balance", new AutoBDropCubeOnBalance(swerveBase, pickupArmBase, suctionArmBase));
+    auto_chooser.setDefaultOption("Red/Blue - Cube Only", new AutoDropCube(swerveBase, pickupArmBase, suctionArmBase));
+    SmartDashboard.putData("Auto Paths", auto_chooser);
     // Configure the trigger bindings
     configureBindings();
     configureLights();
@@ -272,7 +275,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public CommandBase getAutonomousCommand() {
-    return m_auto_chooser.getSelected();
     /*
     CommandBase autonomousCommand = new AutoRedADropCubeOutCommunity(
       swerveBase,
@@ -282,6 +284,7 @@ public class RobotContainer {
 
     return autonomousCommand;
     */
+    return auto_chooser.getSelected();
   }
 
   public boolean getZeroGyroBtnStatus() {
