@@ -62,10 +62,18 @@ public class AutoBDropCubeOnBalance extends CommandBase {
             armBaseCone.release_cone();
             armBaseCone.release_cube();
         }
-        else {
+        else if (timeSinceInitialized < 4300) {
             armBase.go_to_position(ArmConstants.FEEDER_POS);
         }
-        // TO DO
+        else if (timeSinceInitialized < 5300) {
+            drive.drive(0.4, 0.0, 0.0, true);
+        }
+        else if (timeSinceInitialized < 6000) {
+            drive.drive(-0.4, 0.0, 0.0, true);
+        }
+        else {
+            drive.drive(0.0, 0.0, 0.0, true);
+        }
     }
 
     // Make this return true when this Command no longer needs to run execute()
