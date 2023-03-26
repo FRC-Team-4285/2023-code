@@ -17,7 +17,7 @@ public class AutoRedADropCubeOutCommunity extends CommandBase {
    private final PickupArmBase armBase;
    private final SuctionArmBase armBaseCone;
 
-    public AutoRedADropCubeOutCommunity(SwerveBase swerveBase, PickupArmBase pickupArmBase, SuctionArmBase suctionArmBase) {
+   public AutoRedADropCubeOutCommunity(SwerveBase swerveBase, PickupArmBase pickupArmBase, SuctionArmBase suctionArmBase) {
         drive = swerveBase;
         armBase = pickupArmBase;
         armBaseCone = suctionArmBase;
