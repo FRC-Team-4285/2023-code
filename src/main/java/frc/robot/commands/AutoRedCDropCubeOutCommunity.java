@@ -74,7 +74,7 @@ public class AutoRedCDropCubeOutCommunity extends CommandBase {
             drive.drive(1.0, -0.05, 0.0, true);
             armBase.go_to_position(ArmConstants.FEEDER_POS);
         }
-        else if (timeSinceInitialized < 5800) {
+        else if (timeSinceInitialized < 6300) {
             drive.drive(1.0, 0.0, 0.0, true);
             armBase.go_to_position(ArmConstants.FEEDER_POS);
         }
