@@ -62,7 +62,7 @@ public class PickupArmBase extends SubsystemBase {
     }
 
     double pos = getEncoderValue();
-    System.out.println("Pickup Arm: " + pos);
+    //System.out.println("Pickup Arm: " + pos);
     // boolean isSafe = getIsSafe(arm_direction, pos);
     // if (!isSafe) {
     //   stop();
@@ -152,7 +152,7 @@ public class PickupArmBase extends SubsystemBase {
     armMotorPID.setD(0.0);
     armMotorPID.setIZone(0.0);
     armMotorPID.setFF(0.0);
-    armMotorPID.setOutputRange(-30.5, 30.5);
+    armMotorPID.setOutputRange(-35.5, 35.5);
     armMotorPID.setReference(position, ControlType.kPosition);
   }
 

@@ -151,7 +151,8 @@ public class SwerveBase extends SubsystemBase {
 
     // update the odometry every 20ms
     //odometry.update(getHeading(), getModulePositions());
-
+    SmartDashboard.putNumber("Robot Pitch",
+    pigeonSensor.getPitch());
     SmartDashboard.putString("Robot pose",
         getPose().toString());
     SmartDashboard.putNumber("Bot Heading",

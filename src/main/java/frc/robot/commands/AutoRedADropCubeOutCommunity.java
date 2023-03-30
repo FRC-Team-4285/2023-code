@@ -58,6 +58,7 @@ public class AutoRedADropCubeOutCommunity extends CommandBase {
             drive.drive(0.0, 0.0, 0.0, true);
         }
         else if (timeSinceInitialized < 2300) {
+            armBase.go_to_position(ArmConstants.DROP_POS);
             armBaseCone.release_cone();
         }
         else if (timeSinceInitialized < 5000) {

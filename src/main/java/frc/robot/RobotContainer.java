@@ -142,6 +142,7 @@ public class RobotContainer {
     auto_chooser.addOption("Red A - Cube", new AutoRedADropCubeOutCommunity(swerveBase, pickupArmBase, suctionArmBase));
     auto_chooser.addOption("Red C - Cube", new AutoRedCDropCubeOutCommunity(swerveBase, pickupArmBase, suctionArmBase));
     auto_chooser.addOption("Red A - Cone", new AutoRedADropConeOutCommunity(swerveBase, pickupArmBase, suctionArmBase));
+    //auto_chooser.addOption("Balance", new AutoBDropCubeOnBalance(swerveBase, pickupArmBase, suctionArmBase));
     auto_chooser.addOption("Red/Blue B - Cube Balance", new AutoBDropCubeOnBalance(swerveBase, pickupArmBase, suctionArmBase));
     auto_chooser.setDefaultOption("Red/Blue - Cube Only", new AutoDropCube(swerveBase, pickupArmBase, suctionArmBase));
     SmartDashboard.putData("Auto Paths", auto_chooser);
@@ -275,16 +276,16 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public CommandBase getAutonomousCommand() {
-    /*
-    CommandBase autonomousCommand = new AutoRedADropCubeOutCommunity(
+    
+    CommandBase autonomousCommand = new AutoBDropCubeOnBalance(
       swerveBase,
       pickupArmBase,
       suctionArmBase
     );
 
     return autonomousCommand;
-    */
-    return auto_chooser.getSelected();
+    
+    //return auto_chooser.getSelected();
   }
 
   public boolean getZeroGyroBtnStatus() {

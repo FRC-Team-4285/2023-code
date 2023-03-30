@@ -109,10 +109,10 @@ public final class Constants {
     // public static final double DROP_POS = -0.89; //727;
 
     // This is if start config is when robot starts.
-    public static final double FEEDER_POS = 0.25;
-    public static final double START_POS = 0.02;
-    public static final double START_PLUS_POS = -0.05;
-    public static final double DROP_POS = -0.59;
+    public static final double FEEDER_POS = 0.260;//0.25;
+    public static final double START_POS = 0.00; //0.02;
+    public static final double START_PLUS_POS = -0.01;
+    public static final double DROP_POS = -0.674;
 
   }
 
@@ -124,7 +124,7 @@ public final class Constants {
     public static final int BATTERY_MOTOR_ID = 12;
 
     // Motor Speed
-    public static final double CLIMBER_MOTOR_POWER = 0.4;
+    public static final double CLIMBER_MOTOR_POWER = 5.5;
 
     // Direction
     public static final boolean CLIMBER_DIRECTION_UP = true;

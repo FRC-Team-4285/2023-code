@@ -6,7 +6,7 @@ import frc.robot.subsystems.PickupArmBase;
 import frc.robot.subsystems.SuctionArmBase;
 import frc.robot.subsystems.SwerveBase;
 
-public class AutoBDropCubeOnBalance extends CommandBase {
+public class AutoBDropCubeOnBalanceLock extends CommandBase {
   /*
    * Autonomous Command
    * ------------------
@@ -20,7 +20,7 @@ public class AutoBDropCubeOnBalance extends CommandBase {
    private final PickupArmBase armBase;
    private final SuctionArmBase armBaseCone;
 
-    public AutoBDropCubeOnBalance(SwerveBase swerveBase, PickupArmBase pickupArmBase, SuctionArmBase suctionArmBase) {
+    public AutoBDropCubeOnBalanceLock(SwerveBase swerveBase, PickupArmBase pickupArmBase, SuctionArmBase suctionArmBase) {
         drive = swerveBase;
         armBase = pickupArmBase;
         armBaseCone = suctionArmBase;
@@ -66,14 +66,16 @@ public class AutoBDropCubeOnBalance extends CommandBase {
             armBaseCone.release_cube();
             //drop cube
         }
-        else if (timeSinceInitialized < 6600) {
+        else if (timeSinceInitialized < 4300) {
             armBase.go_to_position(ArmConstants.FEEDER_POS);
             //put arm back
-            drive.drive(1.0, 0.0, 0.0, true);
+        }
+        else if (timeSinceInitialized < 5300) {
+            drive.drive(0.4, 0.0, 0.0, true);
             //go over balance for out of community points
         }
-        else if (timeSinceInitialized < 8000) {
-            drive.drive(-1.0, 0.0, 0.0, true);
+        else if (timeSinceInitialized < 6000) {
+            drive.drive(-0.4, 0.0, 0.0, true);
             //back up onto balance for auto-balance attempt
         }
         else {
@@ -89,10 +91,11 @@ public class AutoBDropCubeOnBalance extends CommandBase {
                 drive.drive(0.1,0.0,0.0, false);
 
             }
-            else{
-            drive.drive(0.0, 0.0, 0.0, true);
-            //keep robot balanced until end of auto
+            else {
+                drive.drive(0.0,0.0,0.0,false);
             }
+            //drive.drive(0.0, 0.0, 0.0, true);
+            //keep robot balanced until end of auto
         }
     }
 

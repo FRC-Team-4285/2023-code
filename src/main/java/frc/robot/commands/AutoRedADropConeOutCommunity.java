@@ -62,6 +62,7 @@ public class AutoRedADropConeOutCommunity extends CommandBase {
             armBase.go_to_position(ArmConstants.DROP_POS);
         }
         else if (timeSinceInitialized < 4500) {
+            armBase.go_to_position(ArmConstants.DROP_POS);
             armBaseCone.release_cone();
         }
         else if (timeSinceInitialized < 6000) {
