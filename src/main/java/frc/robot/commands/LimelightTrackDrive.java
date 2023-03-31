@@ -46,6 +46,16 @@ public class LimelightTrackDrive extends CommandBase {
     public void execute() {
         double currentTx = tx.getDouble(0.0);
         System.out.println(currentTx);
+        if(currentTx > 6){
+            drive.drive(0.0,0.3,0.0,true);
+        }
+        else if(currentTx < -6){
+            drive.drive(0.0,-0.3,0.0,true);
+        }
+        else{
+            drive.drive(0.0,0.0,0.0,true);
+        }
+        /*
         if (currentTx >= 6) {
             drive.drive(0.0, 0.5, 0.0, true);
         }
@@ -74,6 +84,7 @@ public class LimelightTrackDrive extends CommandBase {
         else {
             drive.drive(0.0, 0.0, 0.0, true);
         }
+        */
     }
 
     // Make this return true when this Command no longer needs to run execute()

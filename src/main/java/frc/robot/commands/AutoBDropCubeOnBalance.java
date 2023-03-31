@@ -51,7 +51,7 @@ public class AutoBDropCubeOnBalance extends CommandBase {
     public void execute() {
         double timeSinceInitialized = getTimeSinceInitialized();
         double tilt = drive.getPigeonSensor().getPitch();//degrees?
-        double deadzone = 5.0; //degrees
+        double deadzone = 10.0; //degrees
         //drive.drive(0.0, 0.0, 0.0, true);
 
         if (timeSinceInitialized < 2000) {
@@ -66,33 +66,42 @@ public class AutoBDropCubeOnBalance extends CommandBase {
             armBaseCone.release_cube();
             //drop cube
         }
-        else if (timeSinceInitialized < 6600) {
+        else if (timeSinceInitialized < 7000) {
             armBase.go_to_position(ArmConstants.FEEDER_POS);
             //put arm back
             drive.drive(1.0, 0.0, 0.0, true);
             //go over balance for out of community points
         }
-        else if (timeSinceInitialized < 8000) {
+        else if (timeSinceInitialized < 7500){
+            drive.drive(0.0, 0.0, 0.0, true);
+        }
+        else if (timeSinceInitialized < 9700) {
             drive.drive(-1.0, 0.0, 0.0, true);
             //back up onto balance for auto-balance attempt
+        }
+        else if (timeSinceInitialized < 12500){
+            drive.drive(0.0,0.0,0.0,true);
+        }
+        else if(timeSinceInitialized < 13000){
+            drive.drive(0.0,0.1, 0.0, true);
         }
         else {
             /* Feedback-based balancing code */
             /* use pitch value from pigeon to adjust wheel speed */
-            if (tilt > deadzone){
+            /*if (tilt > deadzone){
                 //pitch is too high, decrease pitch
-                drive.drive(-0.1, 0.0, 0.0, false);
-            }
-            else if (tilt < -deadzone)
+                drive.drive(-0.5, 0.0, 0.0, false);
+            }*/
+            /*else if (tilt < -deadzone)
             {
                 //pitch is too low, increase pitch
-                drive.drive(0.1,0.0,0.0, false);
+                drive.drive(0.5,0.0,0.0, false);
 
-            }
-            else{
+            }*/
+            //else{
             drive.drive(0.0, 0.0, 0.0, true);
             //keep robot balanced until end of auto
-            }
+            //}
         }
     }
 
