@@ -71,15 +71,15 @@ public class AutoBlueCDropCubeOutCommunity extends CommandBase {
         }
         else if (timeSinceInitialized < 4000) {
             drive.drive(1.0, -0.1, 0.0, true);
-            armBase.go_to_position(ArmConstants.FEEDER_POS);
+            armBase.go_to_position(ArmConstants.START_POS);
         }
-        else if (timeSinceInitialized < 6200) {
+        else if (timeSinceInitialized < 6500) {
             drive.drive(1.0, 0.0, 0.0, true);
-            armBase.go_to_position(ArmConstants.FEEDER_POS);
+            armBase.go_to_position(ArmConstants.START_POS);
         }
         else { // stop
             drive.drive(0.0, 0, 0, true);
-            armBase.go_to_position(ArmConstants.FEEDER_POS);
+            armBase.go_to_position(ArmConstants.START_POS);
         }
     }
 

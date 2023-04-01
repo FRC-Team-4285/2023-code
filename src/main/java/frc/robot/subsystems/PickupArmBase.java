@@ -13,6 +13,7 @@ import com.revrobotics.SparkMaxAlternateEncoder;
 
 import com.revrobotics.AbsoluteEncoder;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -54,21 +55,13 @@ public class PickupArmBase extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     double currentPosition = getEncoderValue();
+    SmartDashboard.putNumber("Arm Position", currentPosition);
      //System.out.println("arm position " + currentPosition);
     if (Math.abs(currentPosition - desiredPosition) < 0.25) {
       inPosition = true;
     } else {
       inPosition = false;
     }
-
-    double pos = getEncoderValue();
-    //System.out.println("Pickup Arm: " + pos);
-    // boolean isSafe = getIsSafe(arm_direction, pos);
-    // if (!isSafe) {
-    //   stop();
-    //   return;
-    // }
-
   }
 
   @Override

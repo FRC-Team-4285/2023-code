@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -24,6 +25,7 @@ import frc.robot.Constants.HardwareCAN;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
+  private UsbCamera armCamera;
 
   NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
   NetworkTableEntry tx = table.getEntry("tx");
@@ -47,9 +49,12 @@ public class Robot extends TimedRobot {
       PneumaticsModuleType.REVPH
     );
     compressor.enableAnalog(102.5, 115.0);
-    CameraServer.startAutomaticCapture(0);
-    CameraServer.startAutomaticCapture(1);
-    CameraServer.startAutomaticCapture(2);
+    armCamera = CameraServer.startAutomaticCapture(0);
+    armCamera.setFPS(15);
+    armCamera.setResolution(320, 240);
+    //armCamera.close();
+    //CameraServer.startAutomaticCapture(1);
+    //CameraServer.startAutomaticCapture(2);
 
   }
 

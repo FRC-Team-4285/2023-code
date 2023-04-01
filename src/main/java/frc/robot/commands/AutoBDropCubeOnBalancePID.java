@@ -10,8 +10,9 @@ public class AutoBDropCubeOnBalancePID extends CommandBase {
 
    private double startTime = 0.0;
    private double timeOfBalanceAttempt = 0.0;
-   private int waitForBalance = 750; //milliseconds
+   private int waitForBalance = 500; //milliseconds, was 667
    private int nudgeTime = 400; //milliseconds
+   private double nudgePower = 0.65;//was 0.67
    private Boolean AttemptingBalancePos = false;
    private Boolean AttemptingBalanceNeg = false;
    private final SwerveBase drive;
@@ -48,40 +49,39 @@ public class AutoBDropCubeOnBalancePID extends CommandBase {
         double tilt = drive.getPigeonSensor().getPitch();//degrees
         double deadzone = 5.0; //degrees
 
-        if (timeSinceInitialized < 2000) {
+        if (timeSinceInitialized < 1900) {
             //start of autonomous
             armBaseCone.unlock_arm();
             //take arm out of starting config
             armBase.go_to_position(ArmConstants.DROP_POS);
             //get arm ready to drop cube
         }
-        else if (timeSinceInitialized < 2300) {
+        else if (timeSinceInitialized < 2100) {
             armBaseCone.release_cone();
             armBaseCone.release_cube();
             //drop cube
         }
-        else if (timeSinceInitialized < 7000) {
-            armBase.go_to_position(ArmConstants.FEEDER_POS);
+        else if (timeSinceInitialized < 7250) {
+            armBase.go_to_position(ArmConstants.START_POS);
             //put arm back
             drive.drive(1.0, 0.0, 0.0, true);
             //go over balance for out of community points
         }
-        else if (timeSinceInitialized < 7500){
+        else if (timeSinceInitialized < 7750){
+            armBase.go_to_position(ArmConstants.START_POS);
             drive.drive(0.0, 0.0, 0.0, true);
         }
-        else if (timeSinceInitialized < 9800) {
+        else if (timeSinceInitialized < 10250) {
+            armBase.go_to_position(ArmConstants.START_POS);
             drive.drive(-1.0, 0.0, 0.0, true);
             //back up onto balance for auto-balance attempt
         }
-        else if (timeSinceInitialized < 11000){
+        else if (timeSinceInitialized < 10500){
+            armBase.go_to_position(ArmConstants.START_POS);
             drive.drive(0.0,0.0,0.0,true);
         }
-        /*
-        else if(timeSinceInitialized < 13000){
-            //drive.drive(0.0,0.1, 0.0, true);
-        }
-        */
         else {
+            armBase.go_to_position(ArmConstants.START_POS);
             //Nudge robot if balance isn't level
             if((tilt > deadzone) && (timeSinceBalanceAttempt > waitForBalance) && !(AttemptingBalanceNeg)){
                 System.out.println("Starting Negative Nudge");
@@ -93,7 +93,7 @@ public class AutoBDropCubeOnBalancePID extends CommandBase {
             }
             if (AttemptingBalanceNeg){
                 if(timeSinceBalanceAttempt < (waitForBalance + nudgeTime)){
-                    drive.drive(-0.5, 0.0, 0.0, true);
+                    drive.drive(-nudgePower, 0.0, 0.0, true);
                 }
                 else{
                     System.out.println("Completed Negative Nudge");
@@ -104,7 +104,7 @@ public class AutoBDropCubeOnBalancePID extends CommandBase {
             }
             else if(AttemptingBalancePos){
                 if(timeSinceBalanceAttempt < waitForBalance + nudgeTime){
-                    drive.drive(0.5, 0.0, 0.0, true);
+                    drive.drive(nudgePower, 0.0, 0.0, true);
                 }
                 else{
                     System.out.println("Completed Positive Nudge");

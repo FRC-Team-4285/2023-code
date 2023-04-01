@@ -133,6 +133,7 @@ public class RobotContainer {
     suctionArmBase = new SuctionArmBase(this);
 
     //Create & Configue AutoChooser
+    /*
     auto_chooser = new SendableChooser<CommandBase>();
     auto_chooser.addOption("Auto B", new AutoBDropCubeOnBalancePID(swerveBase, pickupArmBase, suctionArmBase));
     auto_chooser.addOption("Blue A", new AutoBlueADropCubeOutCommunity(swerveBase, pickupArmBase, suctionArmBase));
@@ -141,6 +142,7 @@ public class RobotContainer {
     auto_chooser.addOption("Red C", new AutoRedCDropCubeOutCommunity(swerveBase, pickupArmBase, suctionArmBase));
     auto_chooser.setDefaultOption("Auto B", new AutoBDropCubeOnBalancePID(swerveBase, pickupArmBase, suctionArmBase));
     SmartDashboard.putData("Auto Paths", auto_chooser);
+    */
     
     // Configure the trigger bindings
     configureBindings();

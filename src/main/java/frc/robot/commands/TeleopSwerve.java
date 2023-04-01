@@ -65,9 +65,9 @@ public class TeleopSwerve extends CommandBase {
     double rot = rotation.getAsDouble();
 
     // 2. Apply deadband, can edit this later to have smoother behavior
-    fwdX = Math.abs(fwdX) > 0.1 ? fwdX : 0.0; 
-    fwdY = Math.abs(fwdY) > 0.1 ? fwdY : 0.0;
-    rot = Math.abs(rot) > 0.1 ? rot : 0.0;
+    fwdX = Math.abs(fwdX) > 0.1 ? Math.copySign((1.111*Math.abs(fwdX)-0.111), fwdX) : 0.0; 
+    fwdY = Math.abs(fwdY) > 0.1 ? Math.copySign((1.111*Math.abs(fwdY)-0.111), fwdY) : 0.0;
+    rot = Math.abs(rot) > 0.1 ? Math.copySign((1.111*Math.abs(rot)-0.111), rot) : 0.0;
 
     // 3. Make the driving smoother
     fwdX = xLimiter.calculate(fwdX) * Swerve.kTeleDriveMaxSpeedMetersPerSecond;

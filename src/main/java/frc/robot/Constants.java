@@ -92,7 +92,7 @@ public final class Constants {
 
     // PID Positions
     /*These values are only accurate if robot is turned on in starting configuration*/
-    public static final double FEEDER_POS = 0.260;
+    public static final double FEEDER_POS = 0.265;
     public static final double START_POS = 0.00;
     public static final double START_PLUS_POS = -0.01;
     public static final double DROP_POS = -0.674;
