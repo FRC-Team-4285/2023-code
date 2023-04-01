@@ -46,8 +46,8 @@ public class AutoBDropCubeOnBalancePID extends CommandBase {
     public void execute() {
         double timeSinceInitialized = getTimeSinceInitialized();
         double timeSinceBalanceAttempt = timeSinceInitialized - timeOfBalanceAttempt;
-        double tilt = drive.getPigeonSensor().getPitch();//degrees
-        double deadzone = 5.0; //degrees
+        double tilt = drive.getPigeonSensor().getPitch();//degrees (?)
+        double deadzone = 5.0; //degrees (?)
 
         if (timeSinceInitialized < 1900) {
             //start of autonomous
@@ -84,11 +84,14 @@ public class AutoBDropCubeOnBalancePID extends CommandBase {
             armBase.go_to_position(ArmConstants.START_POS);
             //Nudge robot if balance isn't level
             if((tilt > deadzone) && (timeSinceBalanceAttempt > waitForBalance) && !(AttemptingBalanceNeg)){
+                //above condition requires robot to be tilted for a certain amount of time since the last nudge
                 System.out.println("Starting Negative Nudge");
+                /*set flag for negative nudge */
                 AttemptingBalanceNeg = true;
             }
             if((tilt < -deadzone) && (timeSinceBalanceAttempt > waitForBalance) && !(AttemptingBalancePos)){
                 System.out.println("Starting Positive Nudge");
+                /*set flag for positive nudge */
                 AttemptingBalancePos = true;
             }
             if (AttemptingBalanceNeg){
@@ -97,7 +100,9 @@ public class AutoBDropCubeOnBalancePID extends CommandBase {
                 }
                 else{
                     System.out.println("Completed Negative Nudge");
+                    //Balance attempt complete, reset timer since last balance
                     timeOfBalanceAttempt = timeSinceInitialized;
+                    /*reset flag for negative nudge */
                     AttemptingBalanceNeg = false;
                 }
 
@@ -109,6 +114,7 @@ public class AutoBDropCubeOnBalancePID extends CommandBase {
                 else{
                     System.out.println("Completed Positive Nudge");
                     timeOfBalanceAttempt = timeSinceInitialized;
+                    /*reset flag for negative nudge */
                     AttemptingBalancePos = false;
                 }
             }
