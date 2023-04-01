@@ -6,21 +6,19 @@ import frc.robot.subsystems.PickupArmBase;
 import frc.robot.subsystems.SuctionArmBase;
 import frc.robot.subsystems.SwerveBase;
 
-public class AutoBDropCubeOnBalance extends CommandBase {
-  /*
-   * Autonomous Command
-   * ------------------
-   * 
-   * This command is a stub that runs during autonomous.
-   * Currently unused, will be filled soon.
-   */
+public class AutoBDropCubeOnBalancePID extends CommandBase {
 
    private double startTime = 0.0;
+   private double timeOfBalanceAttempt = 0.0;
+   private int waitForBalance = 750; //milliseconds
+   private int nudgeTime = 400; //milliseconds
+   private Boolean AttemptingBalancePos = false;
+   private Boolean AttemptingBalanceNeg = false;
    private final SwerveBase drive;
    private final PickupArmBase armBase;
    private final SuctionArmBase armBaseCone;
 
-    public AutoBDropCubeOnBalance(SwerveBase swerveBase, PickupArmBase pickupArmBase, SuctionArmBase suctionArmBase) {
+    public AutoBDropCubeOnBalancePID(SwerveBase swerveBase, PickupArmBase pickupArmBase, SuctionArmBase suctionArmBase) {
         drive = swerveBase;
         armBase = pickupArmBase;
         armBaseCone = suctionArmBase;
@@ -35,10 +33,6 @@ public class AutoBDropCubeOnBalance extends CommandBase {
     }
 
     private double getCurrentTime() {
-        /*
-        * Returns current time in milliseconds.
-        */
-
         return System.currentTimeMillis();
     }
 
@@ -50,9 +44,9 @@ public class AutoBDropCubeOnBalance extends CommandBase {
     @Override
     public void execute() {
         double timeSinceInitialized = getTimeSinceInitialized();
-        double tilt = drive.getPigeonSensor().getPitch();//degrees?
-        double deadzone = 10.0; //degrees
-        //drive.drive(0.0, 0.0, 0.0, true);
+        double timeSinceBalanceAttempt = timeSinceInitialized - timeOfBalanceAttempt;
+        double tilt = drive.getPigeonSensor().getPitch();//degrees
+        double deadzone = 5.0; //degrees
 
         if (timeSinceInitialized < 2000) {
             //start of autonomous
@@ -79,29 +73,49 @@ public class AutoBDropCubeOnBalance extends CommandBase {
             drive.drive(-1.0, 0.0, 0.0, true);
             //back up onto balance for auto-balance attempt
         }
-        else if (timeSinceInitialized < 12500){
+        else if (timeSinceInitialized < 11000){
             drive.drive(0.0,0.0,0.0,true);
         }
+        /*
         else if(timeSinceInitialized < 13000){
-            drive.drive(0.0,0.1, 0.0, true);
+            //drive.drive(0.0,0.1, 0.0, true);
         }
+        */
         else {
-            /* Feedback-based balancing code */
-            /* use pitch value from pigeon to adjust wheel speed */
-            /*if (tilt > deadzone){
-                //pitch is too high, decrease pitch
-                drive.drive(-0.5, 0.0, 0.0, false);
-            }*/
-            /*else if (tilt < -deadzone)
-            {
-                //pitch is too low, increase pitch
-                drive.drive(0.5,0.0,0.0, false);
+            //Nudge robot if balance isn't level
+            if((tilt > deadzone) && (timeSinceBalanceAttempt > waitForBalance) && !(AttemptingBalanceNeg)){
+                System.out.println("Starting Negative Nudge");
+                AttemptingBalanceNeg = true;
+            }
+            if((tilt < -deadzone) && (timeSinceBalanceAttempt > waitForBalance) && !(AttemptingBalancePos)){
+                System.out.println("Starting Positive Nudge");
+                AttemptingBalancePos = true;
+            }
+            if (AttemptingBalanceNeg){
+                if(timeSinceBalanceAttempt < (waitForBalance + nudgeTime)){
+                    drive.drive(-0.5, 0.0, 0.0, true);
+                }
+                else{
+                    System.out.println("Completed Negative Nudge");
+                    timeOfBalanceAttempt = timeSinceInitialized;
+                    AttemptingBalanceNeg = false;
+                }
 
-            }*/
-            //else{
-            drive.drive(0.0, 0.0, 0.0, true);
-            //keep robot balanced until end of auto
-            //}
+            }
+            else if(AttemptingBalancePos){
+                if(timeSinceBalanceAttempt < waitForBalance + nudgeTime){
+                    drive.drive(0.5, 0.0, 0.0, true);
+                }
+                else{
+                    System.out.println("Completed Positive Nudge");
+                    timeOfBalanceAttempt = timeSinceInitialized;
+                    AttemptingBalancePos = false;
+                }
+            }
+            else{
+                drive.drive(0.0,0.0,0.0,true);
+            }
+
         }
     }
 

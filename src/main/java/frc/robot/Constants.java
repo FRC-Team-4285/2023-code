@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -28,12 +26,12 @@ public final class Constants {
     public static final double trackWidth = Units.inchesToMeters(21.5); //measured from center of each module
     public static final double wheelBase = Units.inchesToMeters(21.5);
 
-    // nominal (real) divided by fudge factor
-    public static final double wheelDiameter = Units.inchesToMeters(4.0 / 1.0); //was 1.04085
+    public static final double wheelDiameter = Units.inchesToMeters(4.0*1.0);
+    /*TODO: Adjust wheelDiameter based on measurements of how far robot actually moves*/
     public static final double wheelCircumference = wheelDiameter * Math.PI;
 
     public static final double driveGearRatio = 8.16; // Mk3 Standard drive ratio 
-    public static final double angleGearRatio = 12.8; // Mk3 Standard steer ratio (does this need encoder stuff??)
+    public static final double angleGearRatio = 12.8; // Mk3 Standard steer ratio
 
     public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
                     new Translation2d(trackWidth / 2.0, wheelBase / 2.0), // front left, ++ quadrant
@@ -43,7 +41,7 @@ public final class Constants {
     );
 
     /* Swerve Profiling Values */
-    public static final double maxSpeed = 1.3; // NOT a speed unit; robot gets faster if this is lower 2.0
+    public static final double maxSpeed = 1.3; // NOT a speed unit; robot gets faster if this is lower???
     public static final double maxAngularVelocity = 12.0;
 
     public static final int frontLeftRotationMotorId = 8;
@@ -71,7 +69,6 @@ public final class Constants {
     public static final double cameraToFrontEdgeDistanceMeters = Units.inchesToMeters(7);
 
     public static final int PIGEON_SENSOR_ID = 0;
-
   }
 
   public static class OperatorConstants {
@@ -79,15 +76,7 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    // PATH PLANNER ONLY!!!! NOT CURRENT AUTO
-    public static final double MAX_SPEED = 1.0;
-    public static final double MAX_ACCELLERATION = 0.7;
-
-    // AUTO CONFIGURATIONS
-    public static final String A_AUTO_CLIMB_CUBE_CONE = "New New Path";
-
-    // CURRENTLY SELECTED AUTO.
-    public static final String SELECTED_AUTO = AutoConstants.A_AUTO_CLIMB_CUBE_CONE;
+    //TODO: PATHPLANNER
   }
 
   public static final class ArmConstants {
@@ -102,18 +91,11 @@ public final class Constants {
     public static final boolean ARM_DIRECTION_DOWN = false;
 
     // PID Positions
-    // This is if feeder config is when robot starts.
-    // public static final double FEEDER_POS = 0.02; //05;
-    // public static final double START_POS = -0.25; //3;
-    // public static final double START_PLUS_POS = -0.3; //3;
-    // public static final double DROP_POS = -0.89; //727;
-
-    // This is if start config is when robot starts.
-    public static final double FEEDER_POS = 0.260;//0.25;
-    public static final double START_POS = 0.00; //0.02;
+    /*These values are only accurate if robot is turned on in starting configuration*/
+    public static final double FEEDER_POS = 0.260;
+    public static final double START_POS = 0.00;
     public static final double START_PLUS_POS = -0.01;
     public static final double DROP_POS = -0.674;
-
   }
 
   public static final class ClimberConstants {
@@ -134,7 +116,6 @@ public final class Constants {
     public static final double CLIMBER_POS_DOWN_SUCTION = -119.0;
     public static final double CLIMBER_POS_DOWN = -0.1;
     public static final double CLIMBER_POS_UP = -9.25;
-
   }
 
   public static final class IntakeConstants {
@@ -153,12 +134,6 @@ public final class Constants {
   }
 
   public static final class SuctionConstants {
-    // Encoder IDs
-    //public static final int SUCTION_MOTOR_ID = 13;
-
-    // Motor Speed
-    //public static final double SUCTION_MOTOR_POWER = 0.1;
-
     // Action
     public static final boolean SUCTION_CUP_ENGAGE = true;
     public static final boolean SUCTION_CUP_RELEASE = false;
@@ -196,5 +171,4 @@ public final class Constants {
     public static final int FLOOR_GRAB_OFF = 10; //actuates grabber for grabbing cones off floor
     public static final int FLOOR_GRAB_ON = 11;
   }
-
 }

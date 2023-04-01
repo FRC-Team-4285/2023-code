@@ -103,8 +103,8 @@ public class RobotContainer {
   public RobotContainer() {
     driverJoystick = new Joystick(0);
     streamDeck = new Joystick(1);
-    DoubleSupplier limit = () -> (1.5 - driverJoystick.getRawAxis(sliderAxis))/2.5;
-    /*maps sliderAxis to be between 0.2 and 1.0*/
+    DoubleSupplier limit = () -> 0.55 - 0.45*driverJoystick.getRawAxis(sliderAxis);
+    /*maps sliderAxis to be between 0.1 and 1.0*/
     DoubleSupplier stopRotation = () -> driverJoystick.getRawButton(12) ? 0.0 : 1.0;
     /* clamps rotation to zero if button 12 is pressed */
     BiFunction<Double, Double, Double> Clamp = (val,lim) -> (Math.abs(val) < lim) ? val : Math.copySign(lim,val);
@@ -114,9 +114,6 @@ public class RobotContainer {
     swerveBase.setDefaultCommand(
       new TeleopSwerve(
         swerveBase,
-        // currently code has no deadband, add deadband here if needed in future
-        //TODO: make separate DoubleSuppliers for translation & roation 
-        //TODO: make button 12 toggle the supplier that is being updated by limitSupplier
         () -> Clamp.apply(driverJoystick.getRawAxis(translationAxis), limit.getAsDouble()),
         () -> Clamp.apply(driverJoystick.getRawAxis(strafeAxis), limit.getAsDouble()),
         () -> -Clamp.apply(driverJoystick.getRawAxis(rotationAxis), limit.getAsDouble()*stopRotation.getAsDouble()),
@@ -135,17 +132,16 @@ public class RobotContainer {
     suctionCupBase = new SuctionCupBase(this);  
     suctionArmBase = new SuctionArmBase(this);
 
+    //Create & Configue AutoChooser
     auto_chooser = new SendableChooser<CommandBase>();
-    auto_chooser.addOption("Red/Blue - Cube Only", new AutoDropCube(swerveBase, pickupArmBase, suctionArmBase));
-    auto_chooser.addOption("Blue A - Cube", new AutoBlueADropCubeOutCommunity(swerveBase, pickupArmBase, suctionArmBase));
-    auto_chooser.addOption("Blue C - Cube", new AutoBlueCDropCubeOutCommunity(swerveBase, pickupArmBase, suctionArmBase));
-    auto_chooser.addOption("Red A - Cube", new AutoRedADropCubeOutCommunity(swerveBase, pickupArmBase, suctionArmBase));
-    auto_chooser.addOption("Red C - Cube", new AutoRedCDropCubeOutCommunity(swerveBase, pickupArmBase, suctionArmBase));
-    auto_chooser.addOption("Red A - Cone", new AutoRedADropConeOutCommunity(swerveBase, pickupArmBase, suctionArmBase));
-    //auto_chooser.addOption("Balance", new AutoBDropCubeOnBalance(swerveBase, pickupArmBase, suctionArmBase));
-    auto_chooser.addOption("Red/Blue B - Cube Balance", new AutoBDropCubeOnBalance(swerveBase, pickupArmBase, suctionArmBase));
-    auto_chooser.setDefaultOption("Red/Blue - Cube Only", new AutoDropCube(swerveBase, pickupArmBase, suctionArmBase));
+    auto_chooser.addOption("Auto B", new AutoBDropCubeOnBalancePID(swerveBase, pickupArmBase, suctionArmBase));
+    auto_chooser.addOption("Blue A", new AutoBlueADropCubeOutCommunity(swerveBase, pickupArmBase, suctionArmBase));
+    auto_chooser.addOption("Blue C", new AutoBlueCDropCubeOutCommunity(swerveBase, pickupArmBase, suctionArmBase));
+    auto_chooser.addOption("Red A", new AutoRedADropCubeOutCommunity(swerveBase, pickupArmBase, suctionArmBase));
+    auto_chooser.addOption("Red C", new AutoRedCDropCubeOutCommunity(swerveBase, pickupArmBase, suctionArmBase));
+    auto_chooser.setDefaultOption("Auto B", new AutoBDropCubeOnBalancePID(swerveBase, pickupArmBase, suctionArmBase));
     SmartDashboard.putData("Auto Paths", auto_chooser);
+    
     // Configure the trigger bindings
     configureBindings();
     configureLights();
@@ -277,7 +273,7 @@ public class RobotContainer {
    */
   public CommandBase getAutonomousCommand() {
     
-    CommandBase autonomousCommand = new AutoBDropCubeOnBalance(
+    CommandBase autonomousCommand = new AutoBDropCubeOnBalancePID(
       swerveBase,
       pickupArmBase,
       suctionArmBase
