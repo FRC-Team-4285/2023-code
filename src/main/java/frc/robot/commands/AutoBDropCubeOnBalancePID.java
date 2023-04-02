@@ -50,7 +50,8 @@ public class AutoBDropCubeOnBalancePID extends CommandBase {
         double timeSinceInitialized = getTimeSinceInitialized();
         double timeSinceBalanceAttempt = timeSinceInitialized - timeOfBalanceAttempt;
         double timeSinceClimbing = timeSinceInitialized - timeOfClimbing;
-        double tilt = drive.getPigeonSensor().getPitch();//degrees (?)
+        double tilt = drive.getPigeonSensor().getPitch();//degrees
+        double climbThreshold = 7.5;//degrees
         double deadzone = 2.5; //degrees
 
         if (timeSinceInitialized < 1900) {
@@ -90,14 +91,14 @@ public class AutoBDropCubeOnBalancePID extends CommandBase {
         else if(!ClimbedOnBalance){
             armBase.go_to_position(ArmConstants.START_POS);
             drive.drive(-1.0, 0.0, 0.0, true);
-            if(tilt < 10.0){
-                //tilt went below 10 degrees, reset timer
+            if(tilt < climbThreshold){
+                //tilt went below climbThreshold, reset timer
                 timeOfClimbing = timeSinceInitialized;
                 isClimbingBalance = false;
             }
 
-            else if((tilt > 10.0) && !(isClimbingBalance)){
-                //tilt is more than 10 degrees, start timing climb
+            else if((tilt > climbThreshold) && !(isClimbingBalance)){
+                //tilt is more than climbThreshold, start timing climb
                 timeOfClimbing = timeSinceInitialized;
                 isClimbingBalance = true;
             }
