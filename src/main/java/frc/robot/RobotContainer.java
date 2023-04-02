@@ -275,7 +275,7 @@ public class RobotContainer {
    */
   public CommandBase getAutonomousCommand() {
     
-    CommandBase autonomousCommand = new AutoBDropCubeOnBalancePID(
+    CommandBase autonomousCommand = new AutoBlueADropCubeOutCommunity(
       swerveBase,
       pickupArmBase,
       suctionArmBase

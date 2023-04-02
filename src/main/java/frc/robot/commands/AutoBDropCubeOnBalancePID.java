@@ -51,7 +51,7 @@ public class AutoBDropCubeOnBalancePID extends CommandBase {
         double timeSinceBalanceAttempt = timeSinceInitialized - timeOfBalanceAttempt;
         double timeSinceClimbing = timeSinceInitialized - timeOfClimbing;
         double tilt = drive.getPigeonSensor().getPitch();//degrees
-        double climbThreshold = 7.5;//degrees
+        double climbThreshold = 10.0;//degrees
         double deadzone = 2.5; //degrees
 
         if (timeSinceInitialized < 1900) {
@@ -91,14 +91,15 @@ public class AutoBDropCubeOnBalancePID extends CommandBase {
         else if(!ClimbedOnBalance){
             armBase.go_to_position(ArmConstants.START_POS);
             drive.drive(-1.0, 0.0, 0.0, true);
-            if(tilt < climbThreshold){
+            if(Math.abs(tilt) < climbThreshold){
                 //tilt went below climbThreshold, reset timer
                 timeOfClimbing = timeSinceInitialized;
                 isClimbingBalance = false;
             }
 
-            else if((tilt > climbThreshold) && !(isClimbingBalance)){
+            else if((Math.abs(tilt) > climbThreshold) && !(isClimbingBalance)){
                 //tilt is more than climbThreshold, start timing climb
+                System.out.println("Tilt Detected!");
                 timeOfClimbing = timeSinceInitialized;
                 isClimbingBalance = true;
             }
@@ -106,11 +107,12 @@ public class AutoBDropCubeOnBalancePID extends CommandBase {
             if(timeSinceClimbing > 100){
                 //tilt has been above 10 degrees for more than 100 milliseconds
                 //assume that robot has sucessfully climbed onto balance
+                System.out.println("Tilt Confirmed, starting climb!");
                 ClimbedOnBalance = true;
                 timeOfClimbing = timeSinceInitialized;
             }
         }
-        else if(timeSinceClimbing < 1000){
+        else if(timeSinceClimbing < 3000){
             armBase.go_to_position(ArmConstants.START_POS);
             drive.drive(-1.0, 0.0, 0.0, true);
         }
