@@ -15,6 +15,9 @@ public class AutoBDropCubeOnBalancePID extends CommandBase {
    private double nudgePower = 0.65;//was 0.67
    private Boolean AttemptingBalancePos = false;
    private Boolean AttemptingBalanceNeg = false;
+   private Boolean isClimbingBalance = false;
+   private double timeOfClimbing = 0.0;
+   private Boolean ClimbedOnBalance = false;
    private final SwerveBase drive;
    private final PickupArmBase armBase;
    private final SuctionArmBase armBaseCone;
@@ -46,8 +49,9 @@ public class AutoBDropCubeOnBalancePID extends CommandBase {
     public void execute() {
         double timeSinceInitialized = getTimeSinceInitialized();
         double timeSinceBalanceAttempt = timeSinceInitialized - timeOfBalanceAttempt;
+        double timeSinceClimbing = timeSinceInitialized - timeOfClimbing;
         double tilt = drive.getPigeonSensor().getPitch();//degrees (?)
-        double deadzone = 5.0; //degrees (?)
+        double deadzone = 2.5; //degrees
 
         if (timeSinceInitialized < 1900) {
             //start of autonomous
@@ -71,6 +75,7 @@ public class AutoBDropCubeOnBalancePID extends CommandBase {
             armBase.go_to_position(ArmConstants.START_POS);
             drive.drive(0.0, 0.0, 0.0, true);
         }
+        /*
         else if (timeSinceInitialized < 10250) {
             armBase.go_to_position(ArmConstants.START_POS);
             drive.drive(-1.0, 0.0, 0.0, true);
@@ -80,6 +85,35 @@ public class AutoBDropCubeOnBalancePID extends CommandBase {
             armBase.go_to_position(ArmConstants.START_POS);
             drive.drive(0.0,0.0,0.0,true);
         }
+        */
+        //*
+        else if(!ClimbedOnBalance){
+            armBase.go_to_position(ArmConstants.START_POS);
+            drive.drive(-1.0, 0.0, 0.0, true);
+            if(tilt < 10.0){
+                //tilt went below 10 degrees, reset timer
+                timeOfClimbing = timeSinceInitialized;
+                isClimbingBalance = false;
+            }
+
+            else if((tilt > 10.0) && !(isClimbingBalance)){
+                //tilt is more than 10 degrees, start timing climb
+                timeOfClimbing = timeSinceInitialized;
+                isClimbingBalance = true;
+            }
+            
+            if(timeSinceClimbing > 100){
+                //tilt has been above 10 degrees for more than 100 milliseconds
+                //assume that robot has sucessfully climbed onto balance
+                ClimbedOnBalance = true;
+                timeOfClimbing = timeSinceInitialized;
+            }
+        }
+        else if(timeSinceClimbing < 1000){
+            armBase.go_to_position(ArmConstants.START_POS);
+            drive.drive(-1.0, 0.0, 0.0, true);
+        }
+        //*/
         else {
             armBase.go_to_position(ArmConstants.START_POS);
             //Nudge robot if balance isn't level
@@ -114,7 +148,7 @@ public class AutoBDropCubeOnBalancePID extends CommandBase {
                 else{
                     System.out.println("Completed Positive Nudge");
                     timeOfBalanceAttempt = timeSinceInitialized;
-                    /*reset flag for negative nudge */
+                    /*reset flag for positive nudge */
                     AttemptingBalancePos = false;
                 }
             }
