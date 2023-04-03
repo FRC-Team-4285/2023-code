@@ -18,7 +18,6 @@ import frc.robot.subsystems.ClimberArmBase;
 import frc.robot.subsystems.IntakeBase;
 import frc.robot.subsystems.PickupArmBase;
 import frc.robot.subsystems.SuctionArmBase;
-import frc.robot.subsystems.SuctionCupBase;
 import frc.robot.subsystems.SwerveBase;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Joystick;
@@ -78,7 +77,6 @@ public class RobotContainer {
   public final ClimberArmBase climberArmBase;
   public final IntakeBase intakeBase;
   public final PickupArmBase pickupArmBase;
-  public final SuctionCupBase suctionCupBase;
   public final SuctionArmBase suctionArmBase;
 
   /* LEDs */
@@ -129,7 +127,6 @@ public class RobotContainer {
     climberArmBase = new ClimberArmBase(this);
     intakeBase = new IntakeBase(this);
     pickupArmBase = new PickupArmBase(this);
-    suctionCupBase = new SuctionCupBase(this);  
     suctionArmBase = new SuctionArmBase(this);
 
     //Create & Configue AutoChooser
@@ -275,10 +272,11 @@ public class RobotContainer {
    */
   public CommandBase getAutonomousCommand() {
     
-    CommandBase autonomousCommand = new AutoBlueADropCubeOutCommunity(
+    CommandBase autonomousCommand = new AutoBlueDropCubeGrabCone(
       swerveBase,
       pickupArmBase,
-      suctionArmBase
+      suctionArmBase,
+      intakeBase
     );
 
     return autonomousCommand;

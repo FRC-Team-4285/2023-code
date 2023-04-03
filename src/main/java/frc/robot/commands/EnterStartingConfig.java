@@ -18,16 +18,13 @@ public class EnterStartingConfig extends CommandBase {
   public EnterStartingConfig(RobotContainer container) {
     robotContainer = container;
     addRequirements(
-      robotContainer.climberArmBase,
-      robotContainer.suctionCupBase,
-      robotContainer.suctionCupBase
+      robotContainer.climberArmBase
     );
   }
 
   @Override
   public void end(boolean isInterrupted) {
     robotContainer.climberArmBase.stop();
-    robotContainer.suctionCupBase.stop();
   }
 
   @Override

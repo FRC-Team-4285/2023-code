@@ -41,8 +41,8 @@ public final class Constants {
     );
 
     /* Swerve Profiling Values */
-    public static final double maxSpeed = 1.3; // NOT a speed unit; robot gets faster if this is lower???
-    public static final double maxAngularVelocity = 9.554;
+    public static final double maxSpeed = 1.0; // was 1.3, robot gets faster if this is lower???
+    public static final double maxAngularVelocity = 3.0; //9.554 max theoretical
 
     public static final int frontLeftRotationMotorId = 8;
     public static final int frontLeftDriveMotorId = 23;
@@ -64,7 +64,7 @@ public final class Constants {
     /* These Constants set the max speed that will be requested by the Teleop Command */
     public static final double kTeleDriveMaxSpeedMetersPerSecond = 3.688;
     /* SDS states that neo-driven standard ratio Mk3 modules have a free speed of 3.688 m/s */
-    public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = 9.554;
+    public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = 3.0;//9.554 max theoretical
     /* calculated from max drive speed divided by distance of Mk3 module from center of robot */
     public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 3;
     public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;
