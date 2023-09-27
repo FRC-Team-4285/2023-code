@@ -1,21 +1,19 @@
 package frc.robot.subsystems;
 
+import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.HardwareCAN;
-import frc.robot.Constants.PneumaticChannels;
 
 import com.revrobotics.CANSparkMax;
-//import com.revrobotics.RelativeEncoder;
-//import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-//import com.revrobotics.SparkMaxAlternateEncoder;
+import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
+import com.revrobotics.SparkMaxAlternateEncoder;
 
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import com.revrobotics.AbsoluteEncoder;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -24,51 +22,46 @@ public class PickupArmBase extends SubsystemBase {
   /** Creates a new ArmBase. */
 
   private CANSparkMax armMotor;
-  private DutyCycleEncoder armMotorEncoder;
-  private DoubleSolenoid armLocker;
-  private Solenoid cubeGrabber;
-  private Solenoid coneGrabber;
+  private SparkMaxPIDController armMotorPID;
+  private AbsoluteEncoder armMotorEncoder;
+  private RelativeEncoder armMotorRelEncoder;
   private boolean arm_direction;
+  private RelativeEncoder encoder;
+  private double desiredPosition;
+  private boolean inPosition;
+  private RobotContainer robotContainer;
 
   //pickup arm has an encoder connected to SPARK MAX
   //said encoder is capable of operating in duty-cycle mode
   //How do you specify the encoder mode to the SPARK MAX???
 
-  public PickupArmBase() {
+
+  public PickupArmBase(RobotContainer container) {
+    robotContainer = container;
     armMotor = new CANSparkMax(ArmConstants.ARM_MOTOR_ID, MotorType.kBrushless);
-    armMotorEncoder = new DutyCycleEncoder(1);
-    armMotorEncoder.setDistancePerRotation(360.0);
 
-    armLocker = new DoubleSolenoid(
-      HardwareCAN.PNEUMATIC_HUB,
-      PneumaticsModuleType.REVPH,
-      PneumaticChannels.ARM_LOCKER_OFF,
-      PneumaticChannels.ARM_LOCKER_ON
-    );
+    // armMotorEncoder = armMotor.getAbsoluteEncoder(Type.kDutyCycle);
+    // armMotorEncoder.setPositionConversionFactor(0.1);
+    armMotorRelEncoder = armMotor.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 4096);
 
-    cubeGrabber = new Solenoid(
-      HardwareCAN.PNEUMATIC_HUB,
-      PneumaticsModuleType.REVPH,
-      PneumaticChannels.CUBE_GRAB
-    );
+    armMotorPID = armMotor.getPIDController();
+    armMotorPID.setFeedbackDevice(armMotorRelEncoder);
 
-    coneGrabber = new Solenoid(
-      HardwareCAN.PNEUMATIC_HUB,
-      PneumaticsModuleType.REVPH,
-      PneumaticChannels.CONE_GRAB
-    );
+    desiredPosition = 99999; // starting value.
+    inPosition = false;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    double pos = getEncoderValue();
-    boolean isSafe = getIsSafe(arm_direction, pos);
-    if (!isSafe) {
-      stop();
-      return;
+    double currentPosition = getEncoderValue();
+    SmartDashboard.putNumber("Arm Position", currentPosition);
+     //System.out.println("arm position " + currentPosition);
+    if (Math.abs(currentPosition - desiredPosition) < 0.25) {
+      inPosition = true;
+    } else {
+      inPosition = false;
     }
-
   }
 
   @Override
@@ -77,8 +70,7 @@ public class PickupArmBase extends SubsystemBase {
   }
 
   public double getEncoderValue() {
-    //encoder is backwards, fixed by - sign
-    return 50.0 - armMotorEncoder.getDistance();
+    return armMotorRelEncoder.getPosition();
   }
 
   public void engage_arm(boolean direction) {
@@ -98,6 +90,7 @@ public class PickupArmBase extends SubsystemBase {
       return;
     }
 
+    // System.out.println(power);
     if (direction) {
       armMotor.set(power);
     }
@@ -107,56 +100,31 @@ public class PickupArmBase extends SubsystemBase {
   }
 
   private boolean getIsSafe(boolean direction, double pos) {
-    boolean isSafe = (pos > 0 && pos < 230);
-    if (!isSafe) {
-      // We know that when within this block we are already out of bounds.
-      // So we only need to know about one side to know whether or not we exceeded
-      // the other side. If we are not below 0, we must be above 100; if we are not above 100,
-      // we must be below 0.
-      boolean bound_dir_exceeded = (pos < 0) ? true : false;
+    
+    // boolean isSafe = (pos > 0 && pos < 230);
+    // if (!isSafe) {
+    //   // We know that when within this block we are already out of bounds.
+    //   // So we only need to know about one side to know whether or not we exceeded
+    //   // the other side. If we are not below 0, we must be above 100; if we are not above 100,
+    //   // we must be below 0.
+    //   boolean bound_dir_exceeded = (pos < 0) ? true : false;
   
-      // bound_dir_exceeded = TRUE when we are BELOW 0
-      // bound_dir_exceeded = FALSE when we are ABOVE 100
-      // direction = TRUE when we are INCREASING/RAISING ARM
-      // direction = FALSE when we are DECREASING/LOWERING ARM
+    //   // bound_dir_exceeded = TRUE when we are BELOW 0
+    //   // bound_dir_exceeded = FALSE when we are ABOVE 100
+    //   // direction = TRUE when we are INCREASING/RAISING ARM
+    //   // direction = FALSE when we are DECREASING/LOWERING ARM
   
-      if (direction && !bound_dir_exceeded) {
-        // if we are INCEASING and we are ABOVE 100, this is NOT OK.
-        return false;
-      }
-      else if (!direction && bound_dir_exceeded) {
-        // if we are DECREASING and we are BELOW 0, this is NOT OK.
-        return false;
-      }
-    }
+    //   if (direction && !bound_dir_exceeded) {
+    //     // if we are INCEASING and we are ABOVE 100, this is NOT OK.
+    //     return false;
+    //   }
+    //   else if (!direction && bound_dir_exceeded) {
+    //     // if we are DECREASING and we are BELOW 0, this is NOT OK.
+    //     return false;
+    //   }
+    // }
 
     return true;
-  }
-
-  public void grab_cube(){
-    cubeGrabber.set(true);
-  }
-
-  public void release_cube(){
-    cubeGrabber.set(false);
-  }
-
-  public void grab_cone() {
-    grab_cube();
-    coneGrabber.set(false); //cone grabber is engaged AFTER cube grabber
-  }
-
-  public void release_cone(){
-    coneGrabber.set(true);//cone grabber is released BEFORE cube grabber
-    release_cube();
-  }
-
-  public void lock_arm(){
-    armLocker.set(Value.kForward);
-  }
-
-  public void unlock_arm(){
-    armLocker.set(Value.kReverse);
   }
 
   public void stop() {
@@ -165,5 +133,24 @@ public class PickupArmBase extends SubsystemBase {
      */
 
     armMotor.set(0.0);
+    inPosition = false;
+    desiredPosition = 9999;
   }
+
+  public void go_to_position(double position) {
+    desiredPosition = position;
+    armMotorPID = armMotor.getPIDController();
+    armMotorPID.setP(5.0);
+    armMotorPID.setI(0.0);
+    armMotorPID.setD(0.0);
+    armMotorPID.setIZone(0.0);
+    armMotorPID.setFF(0.0);
+    armMotorPID.setOutputRange(-35.5, 35.5);
+    armMotorPID.setReference(position, ControlType.kPosition);
+  }
+
+  public boolean getInPosition() {
+    return inPosition;
+  }
+
 }

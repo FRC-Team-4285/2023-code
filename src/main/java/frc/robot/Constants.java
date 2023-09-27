@@ -26,12 +26,12 @@ public final class Constants {
     public static final double trackWidth = Units.inchesToMeters(21.5); //measured from center of each module
     public static final double wheelBase = Units.inchesToMeters(21.5);
 
-    // nominal (real) divided by fudge factor
-    public static final double wheelDiameter = Units.inchesToMeters(4.0 / 1.0); //was 1.04085
+    public static final double wheelDiameter = Units.inchesToMeters(4.0*1.0);
+    /*TODO: Adjust wheelDiameter based on measurements of how far robot actually moves*/
     public static final double wheelCircumference = wheelDiameter * Math.PI;
 
     public static final double driveGearRatio = 8.16; // Mk3 Standard drive ratio 
-    public static final double angleGearRatio = 12.8; // Mk3 Standard steer ratio (does this need encoder stuff??)
+    public static final double angleGearRatio = 12.8; // Mk3 Standard steer ratio
 
     public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
                     new Translation2d(trackWidth / 2.0, wheelBase / 2.0), // front left, ++ quadrant
@@ -41,8 +41,8 @@ public final class Constants {
     );
 
     /* Swerve Profiling Values */
-    public static final double maxSpeed = 4.5; // NOT a speed unit; robot gets faster if this is lower
-    public static final double maxAngularVelocity = 11.0;
+    public static final double maxSpeed = 1.0; // was 1.3, robot gets faster if this is lower???
+    public static final double maxAngularVelocity = 3.0; //9.554 max theoretical
 
     public static final int frontLeftRotationMotorId = 8;
     public static final int frontLeftDriveMotorId = 23;
@@ -61,13 +61,17 @@ public final class Constants {
     public static final int rearLeftRotationEncoderId = 3;
     public static final int rearRightRotationEncoderId = 2;
 
-    public static final double kTeleDriveMaxSpeedMetersPerSecond = 7.5 / 4.0;
-    public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = 3.5;
+    /* These Constants set the max speed that will be requested by the Teleop Command */
+    public static final double kTeleDriveMaxSpeedMetersPerSecond = 3.688;
+    /* SDS states that neo-driven standard ratio Mk3 modules have a free speed of 3.688 m/s */
+    public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = 3.0;//9.554 max theoretical
+    /* calculated from max drive speed divided by distance of Mk3 module from center of robot */
     public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 3;
     public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;
 
     public static final double cameraToFrontEdgeDistanceMeters = Units.inchesToMeters(7);
 
+    public static final int PIGEON_SENSOR_ID = 0;
   }
 
   public static class OperatorConstants {
@@ -75,14 +79,7 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double MAX_SPEED = 0.3;
-    public static final double MAX_ACCELLERATION = 0.3;
-
-    // AUTO CONFIGURATIONS
-    public static final String A_AUTO_CLIMB_CUBE_CONE = "A_AutoClimbCubeCone";
-
-    // CURRENTLY SELECTED AUTO.
-    public static final String SELECTED_AUTO = AutoConstants.A_AUTO_CLIMB_CUBE_CONE;
+    //TODO: PATHPLANNER
   }
 
   public static final class ArmConstants {
@@ -90,11 +87,18 @@ public final class Constants {
     public static final int ARM_MOTOR_ID = 9;
 
     // Motor Speed
-    public static final double ARM_MOTOR_POWER = 0.35;    
+    public static final double ARM_MOTOR_POWER = 2.5;    
 
     // Direction
     public static final boolean ARM_DIRECTION_UP = true;
     public static final boolean ARM_DIRECTION_DOWN = false;
+
+    // PID Positions
+    /*These values are only accurate if robot is turned on in starting configuration*/
+    public static final double FEEDER_POS = 0.265;
+    public static final double START_POS = 0.00;
+    public static final double START_PLUS_POS = -0.01;
+    public static final double DROP_POS = -0.674;
   }
 
   public static final class ClimberConstants {
@@ -105,11 +109,16 @@ public final class Constants {
     public static final int BATTERY_MOTOR_ID = 12;
 
     // Motor Speed
-    public static final double CLIMBER_MOTOR_POWER = 0.4;
+    public static final double CLIMBER_MOTOR_POWER = 5.5;
 
     // Direction
     public static final boolean CLIMBER_DIRECTION_UP = true;
     public static final boolean CLIMBER_DIRECTION_DOWN = false;
+
+    // PID Positions
+    public static final double CLIMBER_POS_DOWN_SUCTION = -119.0;
+    public static final double CLIMBER_POS_DOWN = -0.1;
+    public static final double CLIMBER_POS_UP = -9.25;
   }
 
   public static final class IntakeConstants {
@@ -122,15 +131,12 @@ public final class Constants {
     // Direction
     public static final boolean INTAKE_DIRECTION_UP = true;
     public static final boolean INTAKE_DIRECTION_DOWN = false;
+
+    public static final double INTAKE_EXTEND_POS = 54.97;
+    public static final double INTAKE_RETRACT_POS = 0.0;
   }
 
   public static final class SuctionConstants {
-    // Encoder IDs
-    //public static final int SUCTION_MOTOR_ID = 13;
-
-    // Motor Speed
-    //public static final double SUCTION_MOTOR_POWER = 0.1;
-
     // Action
     public static final boolean SUCTION_CUP_ENGAGE = true;
     public static final boolean SUCTION_CUP_RELEASE = false;
@@ -168,5 +174,4 @@ public final class Constants {
     public static final int FLOOR_GRAB_OFF = 10; //actuates grabber for grabbing cones off floor
     public static final int FLOOR_GRAB_ON = 11;
   }
-
 }

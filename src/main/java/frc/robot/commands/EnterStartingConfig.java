@@ -2,8 +2,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.ClimberConstants;
-import frc.robot.subsystems.ClimberArmBase;
 
 
 public class EnterStartingConfig extends CommandBase {
@@ -20,16 +18,13 @@ public class EnterStartingConfig extends CommandBase {
   public EnterStartingConfig(RobotContainer container) {
     robotContainer = container;
     addRequirements(
-      robotContainer.climberArmBase,
-      robotContainer.suctionCupBase,
-      robotContainer.suctionCupBase
+      robotContainer.climberArmBase
     );
   }
 
   @Override
   public void end(boolean isInterrupted) {
     robotContainer.climberArmBase.stop();
-    robotContainer.suctionCupBase.stop();
   }
 
   @Override

@@ -17,99 +17,31 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.kauailabs.navx.frc.AHRS;
+import com.ctre.phoenix.sensors.Pigeon2Configuration;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.wpilibj.SPI;
+import frc.robot.Constants;
 
 
-public class SwerveBase extends SubsystemBase {
-
-  /**
-   * Subsystem that controls the drivetrain of the robot
-   * Handles all the odometry and base movement for the chassis
-   */
-
-  /**
-   * absolute encoder offsets for the wheels
-   * 180 degrees added to offset values to invert one side of the robot so that it
-   * doesn't spin in place
-   */
-  private static final double frontLeftAngleOffset = Units.degreesToRadians(190 - 180);
-  private static final double frontRightAngleOffset = Units.degreesToRadians(146);
-  private static final double rearLeftAngleOffset = Units.degreesToRadians(-124 + 180);
-  private static final double rearRightAngleOffset = Units.degreesToRadians(-121.5);
-
-  private Pose2d m_pose = new Pose2d(0, 0, new Rotation2d());
-  private final double SCALE_X = -1/0.9;
-  private final double SCALE_Y = -1/0.9;
-
-  /**
-   * SwerveModule objects
-   * Parameters:
-   * drive motor can ID
-   * rotation motor can ID
-   * external CANCoder can ID
-   * measured CANCoder offset
-   */
-
-  private final SwerveModule frontLeft = new SwerveModule(
-      Swerve.frontLeftDriveMotorId,
-      Swerve.frontLeftRotationMotorId,
-      Swerve.frontLeftRotationEncoderId,
-      frontLeftAngleOffset);
-
-  private final SwerveModule frontRight = new SwerveModule(
-      Swerve.frontRightDriveMotorId,
-      Swerve.frontRightRotationMotorId,
-      Swerve.frontRightRotationEncoderId,
-      frontRightAngleOffset);
-
-  public SwerveModule getFrontRight() {
-    return frontRight;
-  }
-
-  private final SwerveModule rearLeft = new SwerveModule(
-      Swerve.rearLeftDriveMotorId,
-      Swerve.rearLeftRotationMotorId,
-      Swerve.rearLeftRotationEncoderId,
-      rearLeftAngleOffset);
-
-  private final SwerveModule rearRight = new SwerveModule(
-      Swerve.rearRightDriveMotorId,
-      Swerve.rearRightRotationMotorId,
-      Swerve.rearRightRotationEncoderId,
-      rearRightAngleOffset);
-
-
-  /**
-   * odometry for the robot, measured in meters for linear motion and radians for
-   * rotational motion
-   * Takes in kinematics and robot angle for parameters
-   */
-  private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(Swerve.kinematics, new Rotation2d(),
-      getModulePositions());
-
-  public SwerveDriveOdometry getOdometry() {
-    return odometry;
-  }
-
+public class SwerveBase extends SubsystemBase {  
   private final WPI_Pigeon2 pigeonSensor;
   private final AHRS navX;
+  private Pigeon2Configuration pigeonConfig;
+  private double oldPigeonYaw = 0.0;
 
   public SwerveBase() {
     navX = new AHRS(SPI.Port.kMXP);
-    pigeonSensor = new WPI_Pigeon2(0);
-    new Thread(() -> {
-      try {
-        //Thread.sleep(1000);
-        //pigeonSensor.reset();
-        //odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
-      } catch (Exception e) {
-      }
-    }).start();
+    pigeonSensor = new WPI_Pigeon2(Constants.Swerve.PIGEON_SENSOR_ID);
+    pigeonConfig = new Pigeon2Configuration();
+    pigeonSensor.configFactoryDefault();
+    pigeonSensor.reset();
+    zeroPigeon();
+    pigeonSensor.getAllConfigs(pigeonConfig);
 
-    //odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
+
+    odometry.resetPosition(new Rotation2d(), getModulePositions(), new Pose2d());
 
     // initialize the rotation offsets for the CANCoders
     frontLeft.initRotationOffset();
@@ -133,14 +65,94 @@ public class SwerveBase extends SubsystemBase {
     frontRight.getRotationMotor().setInverted(false);
     frontLeft.getRotationMotor().setInverted(false);
 
+
   }
 
+  public void zeroPigeon() {
+    pigeonSensor.reset();
+  }
+
+  /**
+   * Subsystem that controls the drivetrain of the robot
+   * Handles all the odometry and base movement for the chassis
+   */
+
+  /**
+   * absolute encoder offsets for the wheels
+   * 180 degrees added to offset values to invert one side of the robot so that it
+   * doesn't spin in place
+   */
+  private static final double frontLeftAngleOffset = Units.degreesToRadians(190 - 180);///(179.23);(190 - 180);
+  private static final double frontRightAngleOffset = Units.degreesToRadians(147.5);//(178.67);//(146);
+  private static final double rearLeftAngleOffset = Units.degreesToRadians(-124 + 181);//(180.69);
+  private static final double rearRightAngleOffset = Units.degreesToRadians(-122);//(179.95);
+
+  private Pose2d m_pose = new Pose2d(0, 0, new Rotation2d());
+  private final double SCALE_X = -1/0.9;
+  private final double SCALE_Y = -1/0.9;
+
+  /**
+   * SwerveModule objects
+   * Parameters:
+   * drive motor can ID
+   * rotation motor can ID
+   * external CANCoder can ID
+   * measured CANCoder offset
+   */
+
+  private final SwerveModule frontLeft = new SwerveModule(
+      Swerve.frontLeftDriveMotorId,
+      Swerve.frontLeftRotationMotorId,
+      Swerve.frontLeftRotationEncoderId,
+      frontLeftAngleOffset,
+      this);
+
+  private final SwerveModule frontRight = new SwerveModule(
+      Swerve.frontRightDriveMotorId,
+      Swerve.frontRightRotationMotorId,
+      Swerve.frontRightRotationEncoderId,
+      frontRightAngleOffset,
+      this);
+
+  public SwerveModule getFrontRight() {
+    return frontRight;
+  }
+
+  private final SwerveModule rearLeft = new SwerveModule(
+      Swerve.rearLeftDriveMotorId,
+      Swerve.rearLeftRotationMotorId,
+      Swerve.rearLeftRotationEncoderId,
+      rearLeftAngleOffset,
+      this);
+
+  private final SwerveModule rearRight = new SwerveModule(
+      Swerve.rearRightDriveMotorId,
+      Swerve.rearRightRotationMotorId,
+      Swerve.rearRightRotationEncoderId,
+      rearRightAngleOffset,
+      this);
+
+
+  /**
+   * odometry for the robot, measured in meters for linear motion and radians for
+   * rotational motion
+   * Takes in kinematics and robot angle for parameters
+   */
+  private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(Swerve.kinematics, new Rotation2d(),
+      getModulePositions());
+  private boolean needPigeonReset = false;
+
+  public SwerveDriveOdometry getOdometry() {
+    return odometry;
+  }
+  
   @Override
   public void periodic() {
 
     // update the odometry every 20ms
-    odometry.update(getHeading(), getModulePositions());
-
+    //odometry.update(getHeading(), getModulePositions());
+    SmartDashboard.putNumber("Robot Pitch",
+    pigeonSensor.getPitch());
     SmartDashboard.putString("Robot pose",
         getPose().toString());
     SmartDashboard.putNumber("Bot Heading",
@@ -176,10 +188,25 @@ public class SwerveBase extends SubsystemBase {
      * speeds is set to field relative or default (robot relative) based on
      * parameter
      */
-    ChassisSpeeds speeds = isFieldRelative
-        ? ChassisSpeeds.fromFieldRelativeSpeeds(
-            forward, strafe, rotation, getHeading())
-        : new ChassisSpeeds(forward, strafe, rotation);
+
+    if (!isFieldRelative) {
+      if (!needPigeonReset) {
+        needPigeonReset = true;
+        oldPigeonYaw = pigeonSensor.getYaw();
+      }
+
+      zeroPigeon();
+    }
+    else if (needPigeonReset) {
+      needPigeonReset = false;
+      pigeonSensor.setYaw(oldPigeonYaw);
+    }
+
+    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+      forward, strafe, rotation, getHeading()
+    );
+
+    // new ChassisSpeeds(forward, strafe, rotation)
 
     // use kinematics (wheel placements) to convert overall robot state to array of
     // individual module states
@@ -305,7 +332,8 @@ public class SwerveBase extends SubsystemBase {
 
   // get the current heading of the robot based on the gyro
   public Rotation2d getHeading() {
-    return Rotation2d.fromDegrees(-navX.getYaw() + 90); // was -
+    return Rotation2d.fromDegrees(pigeonSensor.getYaw() + 90);
+    // navX: return Rotation2d.fromDegrees(-navX.getYaw() + 90);
   }
 
   public void stopModules() {
@@ -320,7 +348,7 @@ public class SwerveBase extends SubsystemBase {
   }
 
   public AHRS getNavX() {
-    return navX;
+   return navX;
   }
 
   public SwerveDriveKinematics getKinematics() {
@@ -347,4 +375,5 @@ public class SwerveBase extends SubsystemBase {
          )
      );
  }
-}
+  }
+

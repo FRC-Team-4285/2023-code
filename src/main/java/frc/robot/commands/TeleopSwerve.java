@@ -29,21 +29,21 @@ public class TeleopSwerve extends CommandBase {
   private final DoubleSupplier forwardY;
   private final DoubleSupplier rotation;
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
-  private final Supplier<Boolean> fieldOrientedFunction;
+  private final Supplier<Boolean> isFieldOriented;
 
   public TeleopSwerve(
       SwerveBase subsystem,
       DoubleSupplier fwdX,
       DoubleSupplier fwdY,
       DoubleSupplier rot,
-      Supplier<Boolean> fieldOrientedFunction) {
+      Supplier<Boolean> isFieldOriented) {
 
     drive = subsystem;
     forwardX = fwdX;
     forwardY = fwdY;
     rotation = rot;
 
-    this.fieldOrientedFunction = fieldOrientedFunction;
+    this.isFieldOriented = isFieldOriented;
 
     this.xLimiter = new SlewRateLimiter(Swerve.kTeleDriveMaxAccelerationUnitsPerSecond);
     this.yLimiter = new SlewRateLimiter(Swerve.kTeleDriveMaxAccelerationUnitsPerSecond);
@@ -65,9 +65,9 @@ public class TeleopSwerve extends CommandBase {
     double rot = rotation.getAsDouble();
 
     // 2. Apply deadband, can edit this later to have smoother behavior
-    fwdX = Math.abs(fwdX) > 0.1 ? fwdX : 0.0; 
-    fwdY = Math.abs(fwdY) > 0.1 ? fwdY : 0.0;
-    rot = Math.abs(rot) > 0.1 ? rot : 0.0;
+    fwdX = Math.abs(fwdX) > 0.1 ? Math.copySign((1.111*Math.abs(fwdX)-0.111), fwdX) : 0.0; 
+    fwdY = Math.abs(fwdY) > 0.1 ? Math.copySign((1.111*Math.abs(fwdY)-0.111), fwdY) : 0.0;
+    rot = Math.abs(rot) > 0.1 ? Math.copySign((1.111*Math.abs(rot)-0.111), rot) : 0.0;
 
     // 3. Make the driving smoother
     fwdX = xLimiter.calculate(fwdX) * Swerve.kTeleDriveMaxSpeedMetersPerSecond;
@@ -78,7 +78,7 @@ public class TeleopSwerve extends CommandBase {
         -fwdX,
         -fwdY,
         rot,
-        true
+        isFieldOriented.get()
       );
   }
 }

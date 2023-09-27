@@ -4,6 +4,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -20,6 +25,12 @@ import frc.robot.Constants.HardwareCAN;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
+  private UsbCamera armCamera;
+
+  NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+  NetworkTableEntry tx = table.getEntry("tx");
+  NetworkTableEntry ty = table.getEntry("ty");
+  NetworkTableEntry ta = table.getEntry("ta");
 
   // Must be static so we can access this via Robot.compressor
   public static Compressor compressor;
@@ -37,7 +48,13 @@ public class Robot extends TimedRobot {
       HardwareCAN.PNEUMATIC_HUB, 
       PneumaticsModuleType.REVPH
     );
-    compressor.enableAnalog(110.0, 120.0);
+    compressor.enableAnalog(102.5, 115.0);
+    armCamera = CameraServer.startAutomaticCapture(0);
+    armCamera.setFPS(15);
+    armCamera.setResolution(320, 240);
+    //armCamera.close();
+    //CameraServer.startAutomaticCapture(1);
+    //CameraServer.startAutomaticCapture(2);
 
   }
 
@@ -55,6 +72,9 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    // SmartDashboard.putData("Limelight A", NetworkTableInstance.getDefault().getTable("limelight"));
+    // SmartDashboard.putData("Limelight A", NetworkTableInstance.getDefault().getTable("limelight2"));
+
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -67,8 +87,8 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    m_robotContainer.getSwerveSubsytem().zeroPigeon();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    m_robotContainer.getSwerveSubsytem().getPigeonSensor().reset();
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();

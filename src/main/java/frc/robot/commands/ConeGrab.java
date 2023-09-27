@@ -1,33 +1,33 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.PickupArmBase;
+import frc.robot.subsystems.SuctionArmBase;
 
 
 public class ConeGrab extends CommandBase {
   /*
-   * Intake Down Command
+   * Cone Grab Command
    * -------------------
    * 
-   * This command will lower the intake system.
+   * This grabs the cone.
    */
 
-  private final PickupArmBase m_armSubsystem;
+  private final SuctionArmBase m_suctionArmSubsystem;
 
 
-  public ConeGrab(PickupArmBase subsystem) {
-    m_armSubsystem = subsystem;
-    addRequirements(m_armSubsystem);
+  public ConeGrab(SuctionArmBase subsystem) {
+    m_suctionArmSubsystem = subsystem;
+    addRequirements(m_suctionArmSubsystem);
   }
 
   @Override
   public void end(boolean isInterrupted) {
-    m_armSubsystem.release_cone();
+    m_suctionArmSubsystem.release_cone();
   }
 
   @Override
   public void initialize() {
-    m_armSubsystem.grab_cone();
+    m_suctionArmSubsystem.grab_cone();
   }
 
   @Override

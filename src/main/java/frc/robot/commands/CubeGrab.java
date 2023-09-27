@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.PickupArmBase;
+import frc.robot.subsystems.SuctionArmBase;
 
 
 public class CubeGrab extends CommandBase {
@@ -12,22 +12,22 @@ public class CubeGrab extends CommandBase {
    * This command will lower the intake system.
    */
 
-  private final PickupArmBase m_armSubsystem;
+  private final SuctionArmBase m_suctionArmSubsystem;
 
 
-  public CubeGrab(PickupArmBase subsystem) {
-    m_armSubsystem = subsystem;
-    addRequirements(m_armSubsystem);
+  public CubeGrab(SuctionArmBase subsystem) {
+    m_suctionArmSubsystem = subsystem;
+    addRequirements(m_suctionArmSubsystem);
   }
 
   @Override
   public void end(boolean isInterrupted) {
-    m_armSubsystem.release_cube();
+    m_suctionArmSubsystem.release_cube();
   }
 
   @Override
   public void initialize() {
-    m_armSubsystem.grab_cube();
+    m_suctionArmSubsystem.grab_cube();
   }
 
   @Override
