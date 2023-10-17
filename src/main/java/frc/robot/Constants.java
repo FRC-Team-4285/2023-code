@@ -29,9 +29,13 @@ public final class Constants {
     public static final double wheelDiameter = Units.inchesToMeters(4.0*1.0);
     /*TODO: Adjust wheelDiameter based on measurements of how far robot actually moves*/
     public static final double wheelCircumference = wheelDiameter * Math.PI;
-
+/*
     public static final double driveGearRatio = 8.16; // Mk3 Standard drive ratio 
     public static final double angleGearRatio = 12.8; // Mk3 Standard steer ratio
+*/
+
+    public static final double driveGearRatio = 5.14; // Mk4 L4 drive ratio
+    public static final double angleGearRatio = 12.8; // Mk4 L4 steer ratio
 
     public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
                     new Translation2d(trackWidth / 2.0, wheelBase / 2.0), // front left, ++ quadrant
@@ -44,17 +48,17 @@ public final class Constants {
     public static final double maxSpeed = 1.0; // was 1.3, robot gets faster if this is lower???
     public static final double maxAngularVelocity = 3.0; //9.554 max theoretical
 
-    public static final int frontLeftRotationMotorId = 8;
-    public static final int frontLeftDriveMotorId = 23;
+    public static final int frontLeftRotationMotorId = 7; //was 8
+    public static final int frontLeftDriveMotorId = 8; //was 23
 
-    public static final int frontRightRotationMotorId = 5;
-    public static final int frontRightDriveMotorId = 22;
+    public static final int frontRightRotationMotorId = 1; //was 5
+    public static final int frontRightDriveMotorId = 2; //was 22
 
-    public static final int rearLeftRotationMotorId = 2;
-    public static final int rearLeftDriveMotorId = 1;
+    public static final int rearLeftRotationMotorId = 5; //was 2
+    public static final int rearLeftDriveMotorId = 6; //was 1
 
-    public static final int rearRightRotationMotorId = 4;
-    public static final int rearRightDriveMotorId = 3;
+    public static final int rearRightRotationMotorId = 3; //was 4
+    public static final int rearRightDriveMotorId = 4; //was 3
 
     public static final int frontLeftRotationEncoderId = 4;
     public static final int frontRightRotationEncoderId = 1;
