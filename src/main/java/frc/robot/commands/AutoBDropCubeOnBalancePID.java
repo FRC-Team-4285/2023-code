@@ -57,13 +57,15 @@ public class AutoBDropCubeOnBalancePID extends CommandBase {
         if (timeSinceInitialized < 1900) {
             //start of autonomous
             armBaseCone.unlock_arm();
+            armBaseCone.grab_cone();
             //take arm out of starting config
             armBase.go_to_position(ArmConstants.DROP_POS);
             //get arm ready to drop cube
         }
         else if (timeSinceInitialized < 2100) {
             armBaseCone.release_cone();
-            armBaseCone.release_cube();
+            armBase.go_to_position(ArmConstants.DROP_POS);
+            //armBaseCone.release_cube();
             //drop cube
         }
         else if (timeSinceInitialized < 7250) {

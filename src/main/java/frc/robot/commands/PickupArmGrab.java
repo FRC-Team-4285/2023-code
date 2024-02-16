@@ -28,6 +28,7 @@ public class PickupArmGrab extends CommandBase {
   @Override
   public void initialize() {
     m_suctionArmSubsystem.grab_cone();
+    
   }
 
   @Override

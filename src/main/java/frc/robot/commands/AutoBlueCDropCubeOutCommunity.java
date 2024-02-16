@@ -73,7 +73,7 @@ public class AutoBlueCDropCubeOutCommunity extends CommandBase {
             drive.drive(1.0, -0.1, 0.0, true);
             armBase.go_to_position(ArmConstants.START_POS);
         }
-        else if (timeSinceInitialized < 6500) {
+        else if (timeSinceInitialized < 7000) {
             drive.drive(1.0, 0.0, 0.0, true);
             armBase.go_to_position(ArmConstants.START_POS);
         }

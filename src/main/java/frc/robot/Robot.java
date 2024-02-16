@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.HardwareCAN;
+// import frc.robot.subsystems.ClimberArmBase;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -26,6 +27,7 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
   private UsbCamera armCamera;
+  private UsbCamera climbcamera;
 
   NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
   NetworkTableEntry tx = table.getEntry("tx");
@@ -43,7 +45,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer (Button bindings, smart dashboard)
     m_robotContainer = new RobotContainer();
-
+    //System.in.
     compressor = new Compressor(
       HardwareCAN.PNEUMATIC_HUB, 
       PneumaticsModuleType.REVPH
@@ -51,9 +53,13 @@ public class Robot extends TimedRobot {
     compressor.enableAnalog(102.5, 115.0);
     armCamera = CameraServer.startAutomaticCapture(0);
     armCamera.setFPS(15);
-    armCamera.setResolution(320, 240);
+    armCamera.setResolution(480, 240);
     //armCamera.close();
-    //CameraServer.startAutomaticCapture(1);
+
+
+    climbcamera = CameraServer.startAutomaticCapture(1);
+    climbcamera.setFPS(6);
+    climbcamera.setResolution(400, 200);
     //CameraServer.startAutomaticCapture(2);
 
   }

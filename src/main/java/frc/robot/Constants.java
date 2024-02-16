@@ -41,7 +41,7 @@ public final class Constants {
     );
 
     /* Swerve Profiling Values */
-    public static final double maxSpeed = 1.0; // was 1.3, robot gets faster if this is lower???
+    public static final double maxSpeed = 1.25; // was 1.3, robot gets faster if this is lower
     public static final double maxAngularVelocity = 3.0; //9.554 max theoretical
 
     public static final int frontLeftRotationMotorId = 8;
@@ -103,8 +103,8 @@ public final class Constants {
 
   public static final class ClimberConstants {
     // Encoder IDs
-    public static final int CLIMBER_MOTOR_LEFT_ID = 10;
-    public static final int CLIMBER_MOTOR_RIGHT_ID = 11;
+   // public static final int CLIMBER_MOTOR_LEFT_ID = 10;
+   // public static final int CLIMBER_MOTOR_RIGHT_ID = 11;
 
     public static final int BATTERY_MOTOR_ID = 12;
 
@@ -119,6 +119,14 @@ public final class Constants {
     public static final double CLIMBER_POS_DOWN_SUCTION = -119.0;
     public static final double CLIMBER_POS_DOWN = -0.1;
     public static final double CLIMBER_POS_UP = -9.25;
+  }
+
+  public static final class FlagConstants {
+    //Encoder IDs
+    public static final int FLAG_MOTOR_ID = 69; //nice
+    //PID Positions
+    public static final double FLAG_POS_DOWN = 90.0; //degrees (?)
+    public static final double FLAG_POS_UP = -90.0;
   }
 
   public static final class IntakeConstants {

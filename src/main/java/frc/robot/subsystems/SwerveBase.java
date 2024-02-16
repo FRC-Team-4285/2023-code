@@ -55,10 +55,10 @@ public class SwerveBase extends SubsystemBase {
     rearLeft.resetDistance();
     rearRight.resetDistance();
 
-    rearRight.getDriveMotor().setInverted(false);
-    rearLeft.getDriveMotor().setInverted(false);
+    rearRight.getDriveMotor().setInverted(true);
+    rearLeft.getDriveMotor().setInverted(true);
     frontRight.getDriveMotor().setInverted(false);
-    frontLeft.getDriveMotor().setInverted(false);
+    frontLeft.getDriveMotor().setInverted(true);
 
     rearRight.getRotationMotor().setInverted(false);
     rearLeft.getRotationMotor().setInverted(false);
@@ -82,10 +82,10 @@ public class SwerveBase extends SubsystemBase {
    * 180 degrees added to offset values to invert one side of the robot so that it
    * doesn't spin in place
    */
-  private static final double frontLeftAngleOffset = Units.degreesToRadians(190 - 180);///(179.23);(190 - 180);
-  private static final double frontRightAngleOffset = Units.degreesToRadians(147.5);//(178.67);//(146);
-  private static final double rearLeftAngleOffset = Units.degreesToRadians(-124 + 181);//(180.69);
-  private static final double rearRightAngleOffset = Units.degreesToRadians(-122);//(179.95);
+  private static final double frontLeftAngleOffset = Units.degreesToRadians(96.94+90);//(190 - 180);(188.09)
+  private static final double frontRightAngleOffset = Units.degreesToRadians(235.46-90);//(147.5);(325.63)
+  private static final double rearLeftAngleOffset = Units.degreesToRadians(237.04);//(-124 + 181);(55.63)
+  private static final double rearRightAngleOffset = Units.degreesToRadians(147.83-90);//(-122);(56.16)
 
   private Pose2d m_pose = new Pose2d(0, 0, new Rotation2d());
   private final double SCALE_X = -1/0.9;
@@ -163,6 +163,8 @@ public class SwerveBase extends SubsystemBase {
     pigeonSensor.getYaw());
     SmartDashboard.putNumber("Pigeon Compass",
     pigeonSensor.getCompassHeading());
+
+    pigeonSensor.getBiasedAccelerometer(null);
 
     SmartDashboard.putString("FL Wheel Angle", frontLeft.getCanCoderAngle().toString());
     SmartDashboard.putString("FR Wheel Angle", frontRight.getCanCoderAngle().toString());

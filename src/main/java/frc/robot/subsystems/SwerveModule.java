@@ -140,7 +140,6 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public double getCurrentVelocityRadiansPerSecond() {
-
     return driveEncoder.getVelocity();
 
   }
@@ -249,7 +248,7 @@ public class SwerveModule extends SubsystemBase {
 
     double angularVelolictySetpoint = optimizedDesiredState.speedMetersPerSecond /
         (Swerve.wheelDiameter / 2.0);
-    if (RobotState.isAutonomous() || isAutoBalancing == true) {
+    if (RobotState.isAutonomous() && isAutoBalancing == true) { //was ||
       driveMotor.setVoltage(Swerve.driveFF.calculate(angularVelolictySetpoint));
 
     } else {

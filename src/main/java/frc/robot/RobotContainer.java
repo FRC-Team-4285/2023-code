@@ -14,7 +14,8 @@ import java.lang.Math;
 
 import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.*;
-import frc.robot.subsystems.ClimberArmBase;
+// import frc.robot.subsystems.ClimberArmBase;
+import frc.robot.subsystems.flagBase;
 import frc.robot.subsystems.IntakeBase;
 import frc.robot.subsystems.PickupArmBase;
 import frc.robot.subsystems.SuctionArmBase;
@@ -74,7 +75,8 @@ public class RobotContainer {
 
   /* Subsystems */
   public final SwerveBase swerveBase;
-  public final ClimberArmBase climberArmBase;
+  // public final ClimberArmBase climberArmBase;
+  public final flagBase FlagBase;
   public final IntakeBase intakeBase;
   public final PickupArmBase pickupArmBase;
   public final SuctionArmBase suctionArmBase;
@@ -124,7 +126,8 @@ public class RobotContainer {
     ledBlueAlliance = new DigitalOutput(4);
     ledRedAlliance = new DigitalOutput(5);
 
-    climberArmBase = new ClimberArmBase(this);
+    // climberArmBase = new ClimberArmBase(this);
+    FlagBase = new flagBase(this);
     intakeBase = new IntakeBase(this);
     pickupArmBase = new PickupArmBase(this);
     suctionArmBase = new SuctionArmBase(this);
@@ -166,7 +169,7 @@ public class RobotContainer {
     btnJiggle = new JoystickButton(streamDeck, 9);
     btnJiggle.whileHeld(new Jiggle(suctionArmBase));
 
-    boolean WANT_MANUAL_ARM = false;
+    boolean WANT_MANUAL_ARM = true;
 
     if (!WANT_MANUAL_ARM) {
       // Arm Drop Config
@@ -192,8 +195,8 @@ public class RobotContainer {
     }
 
     // Climber Manual Raise
-    btnClimberUp = new JoystickButton(streamDeck, 13);
-    btnClimberUp.whileHeld(new ClimberUp(climberArmBase));
+    // btnClimberUp = new JoystickButton(streamDeck, 13);
+    // btnClimberUp.whileHeld(new ClimberUp(climberArmBase));
 
     // Climber Manual Lower
     btnClimberDown = new JoystickButton(streamDeck, 14);
@@ -272,7 +275,7 @@ public class RobotContainer {
    */
   public CommandBase getAutonomousCommand() {
     
-    CommandBase autonomousCommand = new AutoBlueDropCubeGrabCone(
+    CommandBase autonomousCommand = new AutoRedCDropCubeGrabCone(
       swerveBase,
       pickupArmBase,
       suctionArmBase,

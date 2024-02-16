@@ -12,20 +12,20 @@ public class EnterStartingConfig extends CommandBase {
    * This command will raise the climber system.
    */
 
-  private final RobotContainer robotContainer;
+  //private final RobotContainer robotContainer;
 
 
-  public EnterStartingConfig(RobotContainer container) {
-    robotContainer = container;
-    addRequirements(
-      robotContainer.climberArmBase
-    );
-  }
+  // public EnterStartingConfig(RobotContainer container) {
+  //   robotContainer = container;
+  //   addRequirements(
+  //     robotContainer.climberArmBase
+  //   );
+  // }
 
-  @Override
-  public void end(boolean isInterrupted) {
-    robotContainer.climberArmBase.stop();
-  }
+  // @Override
+  // public void end(boolean isInterrupted) {
+  //   robotContainer.climberArmBase.stop();
+  // }
 
   @Override
   public void initialize() {

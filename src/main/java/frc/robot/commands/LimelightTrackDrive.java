@@ -68,7 +68,7 @@ public class LimelightTrackDrive extends CommandBase {
             drive.drive(0.0, 0.15, 0.0, true);
         }
         else if (currentTx >= 0.95) {
-            drive.drive(0.0, 0.25, 0.0, true);
+            drive.drive(0.0, 0.075, 0.0, true);
         }
 
         else if (currentTx <= -6) {
@@ -81,10 +81,10 @@ public class LimelightTrackDrive extends CommandBase {
             drive.drive(0.0, -0.15, 0.0, true);
         }
         else if (currentTx <= -0.95) {
-            drive.drive(0.0, -0.25, 0.0, true);
+            drive.drive(0.0, -0.075, 0.0, true);
         }
         else {
-            drive.drive(0.0, 0.0, 0.0, true);
+            drive.drive(-0.05, 0.0, 0.0, true);
         }
         
     }
