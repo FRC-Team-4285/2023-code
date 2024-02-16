@@ -199,8 +199,11 @@ public class RobotContainer {
     // btnClimberUp.whileHeld(new ClimberUp(climberArmBase));
 
     // Climber Manual Lower
-    btnClimberDown = new JoystickButton(streamDeck, 14);
-    btnClimberDown.whileHeld(new ClimberDown(climberArmBase));
+    // btnClimberDown = new JoystickButton(streamDeck, 14);
+    // btnClimberDown.whileHeld(new ClimberDown(climberArmBase));
+
+    // Raise Flag
+    FlagBase.moveFlag(driverJoystick.getRawAxis(sliderAxis));
 
     // Grab Cone Light Indicator
     btnConeGrabLight = new JoystickButton(streamDeck, 11);
