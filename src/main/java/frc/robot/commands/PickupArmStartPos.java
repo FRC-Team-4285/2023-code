@@ -59,7 +59,8 @@ public class PickupArmStartPos extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return !robotContainer.getArmStartStatus();
+    //return !robotContainer.getArmStartStatus();
+    return true;
   }
 
   private double getCurrentTime() {

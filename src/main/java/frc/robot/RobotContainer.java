@@ -75,11 +75,17 @@ public class RobotContainer {
 
   /* Subsystems */
   public final SwerveBase swerveBase;
+<<<<<<< HEAD
   // public final ClimberArmBase climberArmBase;
   public final flagBase FlagBase;
+=======
+  /*
+  public final ClimberArmBase climberArmBase;
+>>>>>>> 3e5285132ba1e6b8533fa2641a68eefb93ddcd3a
   public final IntakeBase intakeBase;
   public final PickupArmBase pickupArmBase;
   public final SuctionArmBase suctionArmBase;
+  */
 
   /* LEDs */
   public final DigitalOutput ledCubeIndicator;
@@ -125,13 +131,18 @@ public class RobotContainer {
     ledConeIndicator = new DigitalOutput(3);
     ledBlueAlliance = new DigitalOutput(4);
     ledRedAlliance = new DigitalOutput(5);
+<<<<<<< HEAD
 
     // climberArmBase = new ClimberArmBase(this);
     FlagBase = new flagBase(this);
+=======
+/*
+    climberArmBase = new ClimberArmBase(this);
+>>>>>>> 3e5285132ba1e6b8533fa2641a68eefb93ddcd3a
     intakeBase = new IntakeBase(this);
     pickupArmBase = new PickupArmBase(this);
     suctionArmBase = new SuctionArmBase(this);
-
+*/
     //Create & Configue AutoChooser
     /*
     auto_chooser = new SendableChooser<CommandBase>();
@@ -164,8 +175,10 @@ public class RobotContainer {
           () -> swerveBase.zeroPigeon()
         )
       );
-
+  }
+}
     // Jiggle
+    /*
     btnJiggle = new JoystickButton(streamDeck, 9);
     btnJiggle.whileHeld(new Jiggle(suctionArmBase));
 
@@ -212,7 +225,7 @@ public class RobotContainer {
     // Grab Cube Light Indicator
     btnCubeGrabLight = new JoystickButton(streamDeck, 12);
     btnCubeGrabLight.whileHeld(new CubeGrabLight(suctionArmBase));
-
+*/
     // Climber Arm Suction Engage (MOVES CLIMBER ARM + ENGAGES)
     // btnClimberSuctionEngage = new JoystickButton(streamDeck, 15);
     // btnClimberSuctionEngage.whileHeld(new ClimberSuctionEngagePos(climberArmBase, suctionCupBase));
@@ -232,7 +245,7 @@ public class RobotContainer {
     // Intake Start Position
     // btnIntakeStartPos = new JoystickButton(streamDeck, 2);
     // btnIntakeStartPos.whileHeld(new ConeGrabberIngestStartPos(intakeBase));
-
+/*
     // Extend Floor Intake
     btnFloorIntakeExtend = new JoystickButton(streamDeck, 7);
     btnFloorIntakeExtend.whileHeld(new FloorIntakeExtend(intakeBase));
@@ -276,6 +289,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+  /*
   public CommandBase getAutonomousCommand() {
     
     CommandBase autonomousCommand = new AutoRedCDropCubeGrabCone(
@@ -343,3 +357,4 @@ public class RobotContainer {
   }
 
 }
+*/

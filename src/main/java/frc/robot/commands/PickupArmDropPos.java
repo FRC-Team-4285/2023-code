@@ -45,7 +45,8 @@ public class PickupArmDropPos extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return !robotContainer.getArmDropStatus();
+    //return !robotContainer.getArmDropStatus();
+    return true;
   }
 
 }
